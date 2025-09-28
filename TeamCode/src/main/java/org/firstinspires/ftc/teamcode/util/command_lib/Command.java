@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode.util.command_lib;
 public class Command {
     public Command[] commands = {this};
     public boolean initialized = false;
+    public boolean ended = false;
 
     public void initialize() {
 
