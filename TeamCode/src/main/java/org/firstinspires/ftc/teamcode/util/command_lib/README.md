@@ -27,7 +27,8 @@ This basically is the same as the FTCLib command library, but a custom implement
 This is just an example with fake commands, but it shows how it is structured and how it makes autonomous easier.
 
 ## File Structure
-`commands`: consist of the unique robot commands, like `IntakeCommand`, `ShooterCommand`, `TrajectoryCommand`, etc. Feel free to add commands to this bit
+`commands`: consist of the unique robot commands, like `IntakeCommand`, `ShooterCommand`, `TrajectoryCommand`, etc. Feel free to add commands to this bit.
+
 `library`: all the behind the scenes stuff, like `Command`, `CommandScheduler`, `SequentialCommand`, etc. Don't touch this bit
 
 ## Use
