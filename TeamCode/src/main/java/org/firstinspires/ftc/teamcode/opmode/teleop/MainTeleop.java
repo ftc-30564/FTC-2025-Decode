@@ -4,18 +4,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+
 public class MainTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        DcMotor motor = hardwareMap.get(DcMotor.class, "motor");
-
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        Intake intake = new Intake(hardwareMap);
         waitForStart();
 
         while (opModeIsActive()) {
-            motor.setPower(0.5);
+            if (gamepad1.right_bumper){
+                intake.run();
+            }
+            else if (gamepad1.left_bumper) {
+                intake.barf();
+            }
+            else {
+                intake.stop();
+            }
         }
     }
 }
