@@ -10,10 +10,18 @@ public class ParallelCommand extends Command {
         return true;
     }
 
+    /**
+     * Creates a new ParallelCommand. This allows you to run multiple commands in parallel.
+     * The command exits when all the inner commands have finished.
+     * @param commands the commands to run
+     */
     public ParallelCommand(Command... commands) {
         this.commands = commands;
     }
 
+    /**
+     * Initializes all the inner commands.
+     */
     @Override
     public void initialize() {
         for (Command c : this.commands) {
@@ -21,6 +29,9 @@ public class ParallelCommand extends Command {
         }
     }
 
+    /**
+     * Loops through all the inner commands.
+     */
     @Override
     public void loop() {
         for (Command c : this.commands) {
@@ -33,6 +44,10 @@ public class ParallelCommand extends Command {
         }
     }
 
+    /**
+     * Determines if all the inner commands have finished.
+     * @return true if all the inner commands have finished, false otherwise
+     */
     @Override
     public boolean isFinished() {
         return allFinished(this.commands);

@@ -6,15 +6,25 @@ public class SequentialCommand extends Command {
     private int currentCommand = 0;
     private boolean done = false;
 
+    /**
+     * Creates a new SequentialCommand. This runs a group of commands in sequence until they are all finished.
+     * @param commands the commands to run
+     */
     public SequentialCommand(Command... commands) {
         this.commands = commands;
     }
 
+    /**
+     * Initializes the first command.
+     */
     @Override
     public void initialize() {
         this.commands[0].initialize();
     }
 
+    /**
+     * Loops through the commands. Once one command has finished, it moves onto the next one until the last command.
+     */
     @Override
     public void loop() {
         if (done) return;
@@ -33,6 +43,10 @@ public class SequentialCommand extends Command {
         }
     }
 
+    /**
+     * Returns whether or not the sequential command is finished
+     * @return Whether the sequential command is finished
+     */
     @Override
     public boolean isFinished() {
         return done;

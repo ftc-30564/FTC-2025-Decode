@@ -4,18 +4,11 @@ import java.util.function.BooleanSupplier;
 
 // Class that handles actually running the commands.
 public class CommandScheduler {
-    /*
-    new SequentialCommand (
-        new MoveForwardCommand(drivetrain, .5, 1000),
-        new ParallelCommand (
-            new MoveForwardCommand(drivetrain, 0.25, 3000),
-            new IntakeCommand(intake, RUN)
-        ),
-        new IntakeCommand(intake, STOP, 50)
-    )
+    /**
+     * Runs a command non-blocking
+     * @param command The command to run
+     * @return Whether the command is finished
      */
-
-    // Non blocking run function. Returns true when the command is complete
     public boolean run(Command command) {
         if (command.isFinished()) {
             command.end();
