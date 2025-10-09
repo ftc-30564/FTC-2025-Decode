@@ -11,22 +11,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-
-@TeleOp
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
+@TeleOp
 public class MainTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         Follower follower = Constants.createFollower(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
+        Shooter shooter = new Shooter(hardwareMap);
+
         follower.setStartingPose(new Pose());
         follower.update();
 
-        Intake intake = new Intake(hardwareMap);
-        Shooter shooter = new Shooter(hardwareMap);
         waitForStart();
 
         follower.startTeleopDrive();

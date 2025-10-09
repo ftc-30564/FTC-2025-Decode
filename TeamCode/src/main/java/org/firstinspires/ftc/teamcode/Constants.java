@@ -17,8 +17,8 @@ public class Constants {
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(84, 8.32, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE  = new Pose(86.5,  92.4, Math.toRadians(224));
-        public static final Pose RED_SHOOT_FAR    = new Pose(83.4,  18.3, Math.toRadians(238));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(86.5, 92.4, Math.toRadians(224));
+        public static final Pose RED_SHOOT_FAR = new Pose(83.4, 18.3, Math.toRadians(238));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(101.2, 83.9, 0);
         public static final Pose RED_PRE_INTAKE_PGP = new Pose(101.2, 59.8, 0);
@@ -31,8 +31,8 @@ public class Constants {
         // This just mirrors the red positions.
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
-        public static final Pose BLUE_SHOOT_CLOSE  = RED_SHOOT_CLOSE.mirror();
-        public static final Pose BLUE_SHOOT_FAR    = RED_SHOOT_FAR.mirror();
+        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror();
+        public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror();
         public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
         public static final Pose BLUE_PRE_INTAKE_PGP = RED_PRE_INTAKE_PGP.mirror();
         public static final Pose BLUE_PRE_INTAKE_GPP = RED_PRE_INTAKE_GPP.mirror();
@@ -54,7 +54,8 @@ public class Constants {
 
             /**
              * Enum that holds the different ball positions. It takes in two Pose objects, pre and post.
-             * @param pre The robot position right before intaking the ball
+             *
+             * @param pre  The robot position right before intaking the ball
              * @param post The robot position right after intaking the ball
              */
             BallPose(Pose pre, Pose post) {
@@ -65,9 +66,10 @@ public class Constants {
 
         /**
          * Generates a PathChain that starts at a starting position and ends at a shooting position.
+         *
          * @param follower The follower class
-         * @param close Whether the robot starts close or far
-         * @param isRed Whether the robot is red or blue. True if red, false if blue.
+         * @param close    Whether the robot starts close or far
+         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
          * @return The generated PathChain
          */
         public static PathChain startToShoot(Follower follower, boolean close, boolean isRed) {
@@ -84,10 +86,11 @@ public class Constants {
 
         /**
          * Generates a PathChain that starts at a shooting position and ends having intaked a line of balls.
+         *
          * @param follower The follower class
          * @param ballPose The ball position to drive and intake from
-         * @param close Whether the robot starts close or far
-         * @param isRed Whether the robot is red or blue. True if red, false if blue.
+         * @param close    Whether the robot starts close or far
+         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
          * @return The generated PathChain
          */
         public static PathChain shootToIntake(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
@@ -103,10 +106,11 @@ public class Constants {
 
         /**
          * Generates a PathChain that starts at an intaking position and ends at a shooting position.
+         *
          * @param follower The follower class
          * @param ballPose The ball position that the robot starts at
-         * @param close Whether the robot shoots close or far
-         * @param isRed Whether the robot is red or blue. True if red, false if blue.
+         * @param close    Whether the robot shoots close or far
+         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
          * @return The generated PathChain
          */
         public static PathChain intakeToShoot(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
@@ -118,7 +122,7 @@ public class Constants {
                     .build();
         }
     }
-public class Constants {
+
     public static double FIRST_INTAKE_RUN_SPEED = 1;
     public static double SECOND_INTAKE_RUN_SPEED = 1;
 }
