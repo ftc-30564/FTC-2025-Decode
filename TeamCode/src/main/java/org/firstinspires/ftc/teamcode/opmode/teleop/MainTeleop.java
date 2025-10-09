@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 @TeleOp
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+
 public class MainTeleop extends LinearOpMode {
 
     @Override
@@ -24,6 +26,7 @@ public class MainTeleop extends LinearOpMode {
         follower.update();
 
         Intake intake = new Intake(hardwareMap);
+        Shooter shooter = new Shooter(hardwareMap);
         waitForStart();
 
         follower.startTeleopDrive();
@@ -43,6 +46,8 @@ public class MainTeleop extends LinearOpMode {
             else {
                 intake.stop();
             }
+            shooter.setPercent(gamepad1.right_trigger);
+            
         }
     }
 }
