@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
 @TeleOp
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+
 public class MainTeleop extends LinearOpMode {
 
     @Override
@@ -21,6 +23,7 @@ public class MainTeleop extends LinearOpMode {
         follower.setStartingPose(new Pose());
         follower.update();
 
+        Intake intake = new Intake(hardwareMap);
         waitForStart();
 
         follower.startTeleopDrive();
@@ -31,6 +34,15 @@ public class MainTeleop extends LinearOpMode {
                     -gamepad1.right_stick_x,
                     false);
             follower.update();
+            if (gamepad1.right_bumper){
+                intake.run();
+            }
+            else if (gamepad1.left_bumper) {
+                intake.barf();
+            }
+            else {
+                intake.stop();
+            }
         }
     }
 }
