@@ -1,13 +1,50 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import java.net.BindException;
+public class RobotConstants {
+    public static class Drivetrain {
+        public static final String FRONT_LEFT_MOTOR_NAME = "frontLeft";
+        public static final String FRONT_RIGHT_MOTOR_NAME = "frontRight";
+        public static final String BACK_LEFT_MOTOR_NAME = "backRight";
+        public static final String BACK_RIGHT_MOTOR_NAME = "backLeft";
 
-public class Constants {
+        public static final String DEAD_WHEEL_LEFT_NAME = "frontLeft";
+        public static final String DEAD_WHEEL_RIGHT_NAME = "frontRight";
+        public static final String DEAD_WHEEL_PERP_NAME = "backLeft";
+
+        public static final DcMotorSimple.Direction FRONT_LEFT_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
+        public static final DcMotorSimple.Direction FRONT_RIGHT_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
+        public static final DcMotorSimple.Direction BACK_LEFT_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
+        public static final DcMotorSimple.Direction BACK_RIGHT_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
+
+        public static final double DEAD_WHEEL_LEFT_DIRECTION = Encoder.FORWARD;
+        public static final double DEAD_WHEEL_RIGHT_DIRECTION = Encoder.FORWARD;
+        public static final double DEAD_WHEEL_PERP_DIRECTION = Encoder.FORWARD;
+
+        public static final double DEAD_WHEEL_LEFT_OFFSET = 1;
+        public static final double DEAD_WHEEL_RIGHT_OFFSET = -1;
+        public static final double DEAD_WHEEL_PERP_OFFSET = 1;
+
+        public static final double FORWARD_SPEEDLIMIT = 1;
+        public static final double STRAFE_SPEEDLIMIT = 0.7;
+        public static final double TURN_SPEEDLIMIT = 0.7;
+    }
+
+    public static class Intake {
+        public static final String FIRST_INTAKE_NAME = "firstIntake";
+        public static final String SECOND_INTAKE_NAME = "secondIntake";
+        public static final String PUSHER_NAME = "shooterPusher";
+
+        public static double FIRST_INTAKE_RUN_SPEED = 1;
+        public static double SECOND_INTAKE_RUN_SPEED = 1;
+    }
+
     public static class Auto {
         // Here are the various positions for autonomous. Each position is stored
         // as a Pose object, which takes an x, y, and a heading (in Radians). This means
@@ -52,26 +89,12 @@ public class Constants {
             private Pose pre;
             private Pose post;
 
-            /**
-             * Enum that holds the different ball positions. It takes in two Pose objects, pre and post.
-             *
-             * @param pre  The robot position right before intaking the ball
-             * @param post The robot position right after intaking the ball
-             */
             BallPose(Pose pre, Pose post) {
                 this.pre = pre;
                 this.post = post;
             }
         }
 
-        /**
-         * Generates a PathChain that starts at a starting position and ends at a shooting position.
-         *
-         * @param follower The follower class
-         * @param close    Whether the robot starts close or far
-         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
-         * @return The generated PathChain
-         */
         public static PathChain startToShoot(Follower follower, boolean close, boolean isRed) {
             // this is an inline if statement that will determine the correct starting and ending position,
             // depending on whether it is close or far, and red or blue;
@@ -84,15 +107,6 @@ public class Constants {
                     .build();
         }
 
-        /**
-         * Generates a PathChain that starts at a shooting position and ends having intaked a line of balls.
-         *
-         * @param follower The follower class
-         * @param ballPose The ball position to drive and intake from
-         * @param close    Whether the robot starts close or far
-         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
-         * @return The generated PathChain
-         */
         public static PathChain shootToIntake(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
@@ -104,15 +118,6 @@ public class Constants {
                     .build();
         }
 
-        /**
-         * Generates a PathChain that starts at an intaking position and ends at a shooting position.
-         *
-         * @param follower The follower class
-         * @param ballPose The ball position that the robot starts at
-         * @param close    Whether the robot shoots close or far
-         * @param isRed    Whether the robot is red or blue. True if red, false if blue.
-         * @return The generated PathChain
-         */
         public static PathChain intakeToShoot(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
@@ -122,7 +127,4 @@ public class Constants {
                     .build();
         }
     }
-
-    public static double FIRST_INTAKE_RUN_SPEED = 1;
-    public static double SECOND_INTAKE_RUN_SPEED = 1;
 }

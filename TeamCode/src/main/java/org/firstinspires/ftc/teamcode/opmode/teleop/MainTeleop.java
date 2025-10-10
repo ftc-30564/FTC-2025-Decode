@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -28,9 +29,6 @@ public class MainTeleop extends LinearOpMode {
 
         waitForStart();
 
-        final double turnSpeedLimit = 0.7;
-        final double strafeSpeedLimit = 0.7;
-
         follower.startTeleopDrive();
         while (opModeIsActive()) {
             telemetry.addData("Left shooter vel", shooter.getVelocityLeft());
@@ -39,9 +37,9 @@ public class MainTeleop extends LinearOpMode {
             follower.update();
 
             follower.setTeleOpDrive(
-                    -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x * strafeSpeedLimit,
-                    -gamepad1.right_stick_x * turnSpeedLimit,
+                    -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
+                    -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
+                    -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
                     true);
 
             if (gamepad1.right_bumper){
