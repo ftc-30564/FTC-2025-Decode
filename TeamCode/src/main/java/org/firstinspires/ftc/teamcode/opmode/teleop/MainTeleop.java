@@ -23,19 +23,27 @@ public class MainTeleop extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
         Shooter shooter = new Shooter(hardwareMap);
 
-        follower.setStartingPose(new Pose());
+        follower.setStartingPose(new Pose(0, 0, 0));
         follower.update();
 
         waitForStart();
 
+        final double turnSpeedLimit = 0.7;
+        final double strafeSpeedLimit = 0.7;
+
         follower.startTeleopDrive();
         while (opModeIsActive()) {
+            telemetry.addData("Left shooter vel", shooter.getVelocityLeft());
+            telemetry.addData("Right shooter vel", shooter.getVelocityRight());
+
+            follower.update();
+
             follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x,
-                    -gamepad1.right_stick_x,
-                    false);
-            follower.update();
+                    -gamepad1.left_stick_x * strafeSpeedLimit,
+                    -gamepad1.right_stick_x * turnSpeedLimit,
+                    true);
+
             if (gamepad1.right_bumper){
                 intake.run();
             }
@@ -45,8 +53,14 @@ public class MainTeleop extends LinearOpMode {
             else {
                 intake.stop();
             }
-            shooter.setPercent(gamepad1.right_trigger);
-            
+            shooter.setPercent(gamepad1.right_stick_y);
+            if (gamepad1.dpad_up){
+                intake.pusher();
+            } else {
+                intake.pusherStop();
+            }
+            telemetry.update();
+
         }
     }
 }

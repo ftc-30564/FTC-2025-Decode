@@ -16,10 +16,11 @@ public class Constants {
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
+            // back right and left motors were swapped. i just did this temporarily
             .leftFrontMotorName("frontLeft")
-            .leftRearMotorName("backLeft")
+            .leftRearMotorName("backRight")
             .rightFrontMotorName("frontRight")
-            .rightRearMotorName("backRight")
+            .rightRearMotorName("backLeft")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
