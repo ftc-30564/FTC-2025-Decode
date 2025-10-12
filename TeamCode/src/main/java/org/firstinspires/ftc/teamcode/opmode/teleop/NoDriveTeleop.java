@@ -4,44 +4,28 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @TeleOp
-public class MainTeleop extends LinearOpMode {
+public class NoDriveTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Follower follower = Constants.createFollower(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         Shooter shooter = new Shooter(hardwareMap);
 
-        follower.setStartingPose(new Pose(0, 0, 0));
-        follower.update();
-
         waitForStart();
 
-        follower.startTeleopDrive();
         while (opModeIsActive()) {
             telemetry.addData("Left shooter vel", shooter.getVelocityLeft());
             telemetry.addData("Right shooter vel", shooter.getVelocityRight());
             telemetry.addData("Left at target", shooter.leftIsAtVelocity(200));
             telemetry.addData("Right at target", shooter.rightIsAtVelocity(200));
-            follower.update();
 
-            follower.setTeleOpDrive(
-                    -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
-                    -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
-                    -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
-                    true);
 
             if (gamepad1.right_bumper){
                 intake.run();

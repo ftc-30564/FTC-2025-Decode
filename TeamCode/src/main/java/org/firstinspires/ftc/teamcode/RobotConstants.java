@@ -36,6 +36,18 @@ public class RobotConstants {
         public static final double TURN_SPEEDLIMIT = 0.7;
     }
 
+    public static class Shooter {
+        public static final String LEFT_FLYWHEEL_NAME = "rightShooter";
+        public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
+
+        // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
+        public static final double VELOCITY_LEFT_FEEDFORWARD = 0.5 / 152.47;
+        public static final double VELOCITY_RIGHT_FEEDFORWARD = 0.5 / 178.32;
+        public static final double VELOCITY_LEFT_P = 0.01;
+        public static final double VELOCITY_RIGHT_P = 0.01;
+        public static final double VELOCITY_DEADBAND = 10;
+    }
+
     public static class Intake {
         public static final String FIRST_INTAKE_NAME = "firstIntake";
         public static final String SECOND_INTAKE_NAME = "secondIntake";
