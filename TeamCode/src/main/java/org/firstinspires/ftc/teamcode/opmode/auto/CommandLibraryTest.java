@@ -18,23 +18,23 @@ public class CommandLibraryTest extends LinearOpMode {
         CommandScheduler commandScheduler = new CommandScheduler();
 
         Command auto_1 = new SequentialCommand(
-                new WriteToScreenCommand(telemetry, "seq 5s", 5000),
-                new WriteToScreenCommand(telemetry, "seq 2s", 2000),
+                new WriteToScreenCommand(telemetry, "seq 5s").timeout(5000),
+                new WriteToScreenCommand(telemetry, "seq 2s").timeout(2000),
                 new SequentialCommand(
-                        new WriteToScreenCommand(telemetry, "nested 8s", 8000),
-                        new WriteToScreenCommand(telemetry, "nested 3s", 3000)
+                        new WriteToScreenCommand(telemetry, "nested 8s").timeout(8000),
+                        new WriteToScreenCommand(telemetry, "nested 3s").timeout(3000)
                 ),
                 new ParallelCommand(
-                        new WriteToScreenCommand(telemetry, "parallel 3s", 3000),
-                        new WriteToScreenCommand(telemetry, "parallel 6s", 6000),
-                        new WriteToScreenCommand(telemetry, "parallel 9s", 9000)
+                        new WriteToScreenCommand(telemetry, "parallel 3s").timeout(3000),
+                        new WriteToScreenCommand(telemetry, "parallel 6s").timeout(6000),
+                        new WriteToScreenCommand(telemetry, "parallel 9s").timeout(9000)
                 ),
                 new RaceCommand(
-                        new WriteToScreenCommand(telemetry, "race 10s", 10000),
-                        new WriteToScreenCommand(telemetry, "race 6s", 6000),
-                        new WriteToScreenCommand(telemetry, "race 3s", 3000)
+                        new WriteToScreenCommand(telemetry, "race 10s").timeout(10000),
+                        new WriteToScreenCommand(telemetry, "race 6s").timeout(6000),
+                        new WriteToScreenCommand(telemetry, "race 3s").timeout(3000)
                 ),
-                new WriteToScreenCommand(telemetry, "end 5s", 5000)
+                new WriteToScreenCommand(telemetry, "end 5s").timeout(5000)
         );
 
         waitForStart();

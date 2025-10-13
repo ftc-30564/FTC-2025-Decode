@@ -18,6 +18,7 @@ public class RaceCommand extends Command {
     public void initialize() {
         for (Command c : this.commands) {
             c.initialize();
+            c.timerStart();
         }
     }
 
@@ -27,7 +28,7 @@ public class RaceCommand extends Command {
     @Override
     public void loop() {
         for (Command c : this.commands) {
-            if (c.isFinished()) {  // if any of the commands is finished, then the whole command is done.
+            if (c.isFinished() || c.timedOut()) {  // if any of the commands is finished, then the whole command is done.
                 done = true;
             }
             else {

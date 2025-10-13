@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util.command_lib;
 public class ParallelCommand extends Command {
     private boolean allFinished(Command[] commands) {
         for (Command c : commands) {
-            if (!c.isFinished()) {
+            if (!c.isFinished() && !c.timedOut()) {
                 return false;
             }
         }
@@ -26,6 +26,7 @@ public class ParallelCommand extends Command {
     public void initialize() {
         for (Command c : this.commands) {
             c.initialize();
+            c.timerStart();
         }
     }
 
@@ -35,7 +36,7 @@ public class ParallelCommand extends Command {
     @Override
     public void loop() {
         for (Command c : this.commands) {
-            if (!c.isFinished()) {
+            if (!c.isFinished() && !c.timedOut()) {
                 c.loop();
             }
             else {

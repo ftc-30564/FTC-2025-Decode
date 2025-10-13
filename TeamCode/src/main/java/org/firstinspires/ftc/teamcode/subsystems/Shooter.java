@@ -36,6 +36,15 @@ public class Shooter {
         return rightShooter.getVelocity(AngleUnit.DEGREES);
     }
 
+    public void setBothToVelocity(double targetVelocity) {
+        setLeftShooterToVelocity(targetVelocity);
+        setRightShooterToVelocity(targetVelocity);
+    }
+
+    public boolean bothAtVelocity(double targetVelocity) {
+        return leftIsAtVelocity(targetVelocity) && rightIsAtVelocity(targetVelocity);
+    }
+
     public void setLeftShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityLeft();
         double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_LEFT_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_LEFT_P);

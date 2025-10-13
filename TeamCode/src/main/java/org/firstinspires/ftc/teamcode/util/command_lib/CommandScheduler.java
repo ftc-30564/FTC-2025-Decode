@@ -10,7 +10,7 @@ public class CommandScheduler {
      * @return Whether the command is finished
      */
     public boolean run(Command command) {
-        if (command.isFinished()) {
+        if (command.isFinished() || command.timedOut()) {
             command.end();
             return true;
         }
@@ -19,6 +19,7 @@ public class CommandScheduler {
         }
         else {
             command.initialize();
+            command.timerStart();
             command.initialized = true;
         }
         return false;

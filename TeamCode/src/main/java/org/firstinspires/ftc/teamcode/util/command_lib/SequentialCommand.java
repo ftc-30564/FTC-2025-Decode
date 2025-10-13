@@ -20,6 +20,7 @@ public class SequentialCommand extends Command {
     @Override
     public void initialize() {
         this.commands[0].initialize();
+        this.commands[0].timerStart();
     }
 
     /**
@@ -30,7 +31,7 @@ public class SequentialCommand extends Command {
         if (done) return;
 
         this.commands[currentCommand].loop();
-        if (this.commands[currentCommand].isFinished()) {
+        if (this.commands[currentCommand].isFinished() || this.commands[currentCommand].timedOut()) {
             this.commands[currentCommand].end();
             currentCommand ++;
 
@@ -39,6 +40,7 @@ public class SequentialCommand extends Command {
             }
             else {
                 this.commands[currentCommand].initialize();
+                this.commands[currentCommand].timerStart();
             }
         }
     }
