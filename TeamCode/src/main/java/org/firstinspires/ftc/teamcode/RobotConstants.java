@@ -34,6 +34,11 @@ public class RobotConstants {
         public static final double FORWARD_SPEEDLIMIT = 1;
         public static final double STRAFE_SPEEDLIMIT = 0.7;
         public static final double TURN_SPEEDLIMIT = 0.7;
+
+        public static final Pose RED_GOAL_POSE = new Pose(137.5, 143.2, 0);
+        public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
+
+        public static final double DRIVE_SNAP_TO_ANGLE_P = 0.005;
     }
 
     public static class Shooter {
@@ -46,6 +51,8 @@ public class RobotConstants {
         public static final double VELOCITY_LEFT_P = 0.01;
         public static final double VELOCITY_RIGHT_P = 0.01;
         public static final double VELOCITY_DEADBAND = 10;
+
+
     }
 
     public static class Intake {
