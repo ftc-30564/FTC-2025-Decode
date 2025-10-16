@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.teamcode.InterpolationPoints;
-import org.firstinspires.ftc.teamcode.util.DistanceVelocity;
+import org.opencv.core.Point;
 
 import java.util.ArrayList;
 
 public class Interpolator {
 
-    private ArrayList<DistanceVelocity> points;
+    private ArrayList<Point> points;
 
-    public Interpolator(ArrayList<DistanceVelocity> points) {
+    public Interpolator(ArrayList<Point> points) {
         this.points = points;
     }
 
