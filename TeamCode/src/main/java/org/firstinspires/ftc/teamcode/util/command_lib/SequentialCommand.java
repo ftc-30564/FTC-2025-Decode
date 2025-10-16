@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.util.command_lib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 // A command that runs a bunch of commands in sequence.
 // It waits for each command to finish before moving to the next.
 public class SequentialCommand extends Command {
@@ -11,7 +14,7 @@ public class SequentialCommand extends Command {
      * @param commands the commands to run
      */
     public SequentialCommand(Command... commands) {
-        this.commands = commands;
+        this.commands = new ArrayList<>(Arrays.asList(commands));
     }
 
     /**
@@ -19,8 +22,8 @@ public class SequentialCommand extends Command {
      */
     @Override
     public void initialize() {
-        this.commands[0].initialize();
-        this.commands[0].timerStart();
+        this.commands.get(0).initialize();
+        this.commands.get(0).timerStart();
     }
 
     /**
@@ -30,17 +33,17 @@ public class SequentialCommand extends Command {
     public void loop() {
         if (done) return;
 
-        this.commands[currentCommand].loop();
-        if (this.commands[currentCommand].isFinished() || this.commands[currentCommand].timedOut()) {
-            this.commands[currentCommand].end();
+        this.commands.get(currentCommand).loop();
+        if (this.commands.get(currentCommand).isFinished() || this.commands.get(currentCommand).timedOut()) {
+            this.commands.get(currentCommand).end();
             currentCommand ++;
 
-            if (currentCommand >= this.commands.length) {
+            if (currentCommand >= this.commands.size()) {
                 done = true;
             }
             else {
-                this.commands[currentCommand].initialize();
-                this.commands[currentCommand].timerStart();
+                this.commands.get(currentCommand).initialize();
+                this.commands.get(currentCommand).timerStart();
             }
         }
     }

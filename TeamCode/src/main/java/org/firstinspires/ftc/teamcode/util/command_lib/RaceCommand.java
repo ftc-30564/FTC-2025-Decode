@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.util.command_lib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RaceCommand extends Command {
     private boolean done = false;
 
@@ -8,7 +11,7 @@ public class RaceCommand extends Command {
      * @param commands the commands to run
      */
     public RaceCommand(Command... commands) {
-        this.commands = commands;
+        this.commands = new ArrayList<>(Arrays.asList(commands));
     }
 
     /**

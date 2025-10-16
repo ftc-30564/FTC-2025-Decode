@@ -2,10 +2,15 @@ package org.firstinspires.ftc.teamcode.util.command_lib;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 // This is basically the structure for any commands.
 //
 public class Command {
-    public Command[] commands = {this};
+    public ArrayList<Command> commands = new ArrayList<>(List.of(this));
     public boolean initialized = false;
     public boolean ended = false;
     public ElapsedTime timer;
@@ -21,6 +26,10 @@ public class Command {
             return false;
         }
         return timer.milliseconds() >= ms;
+    }
+
+    public void add(Command command) {
+
     }
 
     /**
