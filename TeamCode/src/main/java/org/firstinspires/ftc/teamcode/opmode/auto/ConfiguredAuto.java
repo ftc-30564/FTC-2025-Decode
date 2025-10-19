@@ -5,21 +5,15 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.command_lib.AutoConfiguration;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
-import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
-import org.firstinspires.ftc.teamcode.util.command_lib.ParallelCommand;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 // Placeholder auto
 public class ConfiguredAuto extends LinearOpMode {

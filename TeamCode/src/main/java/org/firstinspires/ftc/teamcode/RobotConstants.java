@@ -7,14 +7,13 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.opencv.core.Point;
-
 public class RobotConstants {
     public static class Drivetrain {
-        public static final String FRONT_LEFT_MOTOR_NAME = "frontLeft";
-        public static final String FRONT_RIGHT_MOTOR_NAME = "frontRight";
-        public static final String BACK_LEFT_MOTOR_NAME = "backRight";
-        public static final String BACK_RIGHT_MOTOR_NAME = "backLeft";
+        // front and back is swapped
+        public static final String FRONT_LEFT_MOTOR_NAME = "frontRight";
+        public static final String FRONT_RIGHT_MOTOR_NAME = "frontLeft";
+        public static final String BACK_LEFT_MOTOR_NAME = "backLeft";
+        public static final String BACK_RIGHT_MOTOR_NAME = "backRight";
 
         public static final String DEAD_WHEEL_LEFT_NAME = "frontLeft";
         public static final String DEAD_WHEEL_RIGHT_NAME = "frontRight";
@@ -48,10 +47,10 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static final double VELOCITY_LEFT_FEEDFORWARD = 0.5 / 152.47;
-        public static final double VELOCITY_RIGHT_FEEDFORWARD = 0.5 / 178.32;
-        public static final double VELOCITY_LEFT_P = 0.01;
-        public static final double VELOCITY_RIGHT_P = 0.01;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.5 / 152.47;
+        public static final double VELOCITY_TOP_FEEDFORWARD = 0.5 / 178.32;
+        public static final double VELOCITY_BOTTOM_P = 0.007;
+        public static final double VELOCITY_TOP_P = 0.007;
         public static final double VELOCITY_DEADBAND = 10;
 
         // Manual velocities, cause the limelight might not arrive in time

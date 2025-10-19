@@ -16,14 +16,6 @@ public class ShootCommand extends Command {
 
     @Override
     public void loop() {
-        shooter.setBothToVelocity(vel);
-        if (shooter.bothAtVelocity(vel)) {
-            isCharged = true;
-        }
-        if (isCharged) {
-            // push balls into shooter
-
-        }
 
     }
 

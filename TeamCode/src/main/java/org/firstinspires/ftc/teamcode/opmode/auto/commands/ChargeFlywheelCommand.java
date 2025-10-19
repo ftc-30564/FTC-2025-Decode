@@ -14,11 +14,6 @@ public class ChargeFlywheelCommand extends Command {
 
     @Override
     public void loop() {
-        shooter.setBothToVelocity(vel);
-    }
 
-    @Override
-    public boolean isFinished() {
-        return shooter.bothAtVelocity(vel);
     }
 }

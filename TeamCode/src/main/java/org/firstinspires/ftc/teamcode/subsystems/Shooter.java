@@ -53,13 +53,13 @@ public class Shooter {
 
     public void setBottomShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityBottom();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_LEFT_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_LEFT_P);
+        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_BOTTOM_P);
         bottomFlywheel.setPower(percent);
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityTop();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_RIGHT_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_RIGHT_P);
+        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_TOP_P);
         topFlywheel.setPower(percent);
     }
 

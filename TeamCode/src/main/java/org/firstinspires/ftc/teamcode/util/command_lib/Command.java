@@ -15,10 +15,14 @@ public class Command {
     public boolean ended = false;
     public ElapsedTime timer;
     public boolean isTimer = false;
-    public double ms = 0;
+    public long ms = 0;
 
     public void timerStart() {
-        timer.reset();
+        if (isTimer) {
+            timer = new ElapsedTime(ms);
+            timer.reset();
+        }
+
     }
 
     public boolean timedOut() {
@@ -61,7 +65,7 @@ public class Command {
         return false;
     }
 
-    public Command timeout(double ms) {
+    public Command timeout(long ms) {
         Command ret = this;
         ret.ms = ms;
         ret.isTimer = true;

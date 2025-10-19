@@ -68,6 +68,8 @@ public class DrivetrainDebug extends LinearOpMode {
             } else {
                 backRightMotor.setPower(0);
             }
+
+            telemetry.update();
         }
     }
 }

@@ -44,10 +44,10 @@ public class NoDriveTeleop extends LinearOpMode {
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.right_bumper || gamepad2.a){
                 intake.run();
             }
-            else if (gamepad1.left_bumper) {
+            else if (gamepad1.left_bumper || gamepad2.b) {
                 intake.barf();
             }
             else {
@@ -70,6 +70,7 @@ public class NoDriveTeleop extends LinearOpMode {
             }
             else {
                 shooter.setTopShooterToVelocity(0);
+                shooter.setBottomShooterToVelocity(0);
             }
 
             if (gamepad2.right_bumper) {
@@ -78,8 +79,6 @@ public class NoDriveTeleop extends LinearOpMode {
             else {
                 shooter.stopPusher();
             }
-            shooter.setBottomShooterToVelocity(200);
-            shooter.setTopShooterToVelocity(200);
 
             telemetry.update();
 

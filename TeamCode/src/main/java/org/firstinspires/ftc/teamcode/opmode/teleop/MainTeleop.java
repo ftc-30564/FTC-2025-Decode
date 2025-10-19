@@ -37,10 +37,9 @@ public class MainTeleop extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
         Shooter shooter = new Shooter(hardwareMap);
 
-        ShootingPosition currentPosition = ShootingPosition.MIDDLE;
-
         drivetrain.setStartingPose(new Pose(0, 0, 0));
-        drivetrain.update();
+
+        ShootingPosition currentPosition = ShootingPosition.MIDDLE;
 
         waitForStart();
 
@@ -57,15 +56,16 @@ public class MainTeleop extends LinearOpMode {
                     -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
                     true);
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.right_bumper || gamepad2.a){
                 intake.run();
             }
-            else if (gamepad1.left_bumper) {
+            else if (gamepad1.left_bumper || gamepad2.b) {
                 intake.barf();
             }
             else {
                 intake.stop();
             }
+
             if (gamepad2.dpad_up) {
                 currentPosition = ShootingPosition.CLOSE;
             }
@@ -75,21 +75,22 @@ public class MainTeleop extends LinearOpMode {
             if (gamepad2.dpad_down) {
                 currentPosition = ShootingPosition.FAR;
             }
+
             if (gamepad2.left_bumper) {
                 shooter.setTopShooterToVelocity(currentPosition.vel);
                 shooter.setBottomShooterToVelocity(currentPosition.vel);
             }
             else {
                 shooter.setTopShooterToVelocity(0);
+                shooter.setBottomShooterToVelocity(0);
             }
+
             if (gamepad2.right_bumper) {
                 shooter.runPusher();
             }
             else {
                 shooter.stopPusher();
             }
-            shooter.setBottomShooterToVelocity(200);
-            shooter.setTopShooterToVelocity(200);
 
             telemetry.update();
 
