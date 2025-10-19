@@ -38,10 +38,4 @@ public class Intake {
         firstIntake.setPower(-RobotConstants.Intake.FIRST_INTAKE_RUN_SPEED);
         secondIntake.setPower(-RobotConstants.Intake.SECOND_INTAKE_RUN_SPEED);
     }
-    public void pusher() {
-        shooterPusher.setPower(1);
-    }
-    public void pusherStop() {
-        shooterPusher.setPower(0);
-    }
 }

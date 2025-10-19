@@ -17,7 +17,8 @@ public class Interpolator {
                return x - 1;
             }
         }
-        throw new IndexOutOfBoundsException("Could not find nearest point in interpolator");
+        // return the second to last point instead
+        return points.size() - 2;
     }
 
     // Returns the ideal wheel velocity based off of the distance from the goal
@@ -25,8 +26,9 @@ public class Interpolator {
         Point leftPoint = points.get(getNearestPointIndex(distance));
         Point rightPoint = points.get(getNearestPointIndex(distance) + 1);
 
+        // calculate the line formula between the two points
         double slope = (rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x);
         double yIntercept = (leftPoint.y - (slope * leftPoint.x));
-        return slope * distance + yIntercept;
+        return (slope * distance) + yIntercept;
     }
 }
