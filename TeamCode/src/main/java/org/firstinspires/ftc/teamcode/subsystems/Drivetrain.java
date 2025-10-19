@@ -30,10 +30,19 @@ public class Drivetrain {
     public void setStartingPose(Pose pose){
         follower.setStartingPose(pose);
     }
+
     public double getDistanceFromGoal(boolean red){
         Pose goalPose = RobotConstants.Auto.BLUE_GOAL_POSE;
         Pose robotPose = getPose();
 
-        return Math.sqrt(Math.pow(goalPose.getY() - robotPose.getY(), 2) + Math.pow(goalPose.getX() - robotPose.getX(), 2));
+        return Math.sqrt(
+                Math.pow(goalPose.getY() - robotPose.getY(), 2) + Math.pow(goalPose.getX() - robotPose.getX(), 2));
+    }
+
+    public double getAngleFromGoalDegrees(boolean red){
+        Pose goalPose = RobotConstants.Auto.BLUE_GOAL_POSE;
+        Pose robotPose = getPose();
+
+        return Math.toDegrees(Math.atan2(goalPose.getY() - robotPose.getY(),goalPose.getX() - robotPose.getX()));
     }
 }
