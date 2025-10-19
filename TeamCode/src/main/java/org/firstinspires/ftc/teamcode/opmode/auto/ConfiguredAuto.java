@@ -59,7 +59,7 @@ public class ConfiguredAuto extends LinearOpMode {
                 }
                 else if (currName.equals("Score")) {
                     if (lastPose == null) throw new RuntimeException("Trying to score starting from unknown position");
-                    if (atStarting)
+                    if (atStarting) {
                         command.add(new FollowPathCommand(follower, lastPose, RobotConstants.Auto.startToShoot(follower, currDetail.equals("Near"), true)));
                     }
                 }
@@ -67,10 +67,6 @@ public class ConfiguredAuto extends LinearOpMode {
         }
 
         waitForStart();
-
-        if (!AutoConfiguration.autonomousConfigured) {
-            return;
-        }
         while (opModeIsActive()) {
 
 
