@@ -32,8 +32,8 @@ public class MainTeleop extends LinearOpMode {
 
         drivetrain.startTeleopDrive();
         while (opModeIsActive()) {
-            telemetry.addData("Left shooter vel", shooter.getVelocityLeft());
-            telemetry.addData("Right shooter vel", shooter.getVelocityRight());
+            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
+            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
 
             drivetrain.update();
 
