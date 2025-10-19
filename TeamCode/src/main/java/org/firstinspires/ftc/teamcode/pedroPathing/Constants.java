@@ -16,7 +16,6 @@ public class Constants {
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
-            // back right and left motors were swapped. i just did this temporarily
             .leftFrontMotorName(RobotConstants.Drivetrain.FRONT_LEFT_MOTOR_NAME)
             .leftRearMotorName(RobotConstants.Drivetrain.BACK_LEFT_MOTOR_NAME)
             .rightFrontMotorName(RobotConstants.Drivetrain.FRONT_RIGHT_MOTOR_NAME)
