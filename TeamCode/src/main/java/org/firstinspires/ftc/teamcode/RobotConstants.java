@@ -7,6 +7,8 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.opencv.core.Point;
+
 public class RobotConstants {
     public static class Drivetrain {
         public static final String FRONT_LEFT_MOTOR_NAME = "frontLeft";
@@ -62,6 +64,7 @@ public class RobotConstants {
         // as a Pose object, which takes an x, y, and a heading (in Radians). This means
         // when we create a Pose object we must convert each angle into radians via Math.toRadians(deg).
 
+        public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(84, 8.32, Math.toRadians(270));
@@ -77,6 +80,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PGP = new Pose(124.5, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(124.5, 35.4, 0);
 
+        public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
         // This just mirrors the red positions.
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
