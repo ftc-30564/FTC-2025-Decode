@@ -21,10 +21,10 @@ public class NoDriveTeleop extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("Left shooter vel", shooter.getVelocityLeft());
-            telemetry.addData("Right shooter vel", shooter.getVelocityRight());
-            telemetry.addData("Left at target", shooter.leftIsAtVelocity(200));
-            telemetry.addData("Right at target", shooter.rightIsAtVelocity(200));
+            telemetry.addData("Left shooter vel", shooter.getVelocityBottom());
+            telemetry.addData("Right shooter vel", shooter.getVelocityTop());
+            telemetry.addData("Left at target", shooter.bottomIsAtVelocity(200));
+            telemetry.addData("Right at target", shooter.topIsAtVelocity(200));
 
 
             if (gamepad1.right_bumper){
@@ -37,8 +37,8 @@ public class NoDriveTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-            shooter.setLeftShooterToVelocity(200);
-            shooter.setRightShooterToVelocity(200);
+            shooter.setBottomShooterToVelocity(200);
+            shooter.setTopShooterToVelocity(200);
 
             if (gamepad1.dpad_up){
                 intake.pusher();

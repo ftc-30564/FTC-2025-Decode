@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.RobotConfigNameable;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
 public class Shooter {
     private DcMotorEx leftShooter;
@@ -28,33 +29,42 @@ public class Shooter {
       rightShooter.setPower(percent);
     }
 
-    public double getVelocityLeft() {
+    public double getVelocityBottom() {
         return leftShooter.getVelocity(AngleUnit.DEGREES);
     }
 
-    public double getVelocityRight() {
+    public double getVelocityTop() {
         return rightShooter.getVelocity(AngleUnit.DEGREES);
     }
 
-    public void setLeftShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityLeft();
+    public void setToVelocityPair(VelocityPair pair) {
+        setBottomShooterToVelocity(pair.bottom);
+        setTopShooterToVelocity(pair.top);
+    }
+
+    public boolean isAtVelocityPair(VelocityPair pair) {
+        return bottomIsAtVelocity(pair.bottom) && topIsAtVelocity(pair.top);
+    }
+
+    public void setBottomShooterToVelocity(double targetVelocity) {
+        double currentVelocity = getVelocityBottom();
         double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_LEFT_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_LEFT_P);
         leftShooter.setPower(percent);
     }
 
-    public void setRightShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityRight();
+    public void setTopShooterToVelocity(double targetVelocity) {
+        double currentVelocity = getVelocityTop();
         double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_RIGHT_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_RIGHT_P);
         rightShooter.setPower(percent);
     }
 
-    public boolean leftIsAtVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityLeft();
+    public boolean bottomIsAtVelocity(double targetVelocity) {
+        double currentVelocity = getVelocityBottom();
         return (currentVelocity >= targetVelocity - RobotConstants.Shooter.VELOCITY_DEADBAND) && (targetVelocity + RobotConstants.Shooter.VELOCITY_DEADBAND >= currentVelocity);
     }
 
-    public boolean rightIsAtVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityRight();
+    public boolean topIsAtVelocity(double targetVelocity) {
+        double currentVelocity = getVelocityTop();
         return (currentVelocity >= targetVelocity - RobotConstants.Shooter.VELOCITY_DEADBAND) && (targetVelocity + RobotConstants.Shooter.VELOCITY_DEADBAND >= currentVelocity);
     }
 }

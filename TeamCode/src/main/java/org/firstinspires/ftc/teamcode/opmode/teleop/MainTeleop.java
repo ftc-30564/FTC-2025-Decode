@@ -53,8 +53,8 @@ public class MainTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-            shooter.setLeftShooterToVelocity(200);
-            shooter.setRightShooterToVelocity(200);
+            shooter.setBottomShooterToVelocity(200);
+            shooter.setTopShooterToVelocity(200);
 
             if (gamepad1.dpad_up){
                 intake.pusher();
