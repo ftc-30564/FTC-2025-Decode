@@ -8,28 +8,15 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 // Test command to make sure the library works properly
 public class WriteToScreenCommand extends Command {
     private Telemetry telemetry;
-    private ElapsedTime time = new ElapsedTime();
     private String message;
-    private double ms;
 
-    public WriteToScreenCommand(Telemetry telemetry, String message, double ms) {
+    public WriteToScreenCommand(Telemetry telemetry, String message) {
         this.telemetry = telemetry;
         this.message = message;
-        this.ms = ms;
-    }
-
-    @Override
-    public void initialize() {
-        time.reset();
     }
 
     @Override
     public void loop() {
         telemetry.addData("MESSAGE", message);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return time.milliseconds() >= ms;
     }
 }

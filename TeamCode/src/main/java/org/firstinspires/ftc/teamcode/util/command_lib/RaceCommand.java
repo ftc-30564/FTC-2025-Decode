@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.util.command_lib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RaceCommand extends Command {
     private boolean done = false;
 
@@ -8,7 +11,7 @@ public class RaceCommand extends Command {
      * @param commands the commands to run
      */
     public RaceCommand(Command... commands) {
-        this.commands = commands;
+        this.commands = new ArrayList<>(Arrays.asList(commands));
     }
 
     /**
@@ -18,6 +21,7 @@ public class RaceCommand extends Command {
     public void initialize() {
         for (Command c : this.commands) {
             c.initialize();
+            c.timerStart();
         }
     }
 
@@ -27,7 +31,7 @@ public class RaceCommand extends Command {
     @Override
     public void loop() {
         for (Command c : this.commands) {
-            if (c.isFinished()) {  // if any of the commands is finished, then the whole command is done.
+            if (c.isFinished() || c.timedOut()) {  // if any of the commands is finished, then the whole command is done.
                 done = true;
             }
             else {

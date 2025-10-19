@@ -11,6 +11,12 @@ public class Intake {
     private CRServo secondIntake;
     private CRServo shooterPusher;
 
+    public static enum Mode {
+        INTAKING,
+        BARFING,
+        RESTING
+    }
+
     public Intake(HardwareMap hardwareMap) {
       firstIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.FIRST_INTAKE_NAME);
       secondIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.SECOND_INTAKE_NAME);
