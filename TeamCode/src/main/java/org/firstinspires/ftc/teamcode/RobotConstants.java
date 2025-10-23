@@ -41,6 +41,8 @@ public class RobotConstants {
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
         public static final double DRIVE_SNAP_TO_ANGLE_P = 0.005;
+
+        public static final double WEBCAM_SNAP_TO_APRILTAG_P = 0.0015;
     }
 
     public static class Shooter {

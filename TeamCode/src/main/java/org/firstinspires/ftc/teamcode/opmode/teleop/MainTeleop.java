@@ -1,27 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.RobotConstants;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @TeleOp
 public class MainTeleop extends LinearOpMode {
+    Drivetrain drivetrain;
+    Intake intake;
+    Shooter shooter;
 
     public enum ShootingPosition {
-        CLOSE(RobotConstants.Shooter.MANUAL_CLOSE_VELOCITY),
         MIDDLE(RobotConstants.Shooter.MANUAL_MIDDLE_VELOCITY),
         FAR(RobotConstants.Shooter.MANUAL_FAR_VELOCITY);
 
@@ -33,9 +26,9 @@ public class MainTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Drivetrain drivetrain = new Drivetrain(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
-        Shooter shooter = new Shooter(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
+        intake = new Intake(hardwareMap);
+        shooter = new Shooter(hardwareMap);
 
         drivetrain.setStartingPose(new Pose(0, 0, 0));
 
@@ -44,6 +37,7 @@ public class MainTeleop extends LinearOpMode {
         waitForStart();
 
         drivetrain.startTeleopDrive();
+
         while (opModeIsActive()) {
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
@@ -54,7 +48,7 @@ public class MainTeleop extends LinearOpMode {
                     -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
                     -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
                     -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
-                    true);
+                    false);
 
             if (gamepad1.right_bumper || gamepad2.a){
                 intake.run();
@@ -67,9 +61,6 @@ public class MainTeleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
-                currentPosition = ShootingPosition.CLOSE;
-            }
-            if (gamepad2.dpad_right) {
                 currentPosition = ShootingPosition.MIDDLE;
             }
             if (gamepad2.dpad_down) {
