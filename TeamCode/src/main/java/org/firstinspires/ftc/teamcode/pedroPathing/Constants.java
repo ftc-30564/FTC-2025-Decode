@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -11,11 +13,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants();
+    public static FollowerConstants followerConstants = new FollowerConstants()
+            .mass(5)
+            .forwardZeroPowerAcceleration(-37.1841065)
+            .lateralZeroPowerAcceleration(-74.017442)
+            .centripetalScaling(0.0012)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(.01, 0, 0.00001, 0.6, 0));
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
+            .maxPower(1)
             .leftFrontMotorName(RobotConstants.Drivetrain.FRONT_LEFT_MOTOR_NAME)
             .leftRearMotorName(RobotConstants.Drivetrain.BACK_LEFT_MOTOR_NAME)
             .rightFrontMotorName(RobotConstants.Drivetrain.FRONT_RIGHT_MOTOR_NAME)
@@ -24,15 +34,14 @@ public class Constants {
             .leftRearMotorDirection(RobotConstants.Drivetrain.BACK_LEFT_MOTOR_DIRECTION)
             .rightFrontMotorDirection(RobotConstants.Drivetrain.FRONT_RIGHT_MOTOR_DIRECTION)
             .rightRearMotorDirection(RobotConstants.Drivetrain.BACK_RIGHT_MOTOR_DIRECTION)
-            .xVelocity(78.261926752421046666666666666667)
-            .yVelocity(61.494551922189565);
+            .xVelocity((63.69953 + 63.160463)/2)
+            .yVelocity((52.869557 + 55.94934)/2)
+            .useBrakeModeInTeleOp(true);
 
     public static ThreeWheelConstants localizerConstants = new ThreeWheelConstants()
-            // the four-bar dead wheels have 32mm size wheels and an encoder resolution of 2000PPR (pulses per rotation).
-            // the theoretical value is 0.00062992 ticks to inches (https://www.gobilda.com/4-bar-odometry-pod-32mm-wheel/)
-            .forwardTicksToInches(0.00062992)
-            .strafeTicksToInches(0.00062992)
-            .turnTicksToInches(0.00062992)
+            .forwardTicksToInches(0.0019737796)
+            .strafeTicksToInches(0.001971613)
+            .turnTicksToInches(0.0019725611)
             .leftPodY(RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_OFFSET)    // ditto
             .rightPodY(RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_OFFSET)    // ditto
             .strafePodX(RobotConstants.Drivetrain.DEAD_WHEEL_PERP_OFFSET)    // ditto

@@ -16,17 +16,17 @@ public class RobotConstants {
         public static final String BACK_RIGHT_MOTOR_NAME = "backRight";
 
         public static final String DEAD_WHEEL_LEFT_NAME = "frontLeft";
-        public static final String DEAD_WHEEL_RIGHT_NAME = "frontRight";
-        public static final String DEAD_WHEEL_PERP_NAME = "backLeft";
+        public static final String DEAD_WHEEL_RIGHT_NAME = "backRight";
+        public static final String DEAD_WHEEL_PERP_NAME = "frontRight";
 
         public static final DcMotorSimple.Direction FRONT_LEFT_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
         public static final DcMotorSimple.Direction FRONT_RIGHT_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
         public static final DcMotorSimple.Direction BACK_LEFT_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
         public static final DcMotorSimple.Direction BACK_RIGHT_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
 
-        public static final double DEAD_WHEEL_LEFT_DIRECTION = Encoder.FORWARD;
-        public static final double DEAD_WHEEL_RIGHT_DIRECTION = Encoder.FORWARD;
-        public static final double DEAD_WHEEL_PERP_DIRECTION = Encoder.FORWARD;
+        public static final double DEAD_WHEEL_LEFT_DIRECTION = Encoder.REVERSE;
+        public static final double DEAD_WHEEL_RIGHT_DIRECTION = Encoder.REVERSE;
+        public static final double DEAD_WHEEL_PERP_DIRECTION = Encoder.REVERSE;
 
         public static final double DEAD_WHEEL_LEFT_OFFSET = 6.14;
         // right one should always be negative
