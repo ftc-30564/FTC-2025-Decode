@@ -28,9 +28,10 @@ public class RobotConstants {
         public static final double DEAD_WHEEL_RIGHT_DIRECTION = Encoder.FORWARD;
         public static final double DEAD_WHEEL_PERP_DIRECTION = Encoder.FORWARD;
 
-        public static final double DEAD_WHEEL_LEFT_OFFSET = 1;
-        public static final double DEAD_WHEEL_RIGHT_OFFSET = -1;
-        public static final double DEAD_WHEEL_PERP_OFFSET = 1;
+        public static final double DEAD_WHEEL_LEFT_OFFSET = 6.14;
+        // right one should always be negative
+        public static final double DEAD_WHEEL_RIGHT_OFFSET = -6.14;
+        public static final double DEAD_WHEEL_PERP_OFFSET = -6.67;
 
         public static final double FORWARD_SPEEDLIMIT = 1;
         public static final double STRAFE_SPEEDLIMIT = 0.7;

@@ -28,9 +28,11 @@ public class Constants {
             .yVelocity(61.494551922189565);
 
     public static ThreeWheelConstants localizerConstants = new ThreeWheelConstants()
-            .forwardTicksToInches(.001989436789)   // tune this
-            .strafeTicksToInches(.001989436789)   // ditto
-            .turnTicksToInches(.001989436789)   // ditto
+            // the four-bar dead wheels have 32mm size wheels and an encoder resolution of 2000PPR (pulses per rotation).
+            // the theoretical value is 0.00062992 ticks to inches (https://www.gobilda.com/4-bar-odometry-pod-32mm-wheel/)
+            .forwardTicksToInches(0.00062992)
+            .strafeTicksToInches(0.00062992)
+            .turnTicksToInches(0.00062992)
             .leftPodY(RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_OFFSET)    // ditto
             .rightPodY(RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_OFFSET)    // ditto
             .strafePodX(RobotConstants.Drivetrain.DEAD_WHEEL_PERP_OFFSET)    // ditto

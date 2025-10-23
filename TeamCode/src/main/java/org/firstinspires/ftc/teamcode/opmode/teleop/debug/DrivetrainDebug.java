@@ -4,6 +4,7 @@ import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
@@ -17,18 +18,19 @@ public class DrivetrainDebug extends LinearOpMode {
         DcMotorEx backLeftMotor =   hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.BACK_LEFT_MOTOR_NAME);
         DcMotorEx backRightMotor =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.BACK_RIGHT_MOTOR_NAME);
 
-        Encoder deadWheelLeft = new Encoder(hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_NAME));
-        Encoder deadWheelRight = new Encoder(hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_NAME));
-        Encoder deadWheelPerp = new Encoder(hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_PERP_NAME));
+        DcMotorEx deadWheelLeft =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_NAME);
+        DcMotorEx deadWheelRight = hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_NAME);
+        DcMotorEx deadWheelPerp =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.DEAD_WHEEL_PERP_NAME);
 
         frontLeftMotor.setDirection(RobotConstants.Drivetrain.FRONT_LEFT_MOTOR_DIRECTION);
         frontRightMotor.setDirection(RobotConstants.Drivetrain.FRONT_RIGHT_MOTOR_DIRECTION);
         backLeftMotor.setDirection(RobotConstants.Drivetrain.BACK_LEFT_MOTOR_DIRECTION);
         backRightMotor.setDirection(RobotConstants.Drivetrain.BACK_RIGHT_MOTOR_DIRECTION);
 
-        deadWheelLeft.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_DIRECTION);
-        deadWheelRight.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_DIRECTION);
-        deadWheelPerp.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_PERP_DIRECTION);
+        // convert Encoder direction to DcMotorSimple
+        deadWheelLeft.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_LEFT_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
+        deadWheelRight.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_RIGHT_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
+        deadWheelPerp.setDirection(RobotConstants.Drivetrain.DEAD_WHEEL_PERP_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -37,9 +39,9 @@ public class DrivetrainDebug extends LinearOpMode {
             telemetry.addData("DPAD Right", "Front Right Motor");
             telemetry.addData("DPAD Down", "Back Right Motor");
 
-            telemetry.addData("Odometry Left (+ when forward)", deadWheelLeft.getDeltaPosition());
-            telemetry.addData("Odometry Right (+ when forward)", deadWheelRight.getDeltaPosition());
-            telemetry.addData("Odometry Perp (+ when left)", deadWheelPerp.getDeltaPosition());
+            telemetry.addData("Odometry Left (+ when forward)", deadWheelLeft.getCurrentPosition());
+            telemetry.addData("Odometry Right (+ when forward)", deadWheelRight.getCurrentPosition());
+            telemetry.addData("Odometry Perp (+ when left)", deadWheelPerp.getCurrentPosition());
 
             // Front Left Motor
             if (gamepad1.dpad_up) {
