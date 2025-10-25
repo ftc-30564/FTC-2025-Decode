@@ -16,7 +16,8 @@ public class WebcamTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("Red apriltag position", webcam.getOffsetRedTarget());
+            telemetry.addData("Red position X", webcam.getOffsetRedTarget().getX());
+            telemetry.addData("Red position Y", webcam.getOffsetRedTarget().getY());
 
             telemetry.update();
         }

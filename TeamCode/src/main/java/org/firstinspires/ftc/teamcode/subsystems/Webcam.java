@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -37,23 +40,24 @@ public class Webcam {
         visionPortal.close();
     }
 
-    private double getXOffsetApriltag(int tag) {
+    private Pose getOffsetApriltag(int tag) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
         for (AprilTagDetection detection : currentDetections) {
             if (detection.id == tag) {
-                return RESOLUTION_X - detection.center.x;
+                Pose3D tagPose = detection.robotPose;
+                return new Pose(tagPose.getPosition().x, tagPose.getPosition().y, tagPose.getOrientation().getYaw(AngleUnit.RADIANS));
             }
         }
 
-        return 0;
+        return new Pose();
     }
 
-    public double getOffsetRedTarget() {
-        return getXOffsetApriltag(24);
+    public Pose getOffsetRedTarget() {
+        return getOffsetApriltag(24);
     }
 
-    public double getOffsetBlueTarget() {
-        return getXOffsetApriltag(20);
+    public Pose getOffsetBlueTarget() {
+        return getOffsetApriltag(20);
     }
 }
