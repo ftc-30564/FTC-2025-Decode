@@ -6,9 +6,14 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.util.VelocityPair;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
+import org.firstinspires.ftc.teamcode.util.command_lib.ParallelCommand;
+import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 public class RobotConstants {
     public static class Drive {
@@ -167,16 +172,37 @@ public class RobotConstants {
                     .build();
         }
 
-        public static Command startToShoot(Drivetrain drivetrain, boolean close, boolean red) {
+        // Path Commands
+        public static Command startToShootTrajectory(Drivetrain drivetrain, boolean close, boolean red) {
             return new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red));
         }
 
-        public static Command shootToIntake(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
+        public static Command shootToIntakeTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
             return new FollowPathCommand(drivetrain, shootToIntakePath(drivetrain, ballPose, close, red));
         }
 
-        public static Command intakeToShoot(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
+        public static Command intakeToShootTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
             return new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red));
+        }
+
+        // Shoot Commands
+        public static Command chargeClose(org.firstinspires.ftc.teamcode.subsystems.Shooter shooter) {
+            return new ChargeFlywheelCommand(shooter, new VelocityPair(200, 200));
+        }
+
+        public static Command shootClose(org.firstinspires.ftc.teamcode.subsystems.Shooter shooter) {
+            return new ShootCommand(shooter, new VelocityPair(200, 200));
+        }
+
+
+        public static Command startCloseAndShoot(Drivetrain drivetrain, org.firstinspires.ftc.teamcode.subsystems.Shooter shooter, boolean close, boolean red) {
+            return new SequentialCommand(
+                    new ParallelCommand(
+                            startToShootTrajectory(drivetrain, close, red),
+                            chargeClose(shooter)
+                    ),
+                    shootClose(shooter).timeout(3000)
+            );
         }
     }
 }

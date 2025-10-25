@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
@@ -26,19 +25,19 @@ public class TestClosePaths extends LinearOpMode {
         Command delay = new DelayCommand(5000);
 
         Command command = new SequentialCommand(
-                startToShoot(drivetrain, close, red),
+                startToShootTrajectory(drivetrain, close, red),
                 delay,
-                shootToIntake(drivetrain, BallPose.GPP, close, red),
+                shootToIntakeTrajectory(drivetrain, BallPose.GPP, close, red),
                 delay,
-                intakeToShoot(drivetrain, BallPose.GPP, close, red),
+                intakeToShootTrajectory(drivetrain, BallPose.GPP, close, red),
                 delay,
-                shootToIntake(drivetrain, BallPose.PGP, close, red),
+                shootToIntakeTrajectory(drivetrain, BallPose.PGP, close, red),
                 delay,
-                intakeToShoot(drivetrain, BallPose.PGP, close, red),
+                intakeToShootTrajectory(drivetrain, BallPose.PGP, close, red),
                 delay,
-                shootToIntake(drivetrain, BallPose.PPG, close, red),
+                shootToIntakeTrajectory(drivetrain, BallPose.PPG, close, red),
                 delay,
-                intakeToShoot(drivetrain, BallPose.PPG, close, red),
+                intakeToShootTrajectory(drivetrain, BallPose.PPG, close, red),
                 delay
         );
 
