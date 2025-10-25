@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathBuilder;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -12,7 +14,6 @@ public class Drivetrain {
 
     public Drivetrain(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
-
     }
 
     public void startTeleopDrive(){
@@ -44,5 +45,17 @@ public class Drivetrain {
         Pose robotPose = getPose();
 
         return Math.toDegrees(Math.atan2(goalPose.getY() - robotPose.getY(),goalPose.getX() - robotPose.getX()));
+    }
+
+    public void followPath(PathChain pathChain, boolean holdEnd) {
+        follower.followPath(pathChain, holdEnd);
+    }
+
+    public boolean isBusy() {
+        return follower.isBusy();
+    }
+
+    public PathBuilder pathBuilder() {
+        return follower.pathBuilder();
     }
 }

@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.command_lib.AutoConfiguration;
@@ -17,13 +16,13 @@ import java.util.ArrayList;
 
 // Placeholder auto
 public class ConfiguredAuto extends LinearOpMode {
-    private Follower follower;
+    private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
 
     @Override
     public void runOpMode() {
-        follower = Constants.createFollower(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
 
@@ -54,7 +53,7 @@ public class ConfiguredAuto extends LinearOpMode {
                 else if (currName.equals("Score")) {
                     if (lastPose == null) throw new RuntimeException("Trying to score starting from unknown position");
                     if (atStarting) {
-                        command.add(new FollowPathCommand(follower, lastPose, RobotConstants.Auto.startToShoot(follower, currDetail.equals("Near"), true)));
+                        command.add(new FollowPathCommand(drivetrain, RobotConstants.Auto.startToShootPath(drivetrain, currDetail.equals("Near"), true)));
                     }
                 }
             }

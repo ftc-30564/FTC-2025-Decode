@@ -45,9 +45,9 @@ public class MainTeleop extends LinearOpMode {
             drivetrain.update();
 
             drivetrain.setTeleopDrive(
-                    -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
-                    -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
-                    -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
+                    -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                    -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                    -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                     false);
 
             if (gamepad1.right_bumper || gamepad2.a){

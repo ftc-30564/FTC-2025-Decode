@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.util.command_lib.Command;
+
 public class RobotConstants {
-    public static class Drivetrain {
+    public static class Drive {
         // front and back is swapped
         public static final String FRONT_LEFT_MOTOR_NAME = "frontRight";
         public static final String FRONT_RIGHT_MOTOR_NAME = "frontLeft";
@@ -106,13 +109,10 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
 
         // This is an enum that holds the different ball positions.
-        public static enum BallPose {
-            RED_PPG(RED_PRE_INTAKE_PPG, RED_POST_INTAKE_PPG),
-            RED_PGP(RED_PRE_INTAKE_PGP, RED_POST_INTAKE_PGP),
-            RED_GPP(RED_PRE_INTAKE_GPP, RED_POST_INTAKE_GPP),
-            BLUE_PPG(BLUE_PRE_INTAKE_PPG, BLUE_POST_INTAKE_PPG),
-            BLUE_PGP(BLUE_PRE_INTAKE_PGP, BLUE_POST_INTAKE_PGP),
-            BLUE_GPP(BLUE_PRE_INTAKE_GPP, BLUE_POST_INTAKE_GPP);
+        public enum BallPose {
+            PPG(RED_PRE_INTAKE_PPG, RED_POST_INTAKE_PPG),
+            PGP(RED_PRE_INTAKE_PGP, RED_POST_INTAKE_PGP),
+            GPP(RED_PRE_INTAKE_GPP, RED_POST_INTAKE_GPP);
 
             private Pose pre;
             private Pose post;
@@ -121,24 +121,34 @@ public class RobotConstants {
                 this.pre = pre;
                 this.post = post;
             }
+
+            BallPose mirror() {
+                this.pre = this.pre.mirror();
+                this.post = this.post.mirror();
+
+                return this;
+            }
         }
 
-        public static PathChain startToShoot(Follower follower, boolean close, boolean isRed) {
+        public static PathChain startToShootPath(Drivetrain drivetrain, boolean close, boolean isRed) {
             // this is an inline if statement that will determine the correct starting and ending position,
             // depending on whether it is close or far, and red or blue;
             Pose start = isRed ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR);
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            return follower.pathBuilder()
+            return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, end))
                     .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
                     .build();
         }
 
-        public static PathChain shootToIntake(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
+        public static PathChain shootToIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            return follower.pathBuilder()
+
+            ballPose = isRed ? ballPose : ballPose.mirror();
+
+            return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, ballPose.pre))
                     .setLinearHeadingInterpolation(start.getHeading(), ballPose.pre.getHeading())
                     .addPath(new BezierLine(ballPose.pre, ballPose.post))
@@ -146,13 +156,27 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain intakeToShoot(Follower follower, BallPose ballPose, boolean close, boolean isRed) {
+        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            return follower.pathBuilder()
+            ballPose = isRed ? ballPose : ballPose.mirror();
+
+            return drivetrain.pathBuilder()
                     .addPath(new BezierLine(ballPose.post, end))
                     .setLinearHeadingInterpolation(ballPose.post.getHeading(), end.getHeading())
                     .build();
+        }
+
+        public static Command startToShoot(Drivetrain drivetrain, boolean close, boolean red) {
+            return new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red));
+        }
+
+        public static Command shootToIntake(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
+            return new FollowPathCommand(drivetrain, shootToIntakePath(drivetrain, ballPose, close, red));
+        }
+
+        public static Command intakeToShoot(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
+            return new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red));
         }
     }
 }

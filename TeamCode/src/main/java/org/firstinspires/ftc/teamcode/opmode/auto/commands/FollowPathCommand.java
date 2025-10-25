@@ -1,34 +1,27 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.commands;
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 
 public class FollowPathCommand extends Command {
-    private Follower follower;
+    private Drivetrain drivetrain;
     private PathChain path;
-    private Pose startingPose;
 
-    public FollowPathCommand(Follower follower, Pose startingPose, PathChain path) {
-        this.follower = follower;
+    public FollowPathCommand(Drivetrain drivetrain, PathChain path) {
+        this.drivetrain = drivetrain;
         this.path = path;
     }
 
     @Override
-    public void initialize() {
-        follower.setStartingPose(startingPose);
-    }
-
-    @Override
     public void loop() {
-        follower.update();
-        follower.followPath(path, true);
+        drivetrain.update();
+        drivetrain.followPath(path, true);
     }
 
     @Override
     public boolean isFinished() {
-        return !follower.isBusy();
+        return !drivetrain.isBusy();
     }
 }
