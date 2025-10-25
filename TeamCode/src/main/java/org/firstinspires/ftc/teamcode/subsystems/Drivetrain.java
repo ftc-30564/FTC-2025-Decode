@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class Drivetrain {
     private Follower follower;
+    private Pose holdPoint;
 
     public Drivetrain(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
@@ -31,6 +32,13 @@ public class Drivetrain {
     public void setStartingPose(Pose pose){
         follower.setStartingPose(pose);
     }
+    public void holdPoint(){
+        follower.holdPoint(holdPoint);
+    }
+    public void setHoldPoint(){
+        holdPoint = getPose();
+    }
+
 
     public double getDistanceFromGoal(boolean red){
         Pose goalPose = RobotConstants.Auto.BLUE_GOAL_POSE;

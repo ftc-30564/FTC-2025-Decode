@@ -33,31 +33,56 @@ public class MainTeleop extends LinearOpMode {
         drivetrain.setStartingPose(new Pose(0, 0, 0));
 
         ShootingPosition currentPosition = ShootingPosition.MIDDLE;
+        boolean holding = false;
+
+        boolean intakeButton;
+        boolean barfButton;
+        boolean chargeButton;
+        boolean shootButton;
 
         waitForStart();
 
         drivetrain.startTeleopDrive();
 
         while (opModeIsActive()) {
+            intakeButton = (gamepad1.right_bumper || gamepad2.a);
+            barfButton = gamepad1.left_bumper;
+            chargeButton = gamepad2.left_bumper;
+            shootButton = gamepad2.right_bumper;
+
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
 
             drivetrain.update();
 
-            drivetrain.setTeleopDrive(
-                    -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                    -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                    -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                    false);
+            if (!holding) {
+                drivetrain.setTeleopDrive(
+                        -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
+                        -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
+                        -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
+                        false);
+            }
+            else {
+                drivetrain.holdPoint();
+            }
 
-            if (gamepad1.right_bumper || gamepad2.a){
+
+            if (intakeButton || shootButton){
                 intake.run();
             }
-            else if (gamepad1.left_bumper || gamepad2.b) {
+            else if (barfButton) {
                 intake.barf();
             }
             else {
                 intake.stop();
+            }
+
+            if (gamepad2.rightBumperWasPressed()) {
+                drivetrain.setHoldPoint();
+                holding = true;
+            }
+            if (gamepad2.rightBumperWasReleased()) {
+                holding = false;
             }
 
             if (gamepad2.dpad_up) {
@@ -67,7 +92,7 @@ public class MainTeleop extends LinearOpMode {
                 currentPosition = ShootingPosition.FAR;
             }
 
-            if (gamepad2.left_bumper) {
+            if (chargeButton) {
                 shooter.setTopShooterToVelocity(currentPosition.vel);
                 shooter.setBottomShooterToVelocity(currentPosition.vel);
             }
@@ -76,7 +101,10 @@ public class MainTeleop extends LinearOpMode {
                 shooter.setBottomShooterToVelocity(0);
             }
 
-            if (gamepad2.right_bumper) {
+            if (intakeButton) {
+                shooter.runBackPusher();
+            }
+            else if (shootButton) {
                 shooter.runPusher();
             }
             else {
