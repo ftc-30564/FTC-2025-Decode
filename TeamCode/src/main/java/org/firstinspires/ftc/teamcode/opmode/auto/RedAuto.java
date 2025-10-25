@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auto.test;
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class TestClosePaths extends LinearOpMode {
+public class RedAuto extends LinearOpMode {
     public Drivetrain drivetrain;
     public final boolean close = true;
     public final boolean red = true;

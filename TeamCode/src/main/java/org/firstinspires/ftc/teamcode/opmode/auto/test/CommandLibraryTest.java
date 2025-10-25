@@ -15,8 +15,6 @@ public class CommandLibraryTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        CommandScheduler commandScheduler = new CommandScheduler();
-
         Command auto_1 = new SequentialCommand(
                 new WriteToScreenCommand(telemetry, "seq 5s").timeout(5000),
                 new WriteToScreenCommand(telemetry, "seq 2s").timeout(2000),
@@ -37,10 +35,12 @@ public class CommandLibraryTest extends LinearOpMode {
                 new WriteToScreenCommand(telemetry, "end 5s").timeout(5000)
         );
 
+        CommandScheduler commandScheduler = new CommandScheduler(auto_1);
+
         waitForStart();
 
         while (opModeIsActive()) {
-            boolean auto_1_done = commandScheduler.run(auto_1);
+            boolean auto_1_done = commandScheduler.run(telemetry);
             if (auto_1_done) {
                 telemetry.addData("command done", true);
             }

@@ -56,7 +56,7 @@ public class Drivetrain {
     }
 
     public void followPath(PathChain pathChain, boolean holdEnd) {
-        follower.followPath(pathChain, holdEnd);
+        follower.followPath(pathChain, false);
     }
 
     public boolean isBusy() {

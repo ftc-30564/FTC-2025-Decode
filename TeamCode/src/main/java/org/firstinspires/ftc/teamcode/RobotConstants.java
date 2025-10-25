@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.ShootCommand;
@@ -66,8 +67,8 @@ public class RobotConstants {
 
         // Manual velocities, cause the limelight might not arrive in time
         public static final double MANUAL_CLOSE_VELOCITY = 150;
-        public static final double MANUAL_MIDDLE_VELOCITY = 200;
-        public static final double MANUAL_FAR_VELOCITY = 300;
+        public static final double MANUAL_MIDDLE_VELOCITY = 230;
+        public static final double MANUAL_FAR_VELOCITY = 225;
     }
 
     public static class Intake {
@@ -89,7 +90,7 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(84, 8.32, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(86.5, 92.4, Math.toRadians(224));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84.4, 78.9, Math.toRadians(231));
         public static final Pose RED_SHOOT_FAR = new Pose(83.4, 18.3, Math.toRadians(238));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(101.2, 83.9, 0);
@@ -173,16 +174,16 @@ public class RobotConstants {
         }
 
         // Path Commands
-        public static Command startToShootTrajectory(Drivetrain drivetrain, boolean close, boolean red) {
-            return new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red));
+        public static Command startToShootTrajectory(Drivetrain drivetrain, boolean close, boolean red, Telemetry telemetry) {
+            return new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red), telemetry);
         }
 
-        public static Command shootToIntakeTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
-            return new FollowPathCommand(drivetrain, shootToIntakePath(drivetrain, ballPose, close, red));
+        public static Command shootToIntakeTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red, Telemetry telemetry) {
+            return new FollowPathCommand(drivetrain, shootToIntakePath(drivetrain, ballPose, close, red), telemetry);
         }
 
-        public static Command intakeToShootTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red) {
-            return new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red));
+        public static Command intakeToShootTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red, Telemetry telemetry) {
+            return new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red), telemetry);
         }
 
         // Shoot Commands
@@ -195,10 +196,10 @@ public class RobotConstants {
         }
 
 
-        public static Command startCloseAndShoot(Drivetrain drivetrain, org.firstinspires.ftc.teamcode.subsystems.Shooter shooter, boolean close, boolean red) {
+        public static Command startCloseAndShoot(Drivetrain drivetrain, org.firstinspires.ftc.teamcode.subsystems.Shooter shooter, boolean close, boolean red, Telemetry telemetry) {
             return new SequentialCommand(
                     new ParallelCommand(
-                            startToShootTrajectory(drivetrain, close, red),
+                            startToShootTrajectory(drivetrain, close, red, telemetry),
                             chargeClose(shooter)
                     ),
                     shootClose(shooter).timeout(3000)

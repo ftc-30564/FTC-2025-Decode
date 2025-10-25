@@ -57,10 +57,11 @@ public class MainTeleop extends LinearOpMode {
 
             if (!holding) {
                 drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drivetrain.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drivetrain.STRAFE_SPEEDLIMIT,
-                        -gamepad1.right_stick_x * RobotConstants.Drivetrain.TURN_SPEEDLIMIT,
+                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                         false);
+                telemetry.addData("Teleop drive", "running");
             }
             else {
                 drivetrain.holdPoint();
@@ -82,6 +83,7 @@ public class MainTeleop extends LinearOpMode {
                 holding = true;
             }
             if (gamepad2.rightBumperWasReleased()) {
+                drivetrain.startTeleopDrive();
                 holding = false;
             }
 
