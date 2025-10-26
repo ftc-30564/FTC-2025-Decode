@@ -9,10 +9,9 @@ import org.firstinspires.ftc.teamcode.RobotConstants;
 public class Intake {
     private CRServo firstIntake;
     private CRServo secondIntake;
-    private CRServo shooterPusher;
 
     public static enum Mode {
-        INTAKING,
+        RUNNING,
         BARFING,
         RESTING
     }
@@ -20,9 +19,6 @@ public class Intake {
     public Intake(HardwareMap hardwareMap) {
       firstIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.FIRST_INTAKE_NAME);
       secondIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.SECOND_INTAKE_NAME);
-      shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
-
-      shooterPusher.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
     public void run() {

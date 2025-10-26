@@ -40,7 +40,7 @@ public class CommandLibraryTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            boolean auto_1_done = commandScheduler.run(telemetry);
+            boolean auto_1_done = commandScheduler.run();
             if (auto_1_done) {
                 telemetry.addData("command done", true);
             }

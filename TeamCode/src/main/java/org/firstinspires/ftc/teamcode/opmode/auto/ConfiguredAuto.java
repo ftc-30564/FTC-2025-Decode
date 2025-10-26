@@ -24,7 +24,7 @@ public class ConfiguredAuto extends LinearOpMode {
     public void runOpMode() {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        shooter = new Shooter(hardwareMap, telemetry);
 
         boolean atStarting = true;
         Pose startingPose = null;

@@ -17,7 +17,7 @@ public class IntakeCommand extends Command {
 
     @Override
     public void loop() {
-        if (mode == Intake.Mode.INTAKING) {
+        if (mode == Intake.Mode.RUNNING) {
             intake.run();
         }
         else if (mode == Intake.Mode.BARFING) {

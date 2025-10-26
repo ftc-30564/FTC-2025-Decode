@@ -24,7 +24,7 @@ public class NoDriveTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         Intake intake = new Intake(hardwareMap);
-        Shooter shooter = new Shooter(hardwareMap);
+        Shooter shooter = new Shooter(hardwareMap, telemetry);
 
         ShootingPosition currentPosition = ShootingPosition.MIDDLE;
 

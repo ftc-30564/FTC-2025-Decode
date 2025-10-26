@@ -12,12 +12,15 @@ public class CommandScheduler {
         this.command = command;
     }
 
+    public CommandScheduler(Command... commands) {
+        this.command = new SequentialCommand(commands);
+    }
+
     /**
      * Runs a command non-blocking
      * @return Whether the command is finished
      */
-    public boolean run(Telemetry telemetry) {
-        telemetry.addData("C initialized", command.initialized);
+    public boolean run() {
         if (!command.initialized) {
             command.initialize();
             command.timerStart();
@@ -25,8 +28,10 @@ public class CommandScheduler {
             command.initialized = true;
         }
         else if (command.isFinished() || command.timedOut()) {
+            if (command.ended) {
+                return true;
+            }
             command.end();
-            return true;
         }
         else {
             command.loop();

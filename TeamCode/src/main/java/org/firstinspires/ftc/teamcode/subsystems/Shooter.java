@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
@@ -14,9 +15,11 @@ public class Shooter {
     private DcMotorEx bottomFlywheel;
     private DcMotorEx topFlywheel;
     private CRServo shooterPusher;
+    private Telemetry telemetry;
 
-    public Shooter(HardwareMap hardwareMap) {
+    public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
+        this.telemetry = telemetry;
 
         shooterPusher.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -85,6 +88,7 @@ public class Shooter {
         shooterPusher.setPower(-1);
     }
 
-    public void runBackPusher(){ shooterPusher.setPower(-.1);}
-
+    public void runBackPusher(){
+        shooterPusher.setPower(-.3);
+    }
 }

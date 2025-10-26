@@ -6,15 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.util.VelocityPair;
-import org.firstinspires.ftc.teamcode.util.command_lib.Command;
-import org.firstinspires.ftc.teamcode.util.command_lib.ParallelCommand;
-import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 public class RobotConstants {
     public static class Drive {
@@ -90,12 +82,12 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(84, 8.32, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(84.4, 78.9, Math.toRadians(231));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(231));
         public static final Pose RED_SHOOT_FAR = new Pose(83.4, 18.3, Math.toRadians(238));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
-        public static final Pose RED_PRE_INTAKE_PPG = new Pose(101.2, 83.9, 0);
-        public static final Pose RED_PRE_INTAKE_PGP = new Pose(101.2, 59.8, 0);
-        public static final Pose RED_PRE_INTAKE_GPP = new Pose(101.2, 35.4, 0);
+        public static final Pose RED_PRE_INTAKE_PPG = new Pose(99, 83.9, 0);
+        public static final Pose RED_PRE_INTAKE_PGP = new Pose(99, 59.8, 0);
+        public static final Pose RED_PRE_INTAKE_GPP = new Pose(99, 35.4, 0);
         // POST_INTAKE means the position right after it intakes the balls.
         public static final Pose RED_POST_INTAKE_PPG = new Pose(124.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(124.5, 59.8, 0);
@@ -113,6 +105,8 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
         public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
+
+        public static final long SHOOT_TIME_MS = 2500;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
@@ -162,48 +156,15 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
+        public static PathChain toShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
             ballPose = isRed ? ballPose : ballPose.mirror();
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(ballPose.post, end))
-                    .setLinearHeadingInterpolation(ballPose.post.getHeading(), end.getHeading())
+                    .addPath(new BezierLine(drivetrain.getPose(), end))
+                    .setLinearHeadingInterpolation(drivetrain.getPose().getHeading(), end.getHeading())
                     .build();
-        }
-
-        // Path Commands
-        public static Command startToShootTrajectory(Drivetrain drivetrain, boolean close, boolean red, Telemetry telemetry) {
-            return new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red), telemetry);
-        }
-
-        public static Command shootToIntakeTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red, Telemetry telemetry) {
-            return new FollowPathCommand(drivetrain, shootToIntakePath(drivetrain, ballPose, close, red), telemetry);
-        }
-
-        public static Command intakeToShootTrajectory(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean red, Telemetry telemetry) {
-            return new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red), telemetry);
-        }
-
-        // Shoot Commands
-        public static Command chargeClose(org.firstinspires.ftc.teamcode.subsystems.Shooter shooter) {
-            return new ChargeFlywheelCommand(shooter, new VelocityPair(200, 200));
-        }
-
-        public static Command shootClose(org.firstinspires.ftc.teamcode.subsystems.Shooter shooter) {
-            return new ShootCommand(shooter, new VelocityPair(200, 200));
-        }
-
-
-        public static Command startCloseAndShoot(Drivetrain drivetrain, org.firstinspires.ftc.teamcode.subsystems.Shooter shooter, boolean close, boolean red, Telemetry telemetry) {
-            return new SequentialCommand(
-                    new ParallelCommand(
-                            startToShootTrajectory(drivetrain, close, red, telemetry),
-                            chargeClose(shooter)
-                    ),
-                    shootClose(shooter).timeout(3000)
-            );
         }
     }
 }
