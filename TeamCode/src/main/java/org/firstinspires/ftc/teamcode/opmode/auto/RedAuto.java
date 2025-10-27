@@ -44,7 +44,9 @@ public class RedAuto extends LinearOpMode {
         // A SequentialCommand lets you put multiple commands inside, and each command
         // runs in order, sequentially.
         Command intakeAndShootPPG = new SequentialCommand(
+                // So, this command will run,
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose()),
+                // and once it's done, then this will run.
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose())
         );
 
@@ -59,7 +61,7 @@ public class RedAuto extends LinearOpMode {
         );
 
 
-        // CommandScheduler lets us run each command in order.
+        // CommandScheduler lets us run each command.
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,   // first, shoot preload
                 intakeAndShootPPG    // then, go intake the PPG balls and shoot them.
@@ -69,7 +71,7 @@ public class RedAuto extends LinearOpMode {
 
         shooter.stopPusher();
         while (opModeIsActive()) {
-            // This runs the commands in order.
+            // This runs the commands.
             scheduler.run();
 
             telemetry.update();

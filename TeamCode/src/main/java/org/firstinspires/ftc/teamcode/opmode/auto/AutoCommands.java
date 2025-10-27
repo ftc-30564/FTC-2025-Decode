@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.RaceCommand;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 // This contains the different commands that are used in autonomous.
-// They're all in one place just so it's cleaner
+// They're all in one place just so it's cleaner.
 public class AutoCommands {
     private final Drivetrain drivetrain;
     private final Shooter shooter;
@@ -43,16 +43,19 @@ public class AutoCommands {
     public Command startAndShoot(boolean close, boolean red) {
         VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
 
-        // Here we are returning a Sequential command, meaning all the commands inside will be run in order.
+        // Here is a Sequential command, meaning all the commands inside will be run in order.
         return new SequentialCommand(
 
                 // This is a Parallel command. This means that all the commands in the list run at the same time,
                 // and the command is considered "finished" when all the inner commands finish.
                 new ParallelCommand(
-                        new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),   // Drive to shooting position
-                        new ChargeFlywheelCommand(shooter, vel).timeout(1000)     // Charge the flywheel
+                        // Drive to shooting position
+                        new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
+                        // Charges the flywheel. The .timeout() means the command will automatically exit after 1 second if it hasn't finished yet.
+                        new ChargeFlywheelCommand(shooter, vel).timeout(1000)
+                        // Once both these commands finish, then the ParallelCommand is finished.
                 ),
-                // Once we've driven to the shooting position and charged the flywheel, we shoot the preload.
+                // Next, once we've driven to the shooting position and charged the flywheel, we shoot the preload.
                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
         ) ;
     }
@@ -67,7 +70,7 @@ public class AutoCommands {
      */
     public Command driveAndIntakeBalls(BallPose ballPose, boolean close, boolean red, Pose drift) {
         return new SequentialCommand(
-                new RaceCommand(
+                new ParallelCommand(
                         new FollowPathCommand(drivetrain, shootToIntakePathV1(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, Intake.Mode.RUNNING).timeout(1000)
                 )
