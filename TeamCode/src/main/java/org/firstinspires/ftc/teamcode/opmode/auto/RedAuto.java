@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
-import static org.firstinspires.ftc.teamcode.opmode.auto.AutoCommands.*;
 
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.PushCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -26,6 +23,8 @@ public class RedAuto extends LinearOpMode {
     public final boolean close = true;
     public final boolean red = true;
 
+    // This is the autonomous code. This is structured the same as
+    // a teleop, but it doesn't use the gamepads.
     @Override
     public void runOpMode() {
         drivetrain = new Drivetrain(hardwareMap);
@@ -33,38 +32,44 @@ public class RedAuto extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
 
+        // Set the starting position on the field. PedroPathing needs to know
+        // this for the other paths to work properly.
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
-        // delay for testing purposes
-        Command delay = new DelayCommand(1000);
-
+        // These are different commands. Commands are used to run certain tasks in order, or
+        // at the same time. This particular command will drive to the starting position,
+        // charge up the flywheel, and once it does both of those things, it will shoot.
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
+        // A SequentialCommand lets you put multiple commands inside, and each command
+        // runs in order, sequentially.
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red)
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose()),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose())
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red)
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose()),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose())
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red)
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose()),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose())
         );
 
 
+        // CommandScheduler lets us run each command in order.
         CommandScheduler scheduler = new CommandScheduler(
-                shootPreload,
-                intakeAndShootPPG
+                shootPreload,   // first, shoot preload
+                intakeAndShootPPG    // then, go intake the PPG balls and shoot them.
                 );
 
         waitForStart();
 
         shooter.stopPusher();
         while (opModeIsActive()) {
+            // This runs the commands in order.
             scheduler.run();
 
             telemetry.update();

@@ -8,6 +8,11 @@ public class ChargeFlywheelCommand extends Command {
     private Shooter shooter;
     private VelocityPair vel;
 
+    /**
+     * A command that charges the flywheel to prepare for shooting
+     * @param shooter The shooter subsystem
+     * @param vel The velocity pair to charge to
+     */
     public ChargeFlywheelCommand(Shooter shooter, VelocityPair vel) {
         this.shooter = shooter;
         this.vel = vel;

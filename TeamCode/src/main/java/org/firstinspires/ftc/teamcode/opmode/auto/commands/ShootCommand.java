@@ -12,6 +12,12 @@ public class ShootCommand extends Command {
     private final Intake intake;
     private VelocityPair velocityPair;
 
+    /**
+     * A command that runs the shooter
+     * @param shooter The shooter object
+     * @param intake The intake object
+     * @param velocityPair The velocity pair to shoot at
+     */
     public ShootCommand(Shooter shooter, Intake intake, VelocityPair velocityPair) {
         this.shooter = shooter;
         this.intake = intake;

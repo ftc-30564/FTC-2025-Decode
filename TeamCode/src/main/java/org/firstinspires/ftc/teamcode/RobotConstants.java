@@ -7,6 +7,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
 public class RobotConstants {
     public static class Drive {
@@ -61,6 +62,9 @@ public class RobotConstants {
         public static final double MANUAL_CLOSE_VELOCITY = 150;
         public static final double MANUAL_MIDDLE_VELOCITY = 230;
         public static final double MANUAL_FAR_VELOCITY = 225;
+
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(215, 215);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(220, 220);
     }
 
     public static class Intake {
@@ -142,28 +146,34 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain shootToIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
+        public static PathChain shootToIntakePathV1(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-
             ballPose = isRed ? ballPose : ballPose.mirror();
+
+            ballPose.pre = ballPose.pre.plus(drift);
+            ballPose.post = ballPose.post.plus(drift);
+
 
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, ballPose.pre))
                     .setLinearHeadingInterpolation(start.getHeading(), ballPose.pre.getHeading())
                     .addPath(new BezierLine(ballPose.pre, ballPose.post))
                     .setLinearHeadingInterpolation(ballPose.pre.getHeading(), ballPose.post.getHeading())
+                    .setBrakingStrength(2)    // increase the braking strength when driving in to pickup the ball
                     .build();
         }
 
-        public static PathChain toShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed) {
+        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
             ballPose = isRed ? ballPose : ballPose.mirror();
 
+            end = end.plus(drift);
+
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(drivetrain.getPose(), end))
-                    .setLinearHeadingInterpolation(drivetrain.getPose().getHeading(), end.getHeading())
+                    .addPath(new BezierLine(ballPose.post, end))
+                    .setLinearHeadingInterpolation(ballPose.post.getHeading(), end.getHeading())
                     .build();
         }
     }

@@ -10,6 +10,11 @@ public class IntakeCommand extends Command {
     private Intake intake;
     private Intake.Mode mode;
 
+    /**
+     * A command that sets the intake
+     * @param intake The intake object
+     * @param mode The mode to set the intake to
+     */
     public IntakeCommand(Intake intake, Intake.Mode mode) {
         this.intake = intake;
         this.mode = mode;
