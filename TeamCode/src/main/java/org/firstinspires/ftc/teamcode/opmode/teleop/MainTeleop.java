@@ -34,7 +34,7 @@ public class MainTeleop extends LinearOpMode {
 
         ShootingPosition currentPosition = ShootingPosition.MIDDLE;
         boolean holding = false;
-
+        boolean zeroButton;
         boolean intakeButton;
         boolean barfButton;
         boolean chargeButton;
@@ -49,6 +49,7 @@ public class MainTeleop extends LinearOpMode {
             barfButton = gamepad1.left_bumper;
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
+            zeroButton = gamepad1.back;
 
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
@@ -67,6 +68,8 @@ public class MainTeleop extends LinearOpMode {
                 drivetrain.holdPoint();
             }
 
+            if (zeroButton)
+                drivetrain.zeroHeading();
 
             if (intakeButton || shootButton){
                 intake.run();

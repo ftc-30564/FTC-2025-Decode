@@ -43,8 +43,6 @@ public class RobotConstants {
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
         public static final double DRIVE_SNAP_TO_ANGLE_P = 0.005;
-
-        public static final double WEBCAM_SNAP_TO_APRILTAG_P = 0.0015;
     }
 
     public static class Shooter {
@@ -63,8 +61,8 @@ public class RobotConstants {
         public static final double MANUAL_MIDDLE_VELOCITY = 230;
         public static final double MANUAL_FAR_VELOCITY = 225;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(215, 215);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(220, 220);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(200, 200);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(215, 215);
     }
 
     public static class Intake {
@@ -89,13 +87,13 @@ public class RobotConstants {
         public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(231));
         public static final Pose RED_SHOOT_FAR = new Pose(83.4, 18.3, Math.toRadians(238));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
-        public static final Pose RED_PRE_INTAKE_PPG = new Pose(99, 83.9, 0);
-        public static final Pose RED_PRE_INTAKE_PGP = new Pose(99, 59.8, 0);
-        public static final Pose RED_PRE_INTAKE_GPP = new Pose(99, 35.4, 0);
+        public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
+        public static final Pose RED_PRE_INTAKE_PGP = new Pose(95, 61.3, 0);
+        public static final Pose RED_PRE_INTAKE_GPP = new Pose(92, 35.4, 0);
         // POST_INTAKE means the position right after it intakes the balls.
-        public static final Pose RED_POST_INTAKE_PPG = new Pose(124.5, 83.9, 0);
-        public static final Pose RED_POST_INTAKE_PGP = new Pose(124.5, 59.8, 0);
-        public static final Pose RED_POST_INTAKE_GPP = new Pose(124.5, 35.4, 0);
+        public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
+        public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
+        public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
 
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
         // This just mirrors the red positions.
@@ -146,7 +144,7 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain shootToIntakePathV1(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+        public static PathChain lineUpIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
             ballPose = isRed ? ballPose : ballPose.mirror();
@@ -154,13 +152,22 @@ public class RobotConstants {
             ballPose.pre = ballPose.pre.plus(drift);
             ballPose.post = ballPose.post.plus(drift);
 
-
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, ballPose.pre))
                     .setLinearHeadingInterpolation(start.getHeading(), ballPose.pre.getHeading())
+
                     .addPath(new BezierLine(ballPose.pre, ballPose.post))
                     .setLinearHeadingInterpolation(ballPose.pre.getHeading(), ballPose.post.getHeading())
-                    .setBrakingStrength(2)    // increase the braking strength when driving in to pickup the ball
+                    .setBrakingStart(18)
+                    .build();
+        }
+
+        public static PathChain forwardIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+            ballPose = isRed ? ballPose : ballPose.mirror();
+
+            return drivetrain.pathBuilder()
+                    .addPath(new BezierLine(ballPose.pre, ballPose.post))
+                    .setLinearHeadingInterpolation(ballPose.pre.getHeading(), ballPose.post.getHeading())
                     .build();
         }
 

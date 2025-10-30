@@ -21,5 +21,6 @@ public class ChargeFlywheelCommand extends Command {
     @Override
     public void loop() {
         shooter.setToVelocityPair(vel);
+        shooter.runBackPusher();
     }
 }

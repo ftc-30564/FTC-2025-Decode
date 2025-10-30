@@ -29,6 +29,9 @@ public class Drivetrain {
     public Pose getPose(){
         return follower.getPose();
     }
+    public void setPose(Pose pose) {
+        follower.setPose(pose);
+    }
     public void setStartingPose(Pose pose){
         follower.setStartingPose(pose);
     }
@@ -39,6 +42,9 @@ public class Drivetrain {
         holdPoint = getPose();
     }
 
+    public void zeroHeading() {
+        setPose(new Pose(getPose().getX(), getPose().getY(),0));
+    }
 
     public double getDistanceFromGoal(boolean red){
         Pose goalPose = RobotConstants.Auto.BLUE_GOAL_POSE;
