@@ -76,6 +76,12 @@ public class MainTeleop extends LinearOpMode {
             else {
                 intake.stop();
             }
+            else if (intakeButton && barfButton) {
+                intake.spit();
+            }
+            else {
+                intake.stop();
+            }
 
             if (gamepad2.rightBumperWasPressed()) {
                 drivetrain.setHoldPoint();
@@ -110,6 +116,8 @@ public class MainTeleop extends LinearOpMode {
             else {
                 shooter.stopPusher();
             }
+
+
 
             telemetry.update();
 
