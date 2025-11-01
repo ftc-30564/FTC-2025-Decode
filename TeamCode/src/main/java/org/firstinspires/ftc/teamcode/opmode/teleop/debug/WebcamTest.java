@@ -16,7 +16,7 @@ public class WebcamTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("Red offset inches", webcam.getOffsetApriltagInches(24));
+            telemetry.addData("Red offset inches", webcam.getOffsetApriltagInches(24, telemetry));
             telemetry.addData("Red offset degrees", webcam.getOffsetApriltagDegrees(24));
 
             telemetry.update();

@@ -62,7 +62,7 @@ public class RobotConstants {
         public static final double MANUAL_FAR_VELOCITY = 225;
 
         public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(200, 200);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(215, 215);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(205, 205);
     }
 
     public static class Intake {
@@ -71,7 +71,7 @@ public class RobotConstants {
         public static final String PUSHER_NAME = "shooterPusher";
 
         public static double FIRST_INTAKE_RUN_SPEED = 1;
-        public static double SECOND_INTAKE_RUN_SPEED = 1;
+        public static double SECOND_INTAKE_RUN_SPEED = 0.65;
     }
 
     public static class Auto {
@@ -82,10 +82,10 @@ public class RobotConstants {
         public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
-        public static final Pose RED_STARTING_FAR = new Pose(84, 8.32, Math.toRadians(270));
+        public static final Pose RED_STARTING_FAR = new Pose(87.75, 8.15, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(231));
-        public static final Pose RED_SHOOT_FAR = new Pose(83.4, 18.3, Math.toRadians(238));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(230));
+        public static final Pose RED_SHOOT_FAR = new Pose(87.06899332917494, 18.47782779759755, Math.toRadians(246));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
         public static final Pose RED_PRE_INTAKE_PGP = new Pose(95, 61.3, 0);
@@ -100,7 +100,7 @@ public class RobotConstants {
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
         public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror();
-        public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror();
+        public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror().plus(new Pose(0, 0, Math.toRadians(-4)));
         public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
         public static final Pose BLUE_PRE_INTAKE_PGP = RED_PRE_INTAKE_PGP.mirror();
         public static final Pose BLUE_PRE_INTAKE_GPP = RED_PRE_INTAKE_GPP.mirror();
@@ -125,10 +125,11 @@ public class RobotConstants {
             }
 
             BallPose mirror() {
-                this.pre = this.pre.mirror();
-                this.post = this.post.mirror();
+                BallPose ret = this;
+                ret.pre = this.pre.mirror();
+                ret.post = this.post.mirror();
 
-                return this;
+                return ret;
             }
         }
 
@@ -144,43 +145,64 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain lineUpIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+        public static PathChain intakeBallsPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            ballPose = isRed ? ballPose : ballPose.mirror();
+            Pose ballPre = ballPose.pre;
+            Pose ballPost = ballPose.post;
 
-            ballPose.pre = ballPose.pre.plus(drift);
-            ballPose.post = ballPose.post.plus(drift);
+            if (!isRed) {
+                ballPre = ballPre.mirror();
+                ballPost = ballPost.mirror();
+            }
+
+            ballPre = ballPre.plus(drift);
+            ballPost = ballPost.plus(drift);
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, ballPose.pre))
-                    .setLinearHeadingInterpolation(start.getHeading(), ballPose.pre.getHeading())
+                    .addPath(new BezierLine(start, ballPre))
+                    .setLinearHeadingInterpolation(start.getHeading(), ballPre.getHeading())
 
-                    .addPath(new BezierLine(ballPose.pre, ballPose.post))
-                    .setLinearHeadingInterpolation(ballPose.pre.getHeading(), ballPose.post.getHeading())
+                    .addPath(new BezierLine(ballPre, ballPost))
+                    .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
                     .setBrakingStart(18)
                     .build();
         }
 
         public static PathChain forwardIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
-            ballPose = isRed ? ballPose : ballPose.mirror();
+
+            BallPose ballPoseNew = BallPose.PPG;
+
+            if (!isRed) {
+                ballPoseNew.pre = ballPose.pre.mirror();
+                ballPoseNew.post = ballPose.post.mirror();
+            }
+            else {
+                ballPoseNew = ballPose;
+            }
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(ballPose.pre, ballPose.post))
-                    .setLinearHeadingInterpolation(ballPose.pre.getHeading(), ballPose.post.getHeading())
+                    .addPath(new BezierLine(ballPoseNew.pre, ballPoseNew.post))
+                    .setLinearHeadingInterpolation(ballPoseNew.pre.getHeading(), ballPoseNew.post.getHeading())
                     .build();
         }
 
         public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            ballPose = isRed ? ballPose : ballPose.mirror();
+            Pose ballPost = ballPose.post;
+
+            if (!isRed) {
+                ballPost = ballPost.mirror();
+            }
+
+            ballPost = ballPost.plus(drift);
 
             end = end.plus(drift);
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(ballPose.post, end))
-                    .setLinearHeadingInterpolation(ballPose.post.getHeading(), end.getHeading())
+                    .addPath(new BezierLine(ballPost, end))
+                    .setLinearHeadingInterpolation(ballPost.getHeading(), end.getHeading())
                     .build();
         }
     }

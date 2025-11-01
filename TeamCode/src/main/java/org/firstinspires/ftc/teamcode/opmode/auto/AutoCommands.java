@@ -6,7 +6,6 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.Shooter.*;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
@@ -74,10 +73,10 @@ public class AutoCommands {
         return new SequentialCommand(
                 new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, lineUpIntakePath(drivetrain, ballPose, close, red, drift)),
+                        new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 ),
-                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500)
+                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(200)
         );
     }
 

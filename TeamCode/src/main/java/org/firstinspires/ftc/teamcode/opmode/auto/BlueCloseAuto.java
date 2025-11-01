@@ -51,16 +51,16 @@ public class BlueCloseAuto extends LinearOpMode {
                 // So, this command will run,
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
                 // and once it's done, then this will run.
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(1)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose())
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 0, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 2.5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose())
         );
 

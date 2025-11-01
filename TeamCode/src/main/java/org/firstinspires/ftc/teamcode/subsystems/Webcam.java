@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.arch.core.executor.TaskExecutor;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -41,7 +44,7 @@ public class Webcam {
                 )
                 .setDrawAxes(true)
                 .build();
-        aprilTag.setDecimation(2);
+        aprilTag.setDecimation(4);
 
 
         visionPortal = new VisionPortal.Builder()
@@ -56,12 +59,18 @@ public class Webcam {
         visionPortal.close();
     }
 
-    public double getOffsetApriltagInches(int tag) {
+    public double getOffsetApriltagInches(int tag, Telemetry telemetry) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
         for (AprilTagDetection detection : currentDetections) {
             if (detection.id == tag) {
-                return detection.robotPose.getPosition().y;
+                if (detection.metadata != null) {
+                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                    telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                    telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                    telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                }
+                return detection.ftcPose.x + 6.5;
             }
         }
 
@@ -73,18 +82,10 @@ public class Webcam {
 
         for (AprilTagDetection detection : currentDetections) {
             if (detection.id == tag) {
-                return Math.atan2(detection.robotPose.getPosition().y, detection.robotPose.getPosition().x);
+                return Math.atan2(detection.rawPose.y, detection.rawPose.x);
             }
         }
 
         return 0;
-    }
-
-    public double getOffsetRedTarget() {
-        return getOffsetApriltagInches(24);
-    }
-
-    public double getOffsetBlueTarget() {
-        return getOffsetApriltagInches(20);
     }
 }

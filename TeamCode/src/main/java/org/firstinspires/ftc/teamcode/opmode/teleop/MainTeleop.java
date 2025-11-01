@@ -7,12 +7,14 @@ import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 
 @TeleOp
 public class MainTeleop extends LinearOpMode {
     Drivetrain drivetrain;
     Intake intake;
     Shooter shooter;
+    Webcam webcam;
 
     public enum ShootingPosition {
         MIDDLE(RobotConstants.Shooter.MANUAL_MIDDLE_VELOCITY),
@@ -29,6 +31,8 @@ public class MainTeleop extends LinearOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
+        webcam = new Webcam(hardwareMap);
+
 
         drivetrain.setStartingPose(new Pose(0, 0, 0));
 
@@ -39,6 +43,9 @@ public class MainTeleop extends LinearOpMode {
         boolean barfButton;
         boolean chargeButton;
         boolean shootButton;
+        boolean alignButton;
+
+        webcam.init();
 
         waitForStart();
 
@@ -46,21 +53,32 @@ public class MainTeleop extends LinearOpMode {
 
         while (opModeIsActive()) {
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
-            barfButton = gamepad1.left_bumper;
+            barfButton = gamepad1.b;
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
+            alignButton = gamepad1.left_bumper;
 
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
 
             drivetrain.update();
 
+            double turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
+
+            if (alignButton) {
+                turnAmt = webcam.getOffsetApriltagInches(24, telemetry) * -0.03;
+
+                if (turnAmt == 0) {
+                    turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
+                }
+            }
+
             if (!holding) {
                 drivetrain.setTeleopDrive(
                         -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                        turnAmt,
                         false);
                 telemetry.addData("Teleop drive", "running");
             }
@@ -119,5 +137,7 @@ public class MainTeleop extends LinearOpMode {
             telemetry.update();
 
         }
+
+        webcam.close();
     }
 }
