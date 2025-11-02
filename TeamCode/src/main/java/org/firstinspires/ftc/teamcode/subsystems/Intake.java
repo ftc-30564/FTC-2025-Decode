@@ -34,4 +34,8 @@ public class Intake {
         firstIntake.setPower(-RobotConstants.Intake.FIRST_INTAKE_RUN_SPEED);
         secondIntake.setPower(-RobotConstants.Intake.SECOND_INTAKE_RUN_SPEED);
     }
+    public void spit() {
+        firstIntake.setPower(1);
+        secondIntake.setPower(-1);
+    }
 }
