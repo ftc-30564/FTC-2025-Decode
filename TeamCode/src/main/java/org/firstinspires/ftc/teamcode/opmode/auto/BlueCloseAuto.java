@@ -28,8 +28,6 @@ public class BlueCloseAuto extends LinearOpMode {
     public final boolean close = true;
     public final boolean red = false;
 
-    // This is the autonomous code. This is structured the same as
-    // a teleop, but it doesn't use the gamepads.
     @Override
     public void runOpMode() {
         drivetrain = new Drivetrain(hardwareMap);
@@ -37,21 +35,12 @@ public class BlueCloseAuto extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
 
-        // Set the starting position on the field. PedroPathing needs to know
-        // this for the other paths to work properly.
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
-        // These are different commands. Commands are used to run certain tasks in order, or
-        // at the same time. This particular command will drive to the starting position,
-        // charge up the flywheel, and once it does both of those things, it will shoot.
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
-        // A SequentialCommand lets you put multiple commands inside, and each command
-        // runs in order, sequentially.
         Command intakeAndShootPPG = new SequentialCommand(
-                // So, this command will run,
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                // and once it's done, then this will run.
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(-2)))
         );
 
@@ -66,10 +55,9 @@ public class BlueCloseAuto extends LinearOpMode {
         );
 
 
-        // CommandScheduler lets us run each command.
         CommandScheduler scheduler = new CommandScheduler(
-                shootPreload,   // first, shoot preload
-                intakeAndShootPPG,    // then, go intake the PPG balls and shoot them.
+                shootPreload,
+                intakeAndShootPPG,
                 intakeAndShootPGP,
                 intakeAndShootGPP
                 );
@@ -78,7 +66,6 @@ public class BlueCloseAuto extends LinearOpMode {
 
         shooter.stopPusher();
         while (opModeIsActive()) {
-            // This runs the commands.
             scheduler.run();
 
             telemetry.update();

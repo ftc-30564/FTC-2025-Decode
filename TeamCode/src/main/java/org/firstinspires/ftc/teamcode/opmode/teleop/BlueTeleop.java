@@ -16,7 +16,6 @@ public class BlueTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
-    private Webcam webcam;
 
     private final boolean IS_RED = false;
 
@@ -35,7 +34,6 @@ public class BlueTeleop extends LinearOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
-        webcam = new Webcam(hardwareMap);
 
 
         drivetrain.setStartingPose(new Pose(0, 0, 0));
@@ -49,8 +47,6 @@ public class BlueTeleop extends LinearOpMode {
         boolean shootButton;
         boolean alignButton;
 
-        webcam.init();
-
         waitForStart();
 
         drivetrain.startTeleopDrive();
@@ -61,7 +57,6 @@ public class BlueTeleop extends LinearOpMode {
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
-            alignButton = gamepad1.left_bumper;
 
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
@@ -69,14 +64,6 @@ public class BlueTeleop extends LinearOpMode {
             drivetrain.update();
 
             double turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
-
-            if (alignButton) {
-                turnAmt = webcam.getOffsetApriltagInches(24, telemetry) * -0.03;
-
-                if (turnAmt == 0) {
-                    turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
-                }
-            }
 
             if (!holding) {
                 drivetrain.setTeleopDrive(
@@ -144,7 +131,5 @@ public class BlueTeleop extends LinearOpMode {
             telemetry.update();
 
         }
-
-        webcam.close();
     }
 }

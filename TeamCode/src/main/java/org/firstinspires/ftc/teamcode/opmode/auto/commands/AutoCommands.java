@@ -39,20 +39,15 @@ public class AutoCommands {
     public Command startAndShoot(boolean close, boolean red) {
         VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
 
-        // Here is a Sequential command, meaning all the commands inside will be run in order.
         return new SequentialCommand(
-
-                // This is a Parallel command. This means that all the commands in the list run at the same time,
-                // and the command is considered "finished" when all the inner commands finish.
                 new ParallelCommand(
-                        // Drive to shooting position
                         new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
-                        // Charges the flywheel. The .timeout() means the command will automatically exit after 1 second if it hasn't finished yet.
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
-                        // Once both these commands finish, then the ParallelCommand is finished.
                 ),
-                // Next, once we've driven to the shooting position and charged the flywheel, we shoot the preload.
-                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                new RaceCommand(
+                        new HoldPositionCommand(drivetrain),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                )
         ) ;
     }
 
@@ -92,7 +87,10 @@ public class AutoCommands {
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
-                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                new RaceCommand(
+                        new HoldPositionCommand(drivetrain),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                )
         );
     }
 }
