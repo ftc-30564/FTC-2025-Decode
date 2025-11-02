@@ -70,7 +70,7 @@ public class Webcam {
                     telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                     telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
                 }
-                return detection.ftcPose.x + 6.5;
+                return detection.ftcPose.x + 6;
             }
         }
 

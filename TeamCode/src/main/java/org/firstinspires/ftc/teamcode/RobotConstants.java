@@ -52,8 +52,8 @@ public class RobotConstants {
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
         public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.5 / 152.47;
         public static final double VELOCITY_TOP_FEEDFORWARD = 0.5 / 178.32;
-        public static final double VELOCITY_BOTTOM_P = 0.007;
-        public static final double VELOCITY_TOP_P = 0.007;
+        public static final double VELOCITY_BOTTOM_P = 0.005;
+        public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
         // Manual velocities, cause the limelight might not arrive in time
@@ -99,7 +99,7 @@ public class RobotConstants {
         // This just mirrors the red positions.
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
-        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror();
+        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(0, 0, Math.toRadians(-1)));
         public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror().plus(new Pose(0, 0, Math.toRadians(-4)));
         public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
         public static final Pose BLUE_PRE_INTAKE_PGP = RED_PRE_INTAKE_PGP.mirror();

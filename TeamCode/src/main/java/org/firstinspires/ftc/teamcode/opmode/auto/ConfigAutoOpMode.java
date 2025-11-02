@@ -24,7 +24,6 @@ The OpMode is controlled using the bumpers to cycle through commands,
 and the dpad to cycle through the detail. This allows for an infinitely customizable
 autonomous and allows us to work with other teams.
 */
-@TeleOp
 public class ConfigAutoOpMode extends LinearOpMode {
 
     // Very simple wrapper that handles cycling between multiple options.

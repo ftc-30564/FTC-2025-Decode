@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auto;
+package org.firstinspires.ftc.teamcode.opmode.auto.commands;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Shooter.*;
@@ -6,11 +6,6 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.Shooter.*;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ChargeFlywheelCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.opmode.auto.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;

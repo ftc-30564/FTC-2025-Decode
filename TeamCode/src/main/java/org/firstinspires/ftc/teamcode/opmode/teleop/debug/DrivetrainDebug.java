@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
-@TeleOp
+@TeleOp(group = "Tests")
 public class DrivetrainDebug extends LinearOpMode {
 
     @Override

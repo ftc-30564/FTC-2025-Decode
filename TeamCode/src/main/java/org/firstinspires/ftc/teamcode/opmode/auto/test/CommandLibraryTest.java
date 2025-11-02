@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.util.command_lib.ParallelCommand;
 import org.firstinspires.ftc.teamcode.util.command_lib.RaceCommand;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-@Autonomous
 public class CommandLibraryTest extends LinearOpMode {
     @Override
     public void runOpMode() {

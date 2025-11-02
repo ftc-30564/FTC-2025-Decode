@@ -8,20 +8,23 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
+import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
-@TeleOp
-public class MainTeleop extends LinearOpMode {
-    Drivetrain drivetrain;
-    Intake intake;
-    Shooter shooter;
-    Webcam webcam;
+@TeleOp(group = "Main")
+public class RedTeleop extends LinearOpMode {
+    private Drivetrain drivetrain;
+    private Intake intake;
+    private Shooter shooter;
+    private Webcam webcam;
+
+    private final boolean IS_RED = true;
 
     public enum ShootingPosition {
-        MIDDLE(RobotConstants.Shooter.MANUAL_MIDDLE_VELOCITY),
-        FAR(RobotConstants.Shooter.MANUAL_FAR_VELOCITY);
+        CLOSE(RobotConstants.Shooter.CLOSE_VELOCITY),
+        FAR(RobotConstants.Shooter.FAR_VELOCITY);
 
-        double vel;
-        ShootingPosition(double vel) {
+        VelocityPair vel;
+        ShootingPosition(VelocityPair vel) {
             this.vel = vel;
         }
     }
@@ -36,7 +39,7 @@ public class MainTeleop extends LinearOpMode {
 
         drivetrain.setStartingPose(new Pose(0, 0, 0));
 
-        ShootingPosition currentPosition = ShootingPosition.MIDDLE;
+        ShootingPosition currentPosition = ShootingPosition.CLOSE;
         boolean holding = false;
         boolean zeroButton;
         boolean intakeButton;
@@ -67,7 +70,7 @@ public class MainTeleop extends LinearOpMode {
             double turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
 
             if (alignButton) {
-                turnAmt = webcam.getOffsetApriltagInches(24, telemetry) * -0.03;
+                turnAmt = webcam.getOffsetApriltagInches(20, telemetry) * -0.03;
 
                 if (turnAmt == 0) {
                     turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
@@ -82,14 +85,15 @@ public class MainTeleop extends LinearOpMode {
                         false);
                 telemetry.addData("Teleop drive", "running");
             }
-            else {
-                drivetrain.holdPoint();
-            }
 
             if (zeroButton)
                 drivetrain.zeroHeading();
 
-            if (intakeButton || shootButton){
+
+            if (intakeButton && barfButton) {
+                intake.spit();
+            }
+            else if (intakeButton || shootButton){
                 intake.run();
             }
             else if (barfButton) {
@@ -98,15 +102,10 @@ public class MainTeleop extends LinearOpMode {
             else {
                 intake.stop();
             }
-            else if (intakeButton && barfButton) {
-                intake.spit();
-            }
-            else {
-                intake.stop();
-            }
 
             if (gamepad2.rightBumperWasPressed()) {
                 drivetrain.setHoldPoint();
+                drivetrain.holdPoint();
                 holding = true;
             }
             if (gamepad2.rightBumperWasReleased()) {
@@ -115,15 +114,14 @@ public class MainTeleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
-                currentPosition = ShootingPosition.MIDDLE;
+                currentPosition = ShootingPosition.CLOSE;
             }
             if (gamepad2.dpad_down) {
                 currentPosition = ShootingPosition.FAR;
             }
 
             if (chargeButton) {
-                shooter.setTopShooterToVelocity(currentPosition.vel);
-                shooter.setBottomShooterToVelocity(currentPosition.vel);
+                shooter.setToVelocityPair(currentPosition.vel);
             }
             else {
                 shooter.setTopShooterToVelocity(0);

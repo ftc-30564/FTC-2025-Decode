@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
-@TeleOp
+@TeleOp(group = "Tests")
 public class FlywheelTest extends LinearOpMode {
 
     @Override

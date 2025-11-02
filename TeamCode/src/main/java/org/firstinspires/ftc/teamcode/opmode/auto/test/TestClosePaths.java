@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import static org.firstinspires.ftc.teamcode.opmode.auto.AutoCommands.*;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
@@ -12,7 +10,6 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-@Autonomous
 public class TestClosePaths extends LinearOpMode {
     public Drivetrain drivetrain;
     public final boolean close = true;

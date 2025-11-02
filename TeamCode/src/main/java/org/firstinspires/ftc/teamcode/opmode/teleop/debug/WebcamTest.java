@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 
-@TeleOp
+@TeleOp(group = "Tests")
 public class WebcamTest extends LinearOpMode {
 
     @Override
