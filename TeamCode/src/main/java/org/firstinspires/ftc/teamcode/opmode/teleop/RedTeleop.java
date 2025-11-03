@@ -35,7 +35,7 @@ public class RedTeleop extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
 
 
-        drivetrain.setStartingPose(new Pose(0, 0, 0));
+        drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
 
         ShootingPosition currentPosition = ShootingPosition.CLOSE;
         boolean holding = false;

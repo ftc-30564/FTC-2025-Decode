@@ -79,6 +79,8 @@ public class RobotConstants {
         // as a Pose object, which takes an x, y, and a heading (in Radians). This means
         // when we create a Pose object we must convert each angle into radians via Math.toRadians(deg).
 
+        public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
+
         public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
         public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));

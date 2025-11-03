@@ -67,5 +67,8 @@ public class RedCloseAuto extends LinearOpMode {
             telemetry.update();
         }
 
+        // update the pose for field centric
+        LAST_REMEMBERED_POSE = drivetrain.getPose();
+
     }
 }

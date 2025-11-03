@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_FAR;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BallPose;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.LAST_REMEMBERED_POSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FAR;
 
@@ -65,11 +66,15 @@ public class RedFarAuto extends LinearOpMode {
         waitForStart();
 
         shooter.stopPusher();
+
         while (opModeIsActive()) {
             scheduler.run();
 
             telemetry.update();
         }
+
+        // update the pose for field centric
+        LAST_REMEMBERED_POSE = drivetrain.getPose();
 
     }
 }

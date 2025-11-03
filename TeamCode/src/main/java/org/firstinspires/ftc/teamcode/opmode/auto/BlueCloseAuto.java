@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_FAR;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BallPose;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.LAST_REMEMBERED_POSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FAR;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.robocol.RobocolConfig;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -70,6 +72,9 @@ public class BlueCloseAuto extends LinearOpMode {
 
             telemetry.update();
         }
+
+        // update the pose for field centric
+        LAST_REMEMBERED_POSE = drivetrain.getPose();
 
     }
 }
