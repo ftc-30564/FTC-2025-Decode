@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BallPose;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.LAST_REMEMBERED_POSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FAR;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.leavePath;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.robocol.RobocolConfig;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -56,12 +58,15 @@ public class BlueCloseAuto extends LinearOpMode {
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose())
         );
 
+        Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
+
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
                 intakeAndShootPPG,
                 intakeAndShootPGP,
-                intakeAndShootGPP
+                intakeAndShootGPP,
+                leave
                 );
 
         waitForStart();

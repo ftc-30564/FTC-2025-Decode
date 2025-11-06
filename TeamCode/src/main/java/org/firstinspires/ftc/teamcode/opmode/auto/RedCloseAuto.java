@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -50,12 +51,15 @@ public class RedCloseAuto extends LinearOpMode {
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose())
         );
 
+        Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
+
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
                 intakeAndShootPPG,
                 intakeAndShootPGP,
-                intakeAndShootGPP
+                intakeAndShootGPP,
+                leave
                 );
 
         waitForStart();
