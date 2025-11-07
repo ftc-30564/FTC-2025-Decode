@@ -42,17 +42,17 @@ public class BlueFarAuto extends LinearOpMode {
 
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
-        Command intakeAndShootPPG = new SequentialCommand(
+        Command intakeAndShootThirdLine = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, -5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(-1)))
         );
 
-        Command intakeAndShootPGP = new SequentialCommand(
+        Command intakeAndShootSecondLine = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(-1)))
         );
 
-        Command intakeAndShootGPP = new SequentialCommand(
+        Command intakeAndShootFirstLine = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose(0, 0, Math.toRadians(-2)))
         );
@@ -62,9 +62,9 @@ public class BlueFarAuto extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootGPP,
-                intakeAndShootPGP,
-                intakeAndShootPPG,
+                intakeAndShootFirstLine,
+                intakeAndShootSecondLine,
+                intakeAndShootThirdLine,
                 leave
                 );
 
