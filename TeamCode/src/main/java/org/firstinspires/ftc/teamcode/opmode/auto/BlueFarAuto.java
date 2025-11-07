@@ -48,13 +48,13 @@ public class BlueFarAuto extends LinearOpMode {
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -4, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(-3)))
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -5, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(-1)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
-
+// http://limelight.local:5801
 @TeleOp(group = "Main")
 public class BlueTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
@@ -36,6 +36,10 @@ public class BlueTeleop extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
 
 
+
+        if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
+            RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
+        }
         drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
 
         ShootingPosition currentPosition = ShootingPosition.CLOSE;
@@ -50,6 +54,7 @@ public class BlueTeleop extends LinearOpMode {
         waitForStart();
 
         drivetrain.startTeleopDrive();
+        drivetrain.resetImu();
 
         while (opModeIsActive()) {
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
@@ -58,24 +63,20 @@ public class BlueTeleop extends LinearOpMode {
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
 
-            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
-            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
-
             drivetrain.update();
 
             double turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
 
             if (!holding) {
                 drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         turnAmt,
                         false);
-                telemetry.addData("Teleop drive", "running");
             }
 
             if (zeroButton)
-                drivetrain.zeroHeading();
+                drivetrain.oneEightyHeading();
 
 
             if (intakeButton && barfButton) {
@@ -122,14 +123,25 @@ public class BlueTeleop extends LinearOpMode {
             else if (shootButton) {
                 shooter.runPusher();
             }
+            else if (barfButton) {
+                shooter.barfPusher();
+            }
             else {
                 shooter.stopPusher();
             }
 
-
+            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
+            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
+            telemetry.addData("Robot X", drivetrain.getPose().getX());
+            telemetry.addData("Robot Y", drivetrain.getPose().getY());
+            telemetry.addData("Robot Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
+            telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleDegrees());
 
             telemetry.update();
 
         }
+
+        // update last remembered pose
+        RobotConstants.Auto.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

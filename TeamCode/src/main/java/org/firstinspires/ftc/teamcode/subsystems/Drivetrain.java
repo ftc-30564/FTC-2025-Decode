@@ -4,17 +4,31 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class Drivetrain {
     private Follower follower;
     private Pose holdPoint;
+    private IMU imu;
 
     public Drivetrain(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
     public void startTeleopDrive(){
@@ -22,6 +36,12 @@ public class Drivetrain {
     }
     public void setTeleopDrive(double forward, double strafe, double turn, boolean isRobotCentric){
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
+    }
+    public void resetImu() {
+        imu.resetYaw();
+    }
+    public double getImuAngleDegrees() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
     public void update(){
         follower.update();
@@ -44,6 +64,10 @@ public class Drivetrain {
 
     public void zeroHeading() {
         setPose(new Pose(getPose().getX(), getPose().getY(),0));
+    }
+
+    public void oneEightyHeading() {
+        setPose(new Pose(getPose().getX(), getPose().getY(),Math.toRadians(180)));
     }
 
     public double getDistanceFromGoal(boolean red){

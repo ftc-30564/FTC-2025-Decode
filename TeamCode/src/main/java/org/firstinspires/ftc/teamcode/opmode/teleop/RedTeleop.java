@@ -49,6 +49,7 @@ public class RedTeleop extends LinearOpMode {
         waitForStart();
 
         drivetrain.startTeleopDrive();
+        drivetrain.resetImu();
 
         while (opModeIsActive()) {
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
@@ -56,9 +57,6 @@ public class RedTeleop extends LinearOpMode {
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
-
-            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
-            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
 
             drivetrain.update();
 
@@ -121,14 +119,24 @@ public class RedTeleop extends LinearOpMode {
             else if (shootButton) {
                 shooter.runPusher();
             }
+            else if (barfButton) {
+                shooter.barfPusher();
+            }
             else {
                 shooter.stopPusher();
             }
 
-
+            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
+            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
+            telemetry.addData("Robot X", drivetrain.getPose().getX());
+            telemetry.addData("Robot Y", drivetrain.getPose().getY());
+            telemetry.addData("Robot Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
+            telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleDegrees());
 
             telemetry.update();
 
         }
+
+        RobotConstants.Auto.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

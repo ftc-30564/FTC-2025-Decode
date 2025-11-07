@@ -89,6 +89,6 @@ public class Shooter {
     }
 
     public void runBackPusher(){
-        shooterPusher.setPower(-.3);
+        shooterPusher.setPower(-.45);
     }
 }

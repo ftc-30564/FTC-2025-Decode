@@ -61,7 +61,7 @@ public class AutoCommands {
      */
     public Command driveAndIntakeBalls(BallPose ballPose, boolean close, boolean red, Pose drift) {
         return new SequentialCommand(
-                new DelayCommand(500),
+                //new DelayCommand(500),
                 new RaceCommand(
                         new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
