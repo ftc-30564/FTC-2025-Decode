@@ -18,18 +18,18 @@ public class Shooter {
     private Telemetry telemetry;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
-        shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
         this.telemetry = telemetry;
 
+        shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
         shooterPusher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         bottomFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.LEFT_FLYWHEEL_NAME);
+        bottomFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
         topFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.RIGHT_FLYWHEEL_NAME);
 
-        bottomFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bottomFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        bottomFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        bottomFlywheel.setVelocityPIDFCoefficients(RobotConstants.Shooter.VELOCITY_BOTTOM_P, 0, 0, RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD);
+        topFlywheel.setVelocityPIDFCoefficients(RobotConstants.Shooter.VELOCITY_TOP_P, 0, 0, RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD);
     }
 
     public void setPercent(double percent) {
@@ -55,15 +55,27 @@ public class Shooter {
     }
 
     public void setBottomShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityBottom();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_BOTTOM_P);
-        bottomFlywheel.setPower(percent);
+//        double currentVelocity = getVelocityBottom();
+//        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_BOTTOM_P);
+//        bottomFlywheel.setPower(percent);
+
+        bottomFlywheel.setVelocity(targetVelocity, AngleUnit.DEGREES);
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityTop();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_TOP_P);
-        topFlywheel.setPower(percent);
+//        double currentVelocity = getVelocityTop();
+//        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_TOP_P);
+//        topFlywheel.setPower(percent);
+
+        topFlywheel.setVelocity(targetVelocity, AngleUnit.DEGREES);
+    }
+
+    public void updateTopShooterPIDF(double p, double i, double d) {
+        topFlywheel.setVelocityPIDFCoefficients(p, i, d, RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD);
+    }
+
+    public void updateBottomShooterPIDF(double p, double i, double d) {
+        bottomFlywheel.setVelocityPIDFCoefficients(p, i, d, RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD);
     }
 
     public boolean bottomIsAtVelocity(double targetVelocity) {

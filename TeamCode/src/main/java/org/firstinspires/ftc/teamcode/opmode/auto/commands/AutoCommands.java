@@ -70,6 +70,10 @@ public class AutoCommands {
         );
     }
 
+    public Command knockGate(boolean red) {
+        return new FollowPathCommand(drivetrain, knockGatePath(drivetrain, red));
+    }
+
     /**
      * Returns a command where the robot drives to the shooting position and shoots balls.
      * @param ballPose the group of balls that the robot starts at (ex. PPG, PGP, GPP)
@@ -78,13 +82,13 @@ public class AutoCommands {
      * @param drift a pose that offsets the end position in case the dead wheels experience drift
      * @return a command where the robot drives to the shooting position and shoots balls
      */
-    public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, Pose drift) {
+    public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, boolean fromGate, Pose drift) {
         VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
 
         return new SequentialCommand(
                 new ParallelCommand(
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500),
-                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, drift)),
+                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, fromGate, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(

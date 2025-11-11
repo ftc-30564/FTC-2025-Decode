@@ -95,6 +95,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
+        public static final Pose RED_HIT_GATE = new Pose(130, 73, Math.toRadians(270));
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
 
@@ -110,6 +111,7 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
         public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
+        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror();
         public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
         public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
 
@@ -174,40 +176,40 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain forwardIntakePath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+        public static PathChain knockGatePath(Drivetrain drivetrain, boolean isRed) {
+            Pose start = isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG;
 
-            BallPose ballPoseNew = BallPose.PPG;
+            Pose lineUp = new Pose(122, 73, Math.toRadians(270));
+            Pose end = isRed ? RED_HIT_GATE : BLUE_HIT_GATE;
 
-            if (!isRed) {
-                ballPoseNew.pre = ballPose.pre.mirror();
-                ballPoseNew.post = ballPose.post.mirror();
-            }
-            else {
-                ballPoseNew = ballPose;
+            if (isRed) {
+                lineUp = lineUp.mirror();
+                end = end.mirror();
             }
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(ballPoseNew.pre, ballPoseNew.post))
-                    .setLinearHeadingInterpolation(ballPoseNew.pre.getHeading(), ballPoseNew.post.getHeading())
+                    .addPath(new BezierLine(start, lineUp))
+                    .setLinearHeadingInterpolation(start.getHeading(), lineUp.getHeading())
+                    .addPath(new BezierLine(lineUp, end))
+                    .setLinearHeadingInterpolation(lineUp.getHeading(), end.getHeading())
                     .build();
         }
 
-        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, boolean fromGate, Pose drift) {
+            Pose start = fromGate ? RED_HIT_GATE : ballPose.post;
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            Pose ballPost = ballPose.post;
-
             if (!isRed) {
-                ballPost = ballPost.mirror();
+                start = start.mirror();
             }
 
-            ballPost = ballPost.plus(drift);
-
+            // TODO: start shouldn't add drift. I'm scared to remove this cause it might mess up some of the paths
+            start = start.plus(drift);
             end = end.plus(drift);
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(ballPost, end))
-                    .setLinearHeadingInterpolation(ballPost.getHeading(), end.getHeading())
+                    .addPath(new BezierLine(start, end))
+                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
                     .build();
         }
 
