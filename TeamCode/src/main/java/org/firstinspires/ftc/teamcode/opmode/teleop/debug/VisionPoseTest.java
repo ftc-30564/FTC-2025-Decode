@@ -7,10 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 
 @TeleOp(group = "Tests")
-public class AlignToTargetTest extends LinearOpMode {
+public class VisionPoseTest extends LinearOpMode {
     public Drivetrain drivetrain;
     public Limelight limelight;
 
@@ -27,24 +26,19 @@ public class AlignToTargetTest extends LinearOpMode {
 
         drivetrain.startTeleopDrive();
         limelight.start();
+        drivetrain.resetImu();
 
         while (opModeIsActive()) {
 
             drivetrain.update();
 
-            if (gamepad1.left_bumper) {
-                drivetrain.setGoalCentricDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        limelight.getOffsetTarget());
-            }
-            else {
-                drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                        false);
-            }
+            drivetrain.setTeleopDrive(
+                    -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                    -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                    -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                    false);
+
+            Pose estPose = limelight.getPoseEstimate(drivetrain.getImuAngleDegrees());
 
             telemetry.addData("Limelight offset", limelight.getOffsetTarget());
             telemetry.update();

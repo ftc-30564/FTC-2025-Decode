@@ -19,7 +19,7 @@ public class RobotConstants {
 
         public static final String DEAD_WHEEL_LEFT_NAME = "frontLeft";
         public static final String DEAD_WHEEL_RIGHT_NAME = "backRight";
-        public static final String DEAD_WHEEL_PERP_NAME = "frontRight";
+        public static final String DEAD_WHEEL_PERP_NAME = "backLeft";
 
         public static final DcMotorSimple.Direction FRONT_LEFT_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
         public static final DcMotorSimple.Direction FRONT_RIGHT_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
@@ -42,7 +42,7 @@ public class RobotConstants {
         public static final Pose RED_GOAL_POSE = new Pose(137.5, 143.2, 0);
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
-        public static final double DRIVE_SNAP_TO_ANGLE_P = 0.005;
+        public static final double DRIVE_SNAP_TO_ANGLE_P = 0.025;
     }
 
     public static class Shooter {
@@ -61,8 +61,8 @@ public class RobotConstants {
         public static final double MANUAL_MIDDLE_VELOCITY = 230;
         public static final double MANUAL_FAR_VELOCITY = 225;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(200, 200);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(205, 205);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(155, 160);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(165, 165);
     }
 
     public static class Intake {

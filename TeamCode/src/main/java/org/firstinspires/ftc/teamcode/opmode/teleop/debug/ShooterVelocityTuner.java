@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -12,12 +13,11 @@ public class ShooterVelocityTuner extends LinearOpMode {
     private final double targetVelocity = 200;
     private boolean isRunning = false;
     private boolean isMeasuring = false;
+    private ElapsedTime timer = new ElapsedTime();
+    private double measuredTime = 0;
 
     private double kP = RobotConstants.Shooter.VELOCITY_TOP_P;
-    private double kI = 0;
-    private double kD = 0;
 
-    private double initialMeasure = 0;
     private double derivativeMeasure = 0;
 
     @Override
@@ -27,14 +27,13 @@ public class ShooterVelocityTuner extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.aWasPressed()) {
                 isRunning = !isRunning;
+                if (isRunning) {
+                    timer.reset();
+                }
             }
             if (gamepad1.yWasPressed()) {
                 isMeasuring = !isMeasuring;
-                if (isMeasuring) {
-                    initialMeasure = shooter.getVelocityTop();
-                }
-                else {
-                    initialMeasure = 0;
+                if (!isMeasuring) {
                     derivativeMeasure = 0;
                 }
             }
@@ -42,37 +41,31 @@ public class ShooterVelocityTuner extends LinearOpMode {
 
             if (isRunning) {
                 if (isMeasuring) {
-                    telemetry.addData("Initial Measure", initialMeasure);
                     telemetry.addData("Derivative Measure", derivativeMeasure);
 
-                    if (derivativeMeasure < Math.abs(shooter.getVelocityTop() - initialMeasure))
-                        derivativeMeasure = Math.abs(shooter.getVelocityTop() - initialMeasure);
+                    if (Math.abs(targetVelocity - shooter.getVelocityTop()) > derivativeMeasure)
+                        derivativeMeasure = Math.abs(targetVelocity - shooter.getVelocityTop());
 
                 }
                 shooter.setTopShooterToVelocity(targetVelocity);
+                if ((shooter.getVelocityTop() > targetVelocity) && (measuredTime == 0)) {
+                    measuredTime = timer.milliseconds();
+                }
 
                 if (gamepad1.dpadUpWasPressed())
                     kP += 0.0001;
                 if (gamepad1.dpadDownWasPressed())
                     kP -= 0.0001;
-                if (gamepad1.dpadLeftWasPressed())
-                    kI += 0.00001;
-                if (gamepad1.dpadRightWasPressed())
-                    kI -= 0.00001;
-                if (gamepad1.rightBumperWasPressed())
-                    kD += 0.00001;
-                if (gamepad1.leftBumperWasPressed())
-                    kD -= 0.00001;
 
-                shooter.updateTopShooterPIDF(kP, kI, kD);
+                shooter.updateTopShooterP(kP);
             }
             else {
                 shooter.setPercent(0);
             }
 
+            telemetry.addData("Time", measuredTime);
+            telemetry.addData("Current pos", shooter.getVelocityTop());
             telemetry.addData("kP", kP);
-            telemetry.addData("kI", kI);
-            telemetry.addData("kD", kD);
             telemetry.update();
         }
     }
