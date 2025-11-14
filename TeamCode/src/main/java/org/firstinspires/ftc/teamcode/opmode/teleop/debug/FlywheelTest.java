@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.opmode.teleop.debug;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Interpolator;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @TeleOp(group = "Tests")
@@ -13,11 +16,17 @@ public class FlywheelTest extends LinearOpMode {
     public void runOpMode() {
         Shooter shooter = new Shooter(hardwareMap, telemetry);
         Intake intake = new Intake(hardwareMap);
+        Limelight limelight = new Limelight(hardwareMap);
+        Interpolator interpolator = new Interpolator(InterpolationPoints.points);
+
+        limelight.setRedGoalPipeline();
 
         double topVel = 0;
         double botVel = 0;
 
         waitForStart();
+
+        limelight.start();
 
         while (opModeIsActive()) {
             telemetry.addData("top vel", topVel);
@@ -52,6 +61,10 @@ public class FlywheelTest extends LinearOpMode {
 
             shooter.setBottomShooterToVelocity(botVel);
             shooter.setTopShooterToVelocity(topVel);
+
+            telemetry.addData("Limelight distance", limelight.getDistanceTarget(true, telemetry));
+            telemetry.addData("Interpolator velocity", interpolator.getVelocity(limelight.getDistanceTarget(true, telemetry)));
+
 
             telemetry.update();
         }

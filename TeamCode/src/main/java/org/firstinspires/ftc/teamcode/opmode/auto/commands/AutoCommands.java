@@ -8,6 +8,7 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
@@ -21,12 +22,14 @@ public class AutoCommands {
     private final Drivetrain drivetrain;
     private final Shooter shooter;
     private final Intake intake;
+    private final Limelight limelight;
     private final Telemetry telemetry;
 
-    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Telemetry telemetry) {
+    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Limelight limelight, Telemetry telemetry) {
         this.drivetrain = drivetrain;
         this.shooter = shooter;
         this.intake = intake;
+        this.limelight = limelight;
         this.telemetry = telemetry;
     }
 
@@ -45,7 +48,7 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
-                        new HoldPositionCommand(drivetrain),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
                         new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                 )
         ) ;
@@ -92,7 +95,7 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
-                        new HoldPositionCommand(drivetrain),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                 )
         );

@@ -1,23 +1,25 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Interpolator;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
-// http://limelight.local:5801
+
 @TeleOp(group = "Main")
 public class BlueTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
     private Limelight limelight;
+    private Interpolator interpolator;
+
 
     private final boolean IS_RED = false;
 
@@ -37,22 +39,32 @@ public class BlueTeleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
+        interpolator = new Interpolator(InterpolationPoints.points);
 
-        limelight.setBlueGoalPipeline();
-
-        if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
-            RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
+        if (IS_RED) {
+            limelight.setRedGoalPipeline();
         }
-        drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+        else {
+            limelight.setBlueGoalPipeline();
+        }
+
+        if (IS_RED) {
+            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+        }
+        else {
+            if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
+                RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
+            }
+            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+        }
+
 
         ShootingPosition currentPosition = ShootingPosition.CLOSE;
-        boolean holding = false;
         boolean zeroButton;
         boolean intakeButton;
         boolean barfButton;
         boolean chargeButton;
         boolean shootButton;
-        boolean alignButton;
 
         double turnAmt = 0;
 
@@ -71,25 +83,29 @@ public class BlueTeleop extends LinearOpMode {
 
             drivetrain.update();
 
-            if (true) {
-                if (gamepad1.left_bumper) {
-                    turnAmt = drivetrain.setGoalCentricDrive(
-                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                            limelight.getOffsetTarget());
-                }
-                else {
-                    drivetrain.setTeleopDrive(
-                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                            false);
-                }
+            if (gamepad1.left_bumper) {
+                turnAmt = drivetrain.setGoalCentricDrive(
+                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        limelight.getYawTarget());
+            }
+            else {
+                drivetrain.setTeleopDrive(
+                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                        false);
             }
 
-            if (zeroButton)
-                drivetrain.oneEightyHeading();
 
+            if (zeroButton) {
+                if (IS_RED) {
+                    drivetrain.zeroHeading();
+                }
+                else {
+                    drivetrain.oneEightyHeading();
+                }
+            }
 
             if (intakeButton && barfButton) {
                 intake.spit();
@@ -104,16 +120,6 @@ public class BlueTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-//            if (gamepad2.rightBumperWasPressed()) {
-//                drivetrain.setHoldPoint();
-//                drivetrain.holdPoint();
-//                holding = true;
-//            }
-//            if (gamepad2.rightBumperWasReleased()) {
-//                drivetrain.startTeleopDrive();
-//                holding = false;
-//            }
-
             if (gamepad2.dpad_up) {
                 currentPosition = ShootingPosition.CLOSE;
             }
@@ -122,7 +128,8 @@ public class BlueTeleop extends LinearOpMode {
             }
 
             if (chargeButton) {
-                shooter.setToVelocityPair(currentPosition.vel);
+                double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
+                shooter.setToVelocityPair(new VelocityPair(vel, vel));
             }
             else {
                 shooter.setTopShooterToVelocity(0);
@@ -142,14 +149,19 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
+            telemetry.addLine("SHOOTER");
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
+            telemetry.addLine("DRIVETRAIN");
             telemetry.addData("Robot X", drivetrain.getPose().getX());
             telemetry.addData("Robot Y", drivetrain.getPose().getY());
             telemetry.addData("Robot Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
             telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleDegrees());
-
+            telemetry.addLine("LIMELIGHT");
             telemetry.addData("Turn Amount", turnAmt);
+            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
+            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
+
             telemetry.update();
 
         }

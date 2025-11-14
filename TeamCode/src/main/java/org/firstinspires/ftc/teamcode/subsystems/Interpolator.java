@@ -5,13 +5,16 @@ import org.opencv.core.Point;
 import java.util.ArrayList;
 
 public class Interpolator {
-
     private ArrayList<Point> points;
 
     public Interpolator(ArrayList<Point> points) {
         this.points = points;
     }
     public int getNearestPointIndex(double distance) {
+        if (distance < points.get(0).x) {
+            return 0;
+        }
+
         for (int x = 0; x < points.size(); x ++) {
             if (points.get(x).x > distance) {
                return x - 1;

@@ -56,12 +56,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        // Manual velocities, cause the limelight might not arrive in time
-        public static final double MANUAL_CLOSE_VELOCITY = 150;
-        public static final double MANUAL_MIDDLE_VELOCITY = 230;
-        public static final double MANUAL_FAR_VELOCITY = 225;
-
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(155, 160);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(155, 165);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(165, 165);
     }
 
@@ -95,7 +90,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
-        public static final Pose RED_HIT_GATE = new Pose(130, 73, Math.toRadians(270));
+        public static final Pose RED_HIT_GATE = new Pose(128, 74.5, Math.toRadians(270));
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
 
@@ -179,12 +174,11 @@ public class RobotConstants {
         public static PathChain knockGatePath(Drivetrain drivetrain, boolean isRed) {
             Pose start = isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG;
 
-            Pose lineUp = new Pose(122, 73, Math.toRadians(270));
+            Pose lineUp = new Pose(118, 78, Math.toRadians(270));
             Pose end = isRed ? RED_HIT_GATE : BLUE_HIT_GATE;
 
-            if (isRed) {
+            if (!isRed) {
                 lineUp = lineUp.mirror();
-                end = end.mirror();
             }
 
             return drivetrain.pathBuilder()
