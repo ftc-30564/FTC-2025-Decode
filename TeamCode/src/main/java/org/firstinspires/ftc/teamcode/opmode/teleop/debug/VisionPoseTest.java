@@ -40,7 +40,7 @@ public class VisionPoseTest extends LinearOpMode {
 
             Pose estPose = limelight.getPoseEstimate(drivetrain.getImuAngleDegrees());
 
-            telemetry.addData("Limelight offset", limelight.getOffsetTarget());
+            telemetry.addData("Limelight offset", limelight.getYawTarget());
             telemetry.update();
         }
     }

@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class Limelight {
         limelight.start();
     }
 
-    public double getOffsetTarget() {
+    public double getYawTarget() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid() && result.getStaleness() < 100) {
             return result.getTx();
@@ -59,6 +60,26 @@ public class Limelight {
         }
 
         return false;
+    }
+
+    public double getDistanceTarget(boolean red, Telemetry telemetry) {
+        LLResult result = limelight.getLatestResult();
+        if (result != null && result.isValid() && result.getStaleness() < 100) {
+            List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+
+            for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                if (fiducial.getFiducialId() != (red ? 24 : 20))
+                    continue;
+
+                Pose3D targetPose = fiducial.getTargetPoseCameraSpace();
+
+                telemetry.addData("Pose X", targetPose.getPosition().x);
+                telemetry.addData("Pose Z", targetPose.getPosition().z);
+
+                return Math.sqrt(Math.pow(targetPose.getPosition().x, 2) + Math.pow(targetPose.getPosition().z, 2));
+            }
+        }
+        return 0;
     }
 
     public Pose getPoseEstimate(double heading) {

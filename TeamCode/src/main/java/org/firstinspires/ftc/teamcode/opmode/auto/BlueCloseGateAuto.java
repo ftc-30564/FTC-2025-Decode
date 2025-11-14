@@ -74,6 +74,7 @@ public class BlueCloseGateAuto extends LinearOpMode {
 
         waitForStart();
 
+        limelight.start();
         shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();

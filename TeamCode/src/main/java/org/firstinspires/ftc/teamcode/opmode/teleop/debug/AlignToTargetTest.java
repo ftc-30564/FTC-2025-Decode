@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 
 @TeleOp(group = "Tests")
 public class AlignToTargetTest extends LinearOpMode {
@@ -36,7 +35,7 @@ public class AlignToTargetTest extends LinearOpMode {
                 drivetrain.setGoalCentricDrive(
                         -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        limelight.getOffsetTarget());
+                        limelight.getYawTarget());
             }
             else {
                 drivetrain.setTeleopDrive(
@@ -46,7 +45,7 @@ public class AlignToTargetTest extends LinearOpMode {
                         false);
             }
 
-            telemetry.addData("Limelight offset", limelight.getOffsetTarget());
+            telemetry.addData("Limelight offset", limelight.getYawTarget());
             telemetry.update();
         }
     }

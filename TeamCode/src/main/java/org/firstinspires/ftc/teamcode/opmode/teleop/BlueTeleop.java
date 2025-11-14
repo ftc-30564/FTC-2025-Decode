@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Interpolator;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
 @TeleOp(group = "Main")
@@ -17,6 +18,8 @@ public class BlueTeleop extends LinearOpMode {
     private Intake intake;
     private Shooter shooter;
     private Limelight limelight;
+    private Interpolator interpolator;
+
 
     private final boolean IS_RED = false;
 
@@ -36,6 +39,7 @@ public class BlueTeleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
+        interpolator = new Interpolator(InterpolationPoints.points);
 
         if (IS_RED) {
             limelight.setRedGoalPipeline();
@@ -83,7 +87,7 @@ public class BlueTeleop extends LinearOpMode {
                 turnAmt = drivetrain.setGoalCentricDrive(
                         -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
-                        limelight.getOffsetTarget());
+                        limelight.getYawTarget());
             }
             else {
                 drivetrain.setTeleopDrive(
@@ -124,7 +128,8 @@ public class BlueTeleop extends LinearOpMode {
             }
 
             if (chargeButton) {
-                shooter.setToVelocityPair(currentPosition.vel);
+                double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
+                shooter.setToVelocityPair(new VelocityPair(vel, vel));
             }
             else {
                 shooter.setTopShooterToVelocity(0);
@@ -155,6 +160,7 @@ public class BlueTeleop extends LinearOpMode {
             telemetry.addLine("LIMELIGHT");
             telemetry.addData("Turn Amount", turnAmt);
             telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
+            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
             telemetry.update();
 

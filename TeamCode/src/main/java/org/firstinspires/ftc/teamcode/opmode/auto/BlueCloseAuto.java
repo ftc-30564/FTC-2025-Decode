@@ -74,6 +74,7 @@ public class BlueCloseAuto extends LinearOpMode {
 
         waitForStart();
 
+        limelight.start();
         shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();

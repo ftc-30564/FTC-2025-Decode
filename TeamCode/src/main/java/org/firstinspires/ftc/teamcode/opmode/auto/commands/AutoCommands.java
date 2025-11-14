@@ -48,7 +48,7 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, red),
+                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
                         new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                 )
         ) ;
@@ -95,7 +95,7 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, red),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                 )
         );
