@@ -19,13 +19,14 @@ public class Drivetrain {
     private Pose holdPoint;
     private IMU imu;
 
+    private double imuOffset = 0;
+
     public Drivetrain(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
         imu = hardwareMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
-
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
         imu.initialize(new IMU.Parameters(orientationOnRobot));
@@ -55,9 +56,13 @@ public class Drivetrain {
     public void resetImu() {
         imu.resetYaw();
     }
+    public void resetImu(double offset) {
+        imuOffset = offset;
+        imu.resetYaw();
+    }
 
     public double getImuAngleDegrees() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        return  imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + imuOffset;
     }
 
     public void update(){

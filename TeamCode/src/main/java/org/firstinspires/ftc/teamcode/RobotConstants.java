@@ -56,11 +56,6 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        // Manual velocities, cause the limelight might not arrive in time
-        public static final double MANUAL_CLOSE_VELOCITY = 150;
-        public static final double MANUAL_MIDDLE_VELOCITY = 230;
-        public static final double MANUAL_FAR_VELOCITY = 225;
-
         public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(155, 160);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(165, 165);
     }
