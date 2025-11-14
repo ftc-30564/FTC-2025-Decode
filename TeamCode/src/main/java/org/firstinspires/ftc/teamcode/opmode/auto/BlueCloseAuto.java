@@ -43,19 +43,19 @@ public class BlueCloseAuto extends LinearOpMode {
 
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
-        Command intakeAndShootFirstLine = new SequentialCommand(
+        Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
         );
 
-        Command intakeAndShootSecondLine = new SequentialCommand(
+        Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
         );
 
-        Command intakeAndShootThirdLine = new SequentialCommand(
+        Command intakeAndShootGPP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 2.5, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
@@ -63,9 +63,9 @@ public class BlueCloseAuto extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootFirstLine,
-                intakeAndShootSecondLine,
-                intakeAndShootThirdLine,
+                intakeAndShootPPG,
+                intakeAndShootPGP,
+                intakeAndShootGPP,
                 leave
                 );
 

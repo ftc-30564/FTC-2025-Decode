@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,20 +15,19 @@ public class Shooter {
     private DcMotorEx topFlywheel;
     private CRServo shooterPusher;
     private Telemetry telemetry;
+    private double bottomVelocityP = RobotConstants.Shooter.VELOCITY_BOTTOM_P;
+    private double topVelocityP = RobotConstants.Shooter.VELOCITY_TOP_P;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
-        shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
         this.telemetry = telemetry;
 
+        shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
         shooterPusher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         bottomFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.LEFT_FLYWHEEL_NAME);
-        topFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.RIGHT_FLYWHEEL_NAME);
-
-        bottomFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bottomFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         bottomFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        topFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.RIGHT_FLYWHEEL_NAME);
     }
 
     public void setPercent(double percent) {
@@ -56,14 +54,22 @@ public class Shooter {
 
     public void setBottomShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityBottom();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_BOTTOM_P);
+        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * bottomVelocityP);
         bottomFlywheel.setPower(percent);
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityTop();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_TOP_P);
+        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * topVelocityP);
         topFlywheel.setPower(percent);
+    }
+
+    public void updateTopShooterP(double p) {
+        this.topVelocityP = p;
+    }
+
+    public void updateBottomShooterP(double p) {
+        this.bottomVelocityP = p;
     }
 
     public boolean bottomIsAtVelocity(double targetVelocity) {

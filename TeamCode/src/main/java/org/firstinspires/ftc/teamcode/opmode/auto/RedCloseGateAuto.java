@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_FAR;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BallPose;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.LAST_REMEMBERED_POSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FAR;
+import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.leavePath;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
@@ -16,7 +22,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class RedCloseAuto extends LinearOpMode {
+public class RedCloseGateAuto extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -38,7 +44,8 @@ public class RedCloseAuto extends LinearOpMode {
 
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(1)))
+                autoCommands.knockGate(red),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(1)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(

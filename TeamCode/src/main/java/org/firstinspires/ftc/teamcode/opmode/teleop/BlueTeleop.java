@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
@@ -16,6 +17,7 @@ public class BlueTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
+    private Limelight limelight;
 
     private final boolean IS_RED = false;
 
@@ -34,8 +36,9 @@ public class BlueTeleop extends LinearOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
+        limelight = new Limelight(hardwareMap);
 
-
+        limelight.setBlueGoalPipeline();
 
         if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
             RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
@@ -51,8 +54,11 @@ public class BlueTeleop extends LinearOpMode {
         boolean shootButton;
         boolean alignButton;
 
+        double turnAmt = 0;
+
         waitForStart();
 
+        limelight.start();
         drivetrain.startTeleopDrive();
         drivetrain.resetImu();
 
@@ -65,14 +71,20 @@ public class BlueTeleop extends LinearOpMode {
 
             drivetrain.update();
 
-            double turnAmt = -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT;
-
-            if (!holding) {
-                drivetrain.setTeleopDrive(
-                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        turnAmt,
-                        false);
+            if (true) {
+                if (gamepad1.left_bumper) {
+                    turnAmt = drivetrain.setGoalCentricDrive(
+                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                            limelight.getOffsetTarget());
+                }
+                else {
+                    drivetrain.setTeleopDrive(
+                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                            false);
+                }
             }
 
             if (zeroButton)
@@ -92,15 +104,15 @@ public class BlueTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-            if (gamepad2.rightBumperWasPressed()) {
-                drivetrain.setHoldPoint();
-                drivetrain.holdPoint();
-                holding = true;
-            }
-            if (gamepad2.rightBumperWasReleased()) {
-                drivetrain.startTeleopDrive();
-                holding = false;
-            }
+//            if (gamepad2.rightBumperWasPressed()) {
+//                drivetrain.setHoldPoint();
+//                drivetrain.holdPoint();
+//                holding = true;
+//            }
+//            if (gamepad2.rightBumperWasReleased()) {
+//                drivetrain.startTeleopDrive();
+//                holding = false;
+//            }
 
             if (gamepad2.dpad_up) {
                 currentPosition = ShootingPosition.CLOSE;
@@ -137,6 +149,7 @@ public class BlueTeleop extends LinearOpMode {
             telemetry.addData("Robot Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
             telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleDegrees());
 
+            telemetry.addData("Turn Amount", turnAmt);
             telemetry.update();
 
         }
