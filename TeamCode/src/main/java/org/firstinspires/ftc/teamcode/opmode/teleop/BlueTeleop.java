@@ -63,7 +63,6 @@ public class BlueTeleop extends LinearOpMode {
         }
 
 
-        ShootingPosition currentPosition = ShootingPosition.CLOSE;
         boolean zeroButton;
         boolean intakeButton;
         boolean barfButton;
@@ -122,13 +121,6 @@ public class BlueTeleop extends LinearOpMode {
             }
             else {
                 intake.stop();
-            }
-
-            if (gamepad2.dpad_up) {
-                currentPosition = ShootingPosition.CLOSE;
-            }
-            if (gamepad2.dpad_down) {
-                currentPosition = ShootingPosition.FAR;
             }
 
             if (chargeButton) {
