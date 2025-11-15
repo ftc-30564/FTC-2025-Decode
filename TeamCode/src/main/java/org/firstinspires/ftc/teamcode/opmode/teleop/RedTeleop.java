@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
@@ -15,6 +17,8 @@ public class RedTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
+    private Limelight limelight;
+    private IndicatorRGB indicator;
 
     private final boolean IS_RED = true;
 
@@ -33,6 +37,8 @@ public class RedTeleop extends LinearOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
+        limelight = new Limelight(hardwareMap);
+        indicator = new IndicatorRGB(hardwareMap);
 
 
         drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
@@ -125,6 +131,10 @@ public class RedTeleop extends LinearOpMode {
             else {
                 shooter.stopPusher();
             }
+            if (limelight.isAlignedWithGoal()) {
+                indicator.green();
+            }
+            else indicator.blue();
 
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
