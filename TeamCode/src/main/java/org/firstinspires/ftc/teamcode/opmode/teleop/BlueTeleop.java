@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Interpolator;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
@@ -20,6 +21,7 @@ public class BlueTeleop extends LinearOpMode {
     private Limelight limelight;
     private Interpolator interpolator;
 
+    private IndicatorRGB indicator;
 
     private final boolean IS_RED = false;
 
@@ -40,6 +42,7 @@ public class BlueTeleop extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
         interpolator = new Interpolator(InterpolationPoints.points);
+        indicator = new IndicatorRGB(hardwareMap);
 
         if (IS_RED) {
             limelight.setRedGoalPipeline();
@@ -47,6 +50,7 @@ public class BlueTeleop extends LinearOpMode {
         else {
             limelight.setBlueGoalPipeline();
         }
+
 
         if (IS_RED) {
             drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
@@ -148,6 +152,12 @@ public class BlueTeleop extends LinearOpMode {
             else {
                 shooter.stopPusher();
             }
+
+            
+            if (limelight.isAlignedWithGoal()) {
+                indicator.green();
+            }
+            else indicator.blue();
 
             telemetry.addLine("SHOOTER");
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
