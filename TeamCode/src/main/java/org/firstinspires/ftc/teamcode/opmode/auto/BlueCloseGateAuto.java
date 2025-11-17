@@ -52,12 +52,12 @@ public class BlueCloseGateAuto extends LinearOpMode {
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 2.5, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(1, 2.5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
         );
 

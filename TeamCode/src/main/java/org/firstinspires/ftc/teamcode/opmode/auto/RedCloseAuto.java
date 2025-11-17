@@ -68,6 +68,7 @@ public class RedCloseAuto extends LinearOpMode {
         waitForStart();
 
         shooter.stopPusher();
+        limelight.start();
         while (opModeIsActive()) {
             scheduler.run();
 

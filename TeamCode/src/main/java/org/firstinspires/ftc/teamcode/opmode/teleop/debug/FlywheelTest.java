@@ -61,9 +61,12 @@ public class FlywheelTest extends LinearOpMode {
 
             shooter.setBottomShooterToVelocity(botVel);
             shooter.setTopShooterToVelocity(topVel);
+//            shooter.setPercent(0.4);
 
             telemetry.addData("Limelight distance", limelight.getDistanceTarget(true, telemetry));
-            telemetry.addData("Interpolator velocity", interpolator.getVelocity(limelight.getDistanceTarget(true, telemetry)));
+            telemetry.addData("Interpolator velocity", interpolator.getVelocity(limelight.getDistanceTarget(false, telemetry)));
+            telemetry.addData("top vel actual", shooter.getVelocityTop());
+            telemetry.addData("bot vel actual", shooter.getVelocityBottom());
 
 
             telemetry.update();

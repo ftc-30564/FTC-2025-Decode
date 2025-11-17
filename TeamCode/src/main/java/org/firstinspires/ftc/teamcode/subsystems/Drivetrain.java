@@ -40,19 +40,23 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public double setGoalCentricDrive(double forward, double strafe, double targetOffset) {
-        double turn = targetOffset * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P;
-        if (turn > 0.3) {
-            turn = 0.3;
+    public double setTeleopDrive(double forward, double strafe, double turn, double targetDegrees){
+        double targetPower = targetDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P;
+        if (targetPower > 0.3) {
+            targetPower = 0.3;
         }
-        if (turn < -0.3) {
-            turn = -0.3;
+        if (targetPower < -0.3) {
+            targetPower = -0.3;
         }
 
-        setTeleopDrive(forward, strafe, turn, false);
-
-        return turn;
+        if (targetDegrees != 0) {
+            setTeleopDrive(forward, strafe, targetPower, false);
+            return targetPower;
+        }
+        follower.setTeleOpDrive(forward, strafe, turn, false);
+        return 0;
     }
+
     public void resetImu() {
         imu.resetYaw();
     }

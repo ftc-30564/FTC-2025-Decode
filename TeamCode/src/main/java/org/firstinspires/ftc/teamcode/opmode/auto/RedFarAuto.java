@@ -57,7 +57,7 @@ public class RedFarAuto extends LinearOpMode {
         );
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, -4, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(3, -4, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(1)))
         );
 
@@ -75,6 +75,7 @@ public class RedFarAuto extends LinearOpMode {
         waitForStart();
 
         shooter.stopPusher();
+        limelight.start();
 
         while (opModeIsActive()) {
             scheduler.run();

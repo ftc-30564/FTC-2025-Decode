@@ -40,7 +40,7 @@ public class AlignToTargetCommand extends Command {
     public void loop() {
         drivetrain.update();
 
-        drivetrain.setGoalCentricDrive(0, 0, limelight.getYawTarget());
+        drivetrain.setTeleopDrive(0, 0, 0, limelight.getYawTarget());
         telemetry.addData("Was", initialized);
         telemetry.addData("ll target", limelight.getYawTarget());
 

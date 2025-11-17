@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
 
 public class Interpolator {
     private ArrayList<Point> points;
+    private double lastValid = RobotConstants.Shooter.CLOSE_VELOCITY.bottom;
 
     public Interpolator(ArrayList<Point> points) {
         this.points = points;
@@ -26,12 +28,17 @@ public class Interpolator {
 
     // Returns the ideal wheel velocity based off of the distance from the goal
     public double getVelocity(double distance) {
+        if (distance == 0)
+            return lastValid;
+
         Point leftPoint = points.get(getNearestPointIndex(distance));
         Point rightPoint = points.get(getNearestPointIndex(distance) + 1);
 
         // calculate the line formula between the two points
         double slope = (rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x);
         double yIntercept = (leftPoint.y - (slope * leftPoint.x));
-        return (slope * distance) + yIntercept;
+
+        lastValid = (slope * distance) + yIntercept;
+        return lastValid;
     }
 }
