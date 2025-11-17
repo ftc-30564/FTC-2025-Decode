@@ -50,14 +50,14 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.5 / 152.47;
-        public static final double VELOCITY_TOP_FEEDFORWARD = 0.5 / 178.32;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.4 / 132;
+        public static final double VELOCITY_TOP_FEEDFORWARD = 0.4 / 137;
         public static final double VELOCITY_BOTTOM_P = 0.005;
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(155, 165);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(165, 165);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(160, 160);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
     public static class Intake {
@@ -90,7 +90,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
-        public static final Pose RED_HIT_GATE = new Pose(128, 74.5, Math.toRadians(270));
+        public static final Pose RED_HIT_GATE = new Pose(130, 77.5, Math.toRadians(270)); // 3, 3
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
 
@@ -106,11 +106,11 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
         public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
-        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror();
+        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1, -3, 0));
         public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
         public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
 
-        public static final long SHOOT_TIME_MS = 2500;
+        public static final long SHOOT_TIME_MS = 2300;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
@@ -179,6 +179,9 @@ public class RobotConstants {
 
             if (!isRed) {
                 lineUp = lineUp.mirror();
+            }
+            else {
+                lineUp = lineUp.plus(new Pose(2, 3, 0));
             }
 
             return drivetrain.pathBuilder()

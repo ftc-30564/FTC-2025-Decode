@@ -54,7 +54,7 @@ public class Limelight {
     public boolean isAlignedWithGoal() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid() && result.getStaleness() < 100) {
-            return result.getTx() <= 1.0 && result.getTx() >= -1.0;
+            return result.getTx() <= 3.0 && result.getTx() >= -3.0;
         }
 
         return false;
@@ -73,10 +73,10 @@ public class Limelight {
             for (LLResultTypes.FiducialResult fiducial : fiducials) {
                 if (fiducial.getFiducialId() != (red ? 24 : 20))
                     continue;
-
-                Pose3D targetPose = fiducial.getTargetPoseCameraSpace();
+                Pose3D targetPose = fiducial.getCameraPoseTargetSpace();
 
                 telemetry.addData("Pose X", targetPose.getPosition().x);
+                telemetry.addData("Pose Y", targetPose.getPosition().y);
                 telemetry.addData("Pose Z", targetPose.getPosition().z);
 
                 return Math.sqrt(Math.pow(targetPose.getPosition().x, 2) + Math.pow(targetPose.getPosition().z, 2));

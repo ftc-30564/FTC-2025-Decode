@@ -20,9 +20,11 @@ public class RedTeleop extends LinearOpMode {
     private Shooter shooter;
     private Limelight limelight;
     private Interpolator interpolator;
+
     private IndicatorRGB indicator;
 
     private final boolean IS_RED = true;
+    private final boolean USING_INTERPOLATION = true;
 
     public enum ShootingPosition {
         CLOSE(RobotConstants.Shooter.CLOSE_VELOCITY),
@@ -43,12 +45,15 @@ public class RedTeleop extends LinearOpMode {
         interpolator = new Interpolator(InterpolationPoints.points);
         indicator = new IndicatorRGB(hardwareMap);
 
+        ShootingPosition shootingPosition = ShootingPosition.CLOSE;
+
         if (IS_RED) {
             limelight.setRedGoalPipeline();
         }
         else {
             limelight.setBlueGoalPipeline();
         }
+
 
         if (IS_RED) {
             drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
@@ -59,6 +64,7 @@ public class RedTeleop extends LinearOpMode {
             }
             drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
         }
+
 
         boolean zeroButton;
         boolean intakeButton;
@@ -84,9 +90,10 @@ public class RedTeleop extends LinearOpMode {
             drivetrain.update();
 
             if (gamepad1.left_bumper) {
-                turnAmt = drivetrain.setGoalCentricDrive(
+                turnAmt = drivetrain.setTeleopDrive(
                         -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                         limelight.getYawTarget());
             }
             else {
@@ -120,9 +127,20 @@ public class RedTeleop extends LinearOpMode {
                 intake.stop();
             }
 
+            if (gamepad1.dpad_down)
+                shootingPosition = ShootingPosition.FAR;
+            if (gamepad1.dpad_up) {
+                shootingPosition = ShootingPosition.CLOSE;
+            }
+
             if (chargeButton) {
-                double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
-                shooter.setToVelocityPair(new VelocityPair(vel, vel));
+                if (USING_INTERPOLATION) {
+                    double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
+                    shooter.setToVelocityPair(new VelocityPair(vel, vel));
+                }
+                else {
+                    shooter.setToVelocityPair(shootingPosition.vel);
+                }
             }
             else {
                 shooter.setTopShooterToVelocity(0);
