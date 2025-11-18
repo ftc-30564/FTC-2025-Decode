@@ -27,5 +27,9 @@ public class IndicatorRGB {
         lightRGB.setPosition(0.0);
         secondLightRGB.setPosition(0.0);
     }
+    public void white() {
+        lightRGB.setPosition(1);
+        secondLightRGB.setPosition(1);
+    }
 }
 
