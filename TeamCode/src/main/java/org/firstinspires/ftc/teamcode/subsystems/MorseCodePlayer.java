@@ -8,7 +8,7 @@ import java.util.List;
 public class MorseCodePlayer {
     private IndicatorRGB indicator;
     private List<LightDuration> lightSequence = new ArrayList<>();
-    private final long UNIT_LENGTH = 100;
+    private final long UNIT_LENGTH = 150;
 
     private final long DOT_DURATION = 1*UNIT_LENGTH;
     private final long BETWEEN_DOT_DASH_DURATION = 1*UNIT_LENGTH;
@@ -56,6 +56,9 @@ public class MorseCodePlayer {
     }
 
     public boolean playSequence() {
+        if (currentSequence >= lightSequence.size())
+            return true;
+
         if (lightSequence.get(currentSequence).white)
             indicator.white();
         else

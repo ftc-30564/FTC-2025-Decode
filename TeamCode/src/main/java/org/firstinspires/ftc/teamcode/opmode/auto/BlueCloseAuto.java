@@ -16,8 +16,10 @@ import com.qualcomm.robotcore.robocol.RobocolConfig;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
+import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
@@ -41,6 +43,9 @@ public class BlueCloseAuto extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, limelight, telemetry);
+
+        MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
+        player.addSequence(".-.. .. -.- ./.- -. -../... ..- -... ... -.-. .-. .. -... .");
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
@@ -78,6 +83,7 @@ public class BlueCloseAuto extends LinearOpMode {
         shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();
+            player.playSequence();
 
             telemetry.update();
         }
