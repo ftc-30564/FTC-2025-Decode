@@ -77,7 +77,7 @@ public class RobotConstants {
 
         public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
-        public static final Pose RED_STARTING_CLOSE = new Pose(105.21, 135.17, Math.toRadians(270));
+        public static final Pose RED_STARTING_CLOSE = new Pose(108.81, 135.17, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(87.75, 8.15, Math.toRadians(270));
         // Shooting positions
         public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(230));
@@ -90,7 +90,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
-        public static final Pose RED_HIT_GATE = new Pose(128.5, 77.5, Math.toRadians(270)); // 3, 3
+        public static final Pose RED_HIT_GATE = new Pose(127, 77.5, Math.toRadians(270)); // 3, 3
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
 
