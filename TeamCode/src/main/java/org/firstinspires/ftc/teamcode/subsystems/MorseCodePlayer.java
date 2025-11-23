@@ -68,8 +68,7 @@ public class MorseCodePlayer {
             if (timer.milliseconds() > lightSequence.get(currentSequence).ms) {
                 currentSequence ++;
                 timer.reset();
-                if (currentSequence >= lightSequence.size())
-                    return true;
+                return currentSequence >= lightSequence.size();
 
             }
             return false;

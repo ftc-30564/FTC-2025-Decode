@@ -15,10 +15,12 @@ public class Shooter {
     private DcMotorEx topFlywheel;
     private CRServo shooterPusher;
     private Telemetry telemetry;
+    private HardwareMap hardwareMap;
     private double bottomVelocityP = RobotConstants.Shooter.VELOCITY_BOTTOM_P;
     private double topVelocityP = RobotConstants.Shooter.VELOCITY_TOP_P;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
         shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
@@ -54,13 +56,19 @@ public class Shooter {
 
     public void setBottomShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityBottom();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) + ((targetVelocity - currentVelocity) * bottomVelocityP);
+        // voltage compensation
+        double adjustedFeedforward = RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD_12V * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
+
+        double percent = (targetVelocity * adjustedFeedforward) + ((targetVelocity - currentVelocity) * bottomVelocityP);
         bottomFlywheel.setPower(percent);
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityTop();
-        double percent = (targetVelocity * RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) + ((targetVelocity - currentVelocity) * topVelocityP);
+        // voltage compensation
+        double adjustedFeedforward = RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD_12V * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
+
+        double percent = (targetVelocity * adjustedFeedforward) + ((targetVelocity - currentVelocity) * topVelocityP);
         topFlywheel.setPower(percent);
     }
 

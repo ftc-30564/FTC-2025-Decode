@@ -18,6 +18,8 @@ public class Drivetrain {
     private Follower follower;
     private Pose holdPoint;
     private IMU imu;
+    private double lastError = 0;
+    private long lastTime = System.nanoTime();
 
     private double imuOffset = 0;
 
@@ -40,16 +42,23 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public double setTeleopDrive(double forward, double strafe, double turn, double targetDegrees){
-        double targetPower = targetDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P;
-        if (targetPower > 0.3) {
-            targetPower = 0.3;
-        }
-        if (targetPower < -0.3) {
-            targetPower = -0.3;
-        }
+    public double setTeleopDrive(double forward, double strafe, double turn, double errorDegrees){
+        long now = System.nanoTime();
+        double dt = (now - lastTime) / 1e9;
+        lastTime = now;
 
-        if (targetDegrees != 0) {
+        double derivative = RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D * ((errorDegrees - lastError) / dt);
+        double targetPower = (errorDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P)
+                + (derivative * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D);
+
+        if (targetPower > 0.3)
+            targetPower = 0.3;
+
+        if (targetPower < -0.3)
+            targetPower = -0.3;
+
+        if (errorDegrees != 0) {
+            lastError = errorDegrees;
             setTeleopDrive(forward, strafe, targetPower, false);
             return targetPower;
         }

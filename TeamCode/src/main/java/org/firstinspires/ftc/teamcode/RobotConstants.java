@@ -43,6 +43,7 @@ public class RobotConstants {
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
         public static final double DRIVE_SNAP_TO_ANGLE_P = 0.025;
+        public static final double DRIVE_SNAP_TO_ANGLE_D = 0.0025;
     }
 
     public static class Shooter {
@@ -52,6 +53,9 @@ public class RobotConstants {
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
         public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.4 / 132;
         public static final double VELOCITY_TOP_FEEDFORWARD = 0.4 / 137;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.4 / 12);
+        public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.4 / 12);
+
         public static final double VELOCITY_BOTTOM_P = 0.005;
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;

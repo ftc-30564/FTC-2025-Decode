@@ -90,7 +90,7 @@ public class AutoCommands {
 
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, fromGate, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
