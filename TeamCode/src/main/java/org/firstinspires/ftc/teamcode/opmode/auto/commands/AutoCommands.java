@@ -68,13 +68,16 @@ public class AutoCommands {
                 new RaceCommand(
                         new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
-                ),
-                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(200)
+                )
+                //new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(200)
         );
     }
 
     public Command knockGate(boolean red) {
-        return new FollowPathCommand(drivetrain, knockGatePath(drivetrain, red));
+        return new SequentialCommand(
+                new FollowPathCommand(drivetrain, knockGatePath(drivetrain, red)).timeout(1500),
+                new DelayCommand(200)
+        );
     }
 
     /**
@@ -90,7 +93,7 @@ public class AutoCommands {
 
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(150),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, fromGate, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),

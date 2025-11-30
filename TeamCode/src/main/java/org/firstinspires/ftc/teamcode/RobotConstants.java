@@ -60,7 +60,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(160, 160);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(167, 167);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
@@ -81,7 +81,7 @@ public class RobotConstants {
 
         public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
-        public static final Pose RED_STARTING_CLOSE = new Pose(108.81, 135.17, Math.toRadians(270));
+        public static final Pose RED_STARTING_CLOSE = new Pose(110.3, 134.57, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(87.75, 8.15, Math.toRadians(270));
         // Shooting positions
         public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(230));
@@ -114,7 +114,7 @@ public class RobotConstants {
         public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
         public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
 
-        public static final long SHOOT_TIME_MS = 2300;
+        public static final long SHOOT_TIME_MS = 1800;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
