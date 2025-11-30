@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.MorseCodeReader;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
@@ -37,8 +38,9 @@ public class RedCloseAuto extends LinearOpMode {
         limelight = new Limelight(hardwareMap);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, limelight, telemetry);
 
+        MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
-        player.addSequence(".-.. .. -.- ./.- -. -../... ..- -... ... -.-. .-. .. -... .");
+        player.addSequence(reader.getMorseCode());
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
