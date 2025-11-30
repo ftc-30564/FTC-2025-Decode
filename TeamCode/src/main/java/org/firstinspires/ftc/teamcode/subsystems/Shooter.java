@@ -57,7 +57,10 @@ public class Shooter {
     public void setBottomShooterToVelocity(double targetVelocity) {
         double currentVelocity = getVelocityBottom();
         // voltage compensation
-        double adjustedFeedforward = RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD_12V * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
+        double voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+        double adjustedFeedforward = RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD_12V * (12 / voltage);
+
+        telemetry.addData("voltage", voltage);
 
         double percent = (targetVelocity * adjustedFeedforward) + ((targetVelocity - currentVelocity) * bottomVelocityP);
         bottomFlywheel.setPower(percent);

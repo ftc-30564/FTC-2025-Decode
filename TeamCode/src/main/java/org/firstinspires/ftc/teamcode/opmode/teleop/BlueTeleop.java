@@ -42,7 +42,7 @@ public class BlueTeleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
-        interpolator = new Interpolator(InterpolationPoints.points);
+        interpolator = new Interpolator(InterpolationPoints.points_11_30);
         indicator = new IndicatorRGB(hardwareMap);
 
         ShootingPosition shootingPosition = ShootingPosition.CLOSE;
