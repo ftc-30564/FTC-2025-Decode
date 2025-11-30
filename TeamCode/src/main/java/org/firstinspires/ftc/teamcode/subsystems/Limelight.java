@@ -41,6 +41,10 @@ public class Limelight {
         limelight.start();
     }
 
+    public boolean isConnected(){
+        return limelight.isConnected();
+    }
+
     public double getYawTarget() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid() && result.getStaleness() < 100) {

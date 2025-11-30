@@ -97,6 +97,8 @@ public class Drivetrain {
         setPose(new Pose(getPose().getX(), getPose().getY(),0));
     }
 
+    public void setMaxPower(double power){follower.setMaxPower(power);}
+
     public void oneEightyHeading() {
         setPose(new Pose(getPose().getX(), getPose().getY(),Math.toRadians(180)));
     }
