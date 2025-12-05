@@ -167,8 +167,6 @@ public class RedTeleop extends LinearOpMode {
                 drivetrain.setMaxPower(1);
             }
 
-//            if (limelight.isConnected())
-//                indicator.red();
 
             if (limelight.isAlignedWithGoal()) {
                 indicator.green();

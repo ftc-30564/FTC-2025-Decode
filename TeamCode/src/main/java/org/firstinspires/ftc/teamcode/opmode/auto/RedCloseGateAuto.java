@@ -64,7 +64,7 @@ public class RedCloseGateAuto extends LinearOpMode {
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 4, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
         );
 

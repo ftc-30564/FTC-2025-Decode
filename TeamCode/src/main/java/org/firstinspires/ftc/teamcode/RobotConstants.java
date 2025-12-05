@@ -61,7 +61,7 @@ public class RobotConstants {
         public static final double VELOCITY_DEADBAND = 10;
 
         public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(167, 167);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(167, 167);
     }
 
     public static class Intake {
@@ -110,7 +110,7 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
         public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
-        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1.25, -3, 0));
+        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1.25, -2.5, 0));
         public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
         public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
 

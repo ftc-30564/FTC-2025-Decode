@@ -76,7 +76,7 @@ public class AutoCommands {
     public Command knockGate(boolean red) {
         return new SequentialCommand(
                 new FollowPathCommand(drivetrain, knockGatePath(drivetrain, red)).timeout(1500),
-                new DelayCommand(200)
+                new DelayCommand(500)
         );
     }
 
