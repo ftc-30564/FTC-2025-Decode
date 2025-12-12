@@ -161,7 +161,7 @@ public class RedTeleop extends LinearOpMode {
             }
 
             if (shootButton){
-                drivetrain.setMaxPower(0.3);
+                drivetrain.setMaxPower(0.5);
             }
             else {
                 drivetrain.setMaxPower(1);
