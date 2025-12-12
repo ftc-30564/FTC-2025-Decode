@@ -84,7 +84,7 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(110.3, 134.57, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(87.75, 8.15, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 75.9, Math.toRadians(230));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 73.9, Math.toRadians(230));
         public static final Pose RED_SHOOT_FAR = new Pose(87.06899332917494, 18.47782779759755, Math.toRadians(242));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
@@ -102,7 +102,7 @@ public class RobotConstants {
         // This just mirrors the red positions.
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
-        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(0, 0, Math.toRadians(-3)));
+        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(1.5, .5, Math.toRadians(-3)));
         public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror().plus(new Pose(0, 0, Math.toRadians(-9)));
         public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
         public static final Pose BLUE_PRE_INTAKE_PGP = RED_PRE_INTAKE_PGP.mirror();
