@@ -53,7 +53,7 @@ public class RedCloseGateAuto extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 2, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(2, 2, Math.toRadians(3))),
                 autoCommands.knockGate(red),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(1)))
         );
