@@ -26,15 +26,15 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class RedFarCycle extends LinearOpMode {
+public class BlueCloseGateOnce extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
     public Limelight limelight;
     public AutoCommands autoCommands;
 
-    public final boolean close = false;
-    public final boolean red = true;
+    public final boolean close = true;
+    public final boolean red = false;
 
     @Override
     public void runOpMode() {
@@ -52,34 +52,37 @@ public class RedFarCycle extends LinearOpMode {
 
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
+        Command intakeAndShootPPG = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
+                autoCommands.knockGate(red, true),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
+        );
+
+        Command intakeAndShootPGP = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
+        );
+
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(1, 2.5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
         );
-
-        Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.HUMAN_PLAYER, close, red, new Pose(0, -2, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, false, new Pose(0, 0, Math.toRadians(0)))
-        );
-
-
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
 
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootHumanPlayer,
-                intakeAndShootHumanPlayer,
-                intakeAndShootHumanPlayer,
+                intakeAndShootPPG,
+                intakeAndShootPGP,
+                intakeAndShootGPP,
                 leave
-        );
+                );
 
         waitForStart();
 
-        shooter.stopPusher();
         limelight.start();
-
+        shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();
             player.playSequence();

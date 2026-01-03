@@ -90,12 +90,12 @@ public class RobotConstants {
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
         public static final Pose RED_PRE_INTAKE_PGP = new Pose(95, 61.3, 0);
         public static final Pose RED_PRE_INTAKE_GPP = new Pose(92, 35.4, 0);
-        public static final Pose RED_PRE_INTAKE_HUMAN = new Pose(134, 28.5, Math.toRadians(285));
+        public static final Pose RED_PRE_INTAKE_HUMAN = new Pose(132.7, 18, Math.toRadians(335));
         // POST_INTAKE means the position right after it intakes the balls.
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
         public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
-        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(134, 10, Math.toRadians(285));
+        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.8, 10.4, Math.toRadians(285));
         public static final Pose RED_HIT_GATE = new Pose(127, 77.5, Math.toRadians(270)); // 3, 3
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
@@ -181,10 +181,10 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain knockGatePath(Drivetrain drivetrain, boolean isRed) {
-            Pose start = isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG;
+        public static PathChain knockGatePath(Drivetrain drivetrain, boolean isRed, boolean fromFirstLine) {
+            Pose start = fromFirstLine ? (isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG) : (isRed ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP);
 
-            Pose lineUp = new Pose(118, 78, Math.toRadians(270));
+            Pose lineUp = fromFirstLine ? new Pose(118, 78, Math.toRadians(270)) : new Pose(115.2, 63, Math.toRadians(270));
             Pose end = isRed ? RED_HIT_GATE : BLUE_HIT_GATE;
 
             if (!isRed) {

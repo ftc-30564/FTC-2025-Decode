@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class RedFar extends LinearOpMode {
+public class RedFar12 extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;

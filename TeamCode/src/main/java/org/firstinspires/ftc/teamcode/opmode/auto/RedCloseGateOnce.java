@@ -26,15 +26,15 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class BlueFar extends LinearOpMode {
+public class RedCloseGateOnce extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
     public Limelight limelight;
     public AutoCommands autoCommands;
 
-    public final boolean close = false;
-    public final boolean red = false;
+    public final boolean close = true;
+    public final boolean red = true;
 
     @Override
     public void runOpMode() {
@@ -53,18 +53,19 @@ public class BlueFar extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, -5, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(-1)))
-        );
-
-        Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(2, 2, Math.toRadians(3))),
+                autoCommands.knockGate(red, true),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(1)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -3, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-1)))
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 2, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+        );
+
+        Command intakeAndShootGPP = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(2, 2, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
@@ -72,15 +73,16 @@ public class BlueFar extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootGPP,
-                intakeAndShootPGP,
                 intakeAndShootPPG,
+                intakeAndShootPGP,
+                intakeAndShootGPP,
                 leave
                 );
 
         waitForStart();
 
         shooter.stopPusher();
+        limelight.start();
         while (opModeIsActive()) {
             scheduler.run();
             player.playSequence();

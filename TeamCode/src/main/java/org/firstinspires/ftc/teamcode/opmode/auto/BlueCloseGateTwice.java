@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class BlueCloseGate extends LinearOpMode {
+public class BlueCloseGateTwice extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -54,13 +54,14 @@ public class BlueCloseGate extends LinearOpMode {
 
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.knockGate(red),
+                autoCommands.knockGate(red, true),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.knockGate(red, false),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
