@@ -26,14 +26,14 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class BlueCloseGateTwice extends LinearOpMode {
+public class BlueFar12Gate extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
     public Limelight limelight;
     public AutoCommands autoCommands;
 
-    public final boolean close = true;
+    public final boolean close = false;
     public final boolean red = false;
 
     @Override
@@ -48,25 +48,26 @@ public class BlueCloseGateTwice extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
+        limelight.setBlueGoalPipeline();
+
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
-        );
-
-        Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
-                autoCommands.knockGate(red, false),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, -5, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(-1)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(1, 2.5, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
+        );
+
+        Command intakeAndShootPGP = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -3, Math.toRadians(3))),
+                autoCommands.knockGate(red, false),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, true, new Pose(0, 0, Math.toRadians(-1)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
@@ -74,14 +75,13 @@ public class BlueCloseGateTwice extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPPG,
                 intakeAndShootPGP,
                 intakeAndShootGPP,
+                intakeAndShootPPG,
                 leave
                 );
 
         waitForStart();
-
         limelight.start();
         shooter.stopPusher();
         while (opModeIsActive()) {

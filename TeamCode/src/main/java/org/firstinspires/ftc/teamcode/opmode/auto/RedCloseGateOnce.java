@@ -48,6 +48,8 @@ public class RedCloseGateOnce extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
+        limelight.setRedGoalPipeline();
+
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
         Command shootPreload = autoCommands.startAndShoot(close, red);

@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class BlueCloseGateOnce extends LinearOpMode {
+public class BlueClose12GateOnce extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -47,6 +47,8 @@ public class BlueCloseGateOnce extends LinearOpMode {
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
+
+        limelight.setBlueGoalPipeline();
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 

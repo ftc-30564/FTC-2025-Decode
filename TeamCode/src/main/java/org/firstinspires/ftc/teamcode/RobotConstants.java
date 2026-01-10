@@ -60,8 +60,8 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(167, 167);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(167, 167);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
     public static class Intake {
@@ -84,7 +84,7 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(110.3, 134.57, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(87.75, 8.15, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(84.8, 73.9, Math.toRadians(230));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84.2, 73.9, Math.toRadians(230));
         public static final Pose RED_SHOOT_FAR = new Pose(87.06899332917494, 18.47782779759755, Math.toRadians(242));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
         public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
@@ -93,8 +93,8 @@ public class RobotConstants {
         public static final Pose RED_PRE_INTAKE_HUMAN = new Pose(132.7, 18, Math.toRadians(335));
         // POST_INTAKE means the position right after it intakes the balls.
         public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
-        public static final Pose RED_POST_INTAKE_PGP = new Pose(133, 59.8, 0);
-        public static final Pose RED_POST_INTAKE_GPP = new Pose(133, 35.4, 0);
+        public static final Pose RED_POST_INTAKE_PGP = new Pose(131.5, 59.8, 0);
+        public static final Pose RED_POST_INTAKE_GPP = new Pose(130.5, 35.4, 0);
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.8, 10.4, Math.toRadians(285));
         public static final Pose RED_HIT_GATE = new Pose(127, 77.5, Math.toRadians(270)); // 3, 3
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
@@ -208,10 +208,13 @@ public class RobotConstants {
 
             if (!isRed) {
                 start = start.mirror();
+                if (fromGate) {
+                    start = BLUE_HIT_GATE;
+                }
             }
 
+
             // TODO: start shouldn't add drift. I'm scared to remove this cause it might mess up some of the paths
-            start = start.plus(drift);
             end = end.plus(drift);
 
             return drivetrain.pathBuilder()
