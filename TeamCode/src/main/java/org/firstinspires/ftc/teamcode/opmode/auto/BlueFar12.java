@@ -55,17 +55,17 @@ public class BlueFar12 extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, -5, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(-6, -5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(-1)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(-4, -2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, -3, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(-4, -3, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(-1)))
         );
 
