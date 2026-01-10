@@ -29,4 +29,16 @@ public class InterpolationPoints {
             new Point(3.4, 180),
             new Point(3.93, 195)
     ));
+    public static ArrayList<Point> points_1_4 = new ArrayList<>(Arrays.asList(
+            new Point(1.46, 160),
+            new Point(1.62, 167),
+            new Point(1.8, 155),
+            new Point(2.1, 150),
+            new Point(2.4,155),
+            new Point(2.7,155),
+            new Point(2.9,160),
+            new Point(3.2,160),
+            new Point(3.5,170),
+            new Point(3.9,180)
+    ));
 }
