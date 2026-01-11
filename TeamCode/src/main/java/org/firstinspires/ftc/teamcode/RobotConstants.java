@@ -60,7 +60,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(157, 157);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
@@ -84,65 +84,86 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(110, 134.57, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(84, 75.9, Math.toRadians(230));
-        public static final Pose RED_SHOOT_FAR = new Pose(87.06899332917494, 18.47782779759755, Math.toRadians(242));
+        public static final Pose RED_SHOOT_CLOSE       = new Pose(84, 75.9, Math.toRadians(230));
+        public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(242));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
-        public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 83.9, 0);
-        public static final Pose RED_PRE_INTAKE_PGP = new Pose(88, 59.8, 0);
-        public static final Pose RED_PRE_INTAKE_GPP = new Pose(92, 35.4, 0);
-        public static final Pose RED_PRE_INTAKE_HUMAN = new Pose(132.7, 18, Math.toRadians(335));
+        public static final Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
+        public static final Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.8, 0);
+        public static final Pose RED_PRE_INTAKE_GPP    = new Pose(92,    35.4, 0);
+        public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(132.7, 18, Math.toRadians(335));
         // POST_INTAKE means the position right after it intakes the balls.
-        public static final Pose RED_POST_INTAKE_PPG = new Pose(125.5, 83.9, 0);
-        public static final Pose RED_POST_INTAKE_PGP = new Pose(131.5, 59.8, 0);
-        public static final Pose RED_POST_INTAKE_GPP = new Pose(130.5, 35.4, 0);
+        public static final Pose RED_POST_INTAKE_PPG   = new Pose(127, 83.9, 0);
+        public static final Pose RED_POST_INTAKE_PGP   = new Pose(131.5, 59.8, 0);
+        public static final Pose RED_POST_INTAKE_GPP   = new Pose(130.5, 35.4, 0);
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.8, 10.4, Math.toRadians(285));
-        public static final Pose RED_HIT_GATE = new Pose(127, 75.5, Math.toRadians(270)); // 3, 3
-        public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
-        public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
+        public static final Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
 
-        public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
-        // This just mirrors the red positions.
-        public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
-        public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
-        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(1, .5, Math.toRadians(-3)));
-        public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror().plus(new Pose(0, 0, Math.toRadians(-9)));
-        public static final Pose BLUE_PRE_INTAKE_HUMAN = RED_PRE_INTAKE_HUMAN.mirror();
-        public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
-        public static final Pose BLUE_PRE_INTAKE_PGP = RED_PRE_INTAKE_PGP.mirror();
-        public static final Pose BLUE_PRE_INTAKE_GPP = RED_PRE_INTAKE_GPP.mirror();
-        public static final Pose BLUE_POST_INTAKE_HUMAN = RED_POST_INTAKE_HUMAN.mirror();
+        public static final Pose RED_HIT_GATE          = new Pose(127,   75.5, Math.toRadians(270)); // 3, 3
+        public static final Pose RED_LEAVE_CLOSE       = new Pose(99.5,  78.4, Math.toRadians(270));
+        public static final Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270));
 
-        public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
-        public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
-        public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
-        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1.25, -1, 0));
-        public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
-        public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
+        public static final Pose BLUE_GOAL_POSE = new Pose(0, 132.67, 0);
+
+        public static final Pose BLUE_STARTING_CLOSE   = new Pose(34.0, 134.57, Math.toRadians(270)); // 144 - 110
+        public static final Pose BLUE_STARTING_FAR     = new Pose(55.0, 8.15,   Math.toRadians(270)); // 144 - 89
+
+        public static final Pose BLUE_SHOOT_CLOSE      = new Pose(61, 76.4,  Math.toRadians(307)); // 144 - 84
+        public static final Pose BLUE_SHOOT_FAR        = new Pose(57.0, 18.4,  Math.toRadians(289)); // 144 - 87
+        public static final Pose BLUE_PRE_INTAKE_PPG   = new Pose(58.0, 83.9,  Math.toRadians(180)); // 144 - 86
+        public static final Pose BLUE_POST_INTAKE_PPG  = new Pose(18.5, 83.9,  Math.toRadians(180)); // 144 - 125.5
+
+        public static final Pose BLUE_PRE_INTAKE_PGP   = new Pose(56.0, 60.2,  Math.toRadians(180)); // 144 - 88
+        public static final Pose BLUE_POST_INTAKE_PGP  = new Pose(12.5, 58.8,  Math.toRadians(180)); // 144 - 131.5
+
+        public static final Pose BLUE_PRE_INTAKE_GPP   = new Pose(52.0, 35.4,  Math.toRadians(180)); // 144 - 92
+        public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(13.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
+
+        public static final Pose BLUE_PRE_INTAKE_HUMAN = new Pose(11.3, 18.0,  Math.toRadians(205)); // 144 - 132.7
+        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(10.2, 10.4, Math.toRadians(255)); // 144 - 133.8
+        public static final Pose BLUE_LINEUP_1         = new Pose(144 - 118, 78, Math.toRadians(270));
+
+        public static final Pose BLUE_HIT_GATE         = new Pose(18.25, 74.5, Math.toRadians(270)); // 144 - 127
+        public static final Pose BLUE_LEAVE_CLOSE      = new Pose(44.5, 78.4, Math.toRadians(270)); // 144 - 99.5
+        public static final Pose BLUE_LEAVE_FAR        = new Pose(53.0, 26.5, Math.toRadians(270)); // 144 - 91
 
         public static final long SHOOT_TIME_MS = 1800;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
-            PPG(RED_PRE_INTAKE_PPG, RED_POST_INTAKE_PPG),
-            PGP(RED_PRE_INTAKE_PGP, RED_POST_INTAKE_PGP),
-            GPP(RED_PRE_INTAKE_GPP, RED_POST_INTAKE_GPP),
-            HUMAN_PLAYER(RED_PRE_INTAKE_HUMAN, RED_POST_INTAKE_HUMAN);
+            PPG,
+            PGP,
+            GPP,
+            HUMAN_PLAYER
+        }
 
-            private Pose pre;
-            private Pose post;
-
-            BallPose(Pose pre, Pose post) {
-                this.pre = pre;
-                this.post = post;
+        public static Pose getPreBallPose(BallPose ballPose, boolean red) {
+            switch (ballPose) {
+                case GPP:
+                    return red ? RED_PRE_INTAKE_GPP : BLUE_PRE_INTAKE_GPP;
+                case PGP:
+                    return red ? RED_PRE_INTAKE_PGP : BLUE_PRE_INTAKE_PGP;
+                case PPG:
+                    return red ? RED_PRE_INTAKE_PPG : BLUE_PRE_INTAKE_PPG;
+                case HUMAN_PLAYER:
+                    return red ? RED_PRE_INTAKE_HUMAN : BLUE_PRE_INTAKE_HUMAN;
             }
 
-            BallPose mirror() {
-                BallPose ret = this;
-                ret.pre = this.pre.mirror();
-                ret.post = this.post.mirror();
+            throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human");
+        }
 
-                return ret;
+        public static Pose getPostBallPose(BallPose ballPose, boolean red) {
+            switch (ballPose) {
+                case GPP:
+                    return red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP;
+                case PGP:
+                    return red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP;
+                case PPG:
+                    return red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG;
+                case HUMAN_PLAYER:
+                    return red ? RED_POST_INTAKE_HUMAN : BLUE_POST_INTAKE_HUMAN;
             }
+
+            throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human");
         }
 
         public static PathChain startToShootPath(Drivetrain drivetrain, boolean close, boolean isRed) {
@@ -160,13 +181,8 @@ public class RobotConstants {
         public static PathChain intakeBallsPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            Pose ballPre = ballPose.pre;
-            Pose ballPost = ballPose.post;
-
-            if (!isRed) {
-                ballPre = ballPre.mirror();
-                ballPost = ballPost.mirror();
-            }
+            Pose ballPre = getPreBallPose(ballPose, isRed);
+            Pose ballPost = getPostBallPose(ballPose, isRed);
 
             ballPre = ballPre.plus(drift);
             ballPost = ballPost.plus(drift);
@@ -181,18 +197,11 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain knockGatePath(Drivetrain drivetrain, boolean isRed, boolean fromFirstLine) {
-            Pose start = fromFirstLine ? (isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG) : (isRed ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP);
+        public static PathChain knockGateFromFirstPath(Drivetrain drivetrain, boolean isRed) {
+            Pose start = (isRed ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG);
 
-            Pose lineUp = fromFirstLine ? new Pose(118, 78, Math.toRadians(270)) : new Pose(115.2, 63, Math.toRadians(270));
+            Pose lineUp = isRed ? RED_LINEUP_1 : BLUE_LINEUP_1;
             Pose end = isRed ? RED_HIT_GATE : BLUE_HIT_GATE;
-
-            if (!isRed) {
-                lineUp = lineUp.mirror();
-            }
-            else {
-                lineUp = lineUp.plus(new Pose(2, 3, 0));
-            }
 
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, lineUp))
@@ -203,18 +212,9 @@ public class RobotConstants {
         }
 
         public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, boolean fromGate, Pose drift) {
-            Pose start = fromGate ? RED_HIT_GATE : ballPose.post;
+            Pose start = fromGate ? (isRed ? RED_HIT_GATE : BLUE_HIT_GATE) : getPostBallPose(ballPose, isRed);
             Pose end = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
-            if (!isRed) {
-                start = start.mirror();
-                if (fromGate) {
-                    start = BLUE_HIT_GATE;
-                }
-            }
-
-
-            // TODO: start shouldn't add drift. I'm scared to remove this cause it might mess up some of the paths
             end = end.plus(drift);
 
             return drivetrain.pathBuilder()

@@ -69,13 +69,13 @@ public class AutoCommands {
                         new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 ),
-                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300)
+                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
     }
 
     public Command knockGate(boolean red, boolean fromFirstLine) {
         return new SequentialCommand(
-                new FollowPathCommand(drivetrain, knockGatePath(drivetrain, red, fromFirstLine)).timeout(1500),
+                new FollowPathCommand(drivetrain, knockGateFromFirstPath(drivetrain, red)).timeout(1500),
                 new DelayCommand(500)
         );
     }
@@ -93,7 +93,7 @@ public class AutoCommands {
 
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(150),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(200),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, fromGate, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
