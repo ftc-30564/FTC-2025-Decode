@@ -68,8 +68,8 @@ public class AutoCommands {
                 new RaceCommand(
                         new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
-                )
-                //new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(200)
+                ),
+                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300)
         );
     }
 

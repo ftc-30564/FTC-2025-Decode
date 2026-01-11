@@ -43,7 +43,7 @@ public class RobotConstants {
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
         public static final double DRIVE_SNAP_TO_ANGLE_P = 0.025;
-        public static final double DRIVE_SNAP_TO_ANGLE_D = 0.009;
+        public static final double DRIVE_SNAP_TO_ANGLE_D = 0.0018;
     }
 
     public static class Shooter {
@@ -60,7 +60,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(151, 151);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
@@ -84,11 +84,11 @@ public class RobotConstants {
         public static final Pose RED_STARTING_CLOSE = new Pose(110, 134.57, Math.toRadians(270));
         public static final Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
         // Shooting positions
-        public static final Pose RED_SHOOT_CLOSE = new Pose(81.7, 73.9, Math.toRadians(230));
+        public static final Pose RED_SHOOT_CLOSE = new Pose(84, 75.9, Math.toRadians(230));
         public static final Pose RED_SHOOT_FAR = new Pose(87.06899332917494, 18.47782779759755, Math.toRadians(242));
         // Intake positions. PRE_INTAKE means the position right before it reaches the first ball.
-        public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 86.9, 0);
-        public static final Pose RED_PRE_INTAKE_PGP = new Pose(95, 61.3, 0);
+        public static final Pose RED_PRE_INTAKE_PPG = new Pose(86, 83.9, 0);
+        public static final Pose RED_PRE_INTAKE_PGP = new Pose(88, 59.8, 0);
         public static final Pose RED_PRE_INTAKE_GPP = new Pose(92, 35.4, 0);
         public static final Pose RED_PRE_INTAKE_HUMAN = new Pose(132.7, 18, Math.toRadians(335));
         // POST_INTAKE means the position right after it intakes the balls.
@@ -96,7 +96,7 @@ public class RobotConstants {
         public static final Pose RED_POST_INTAKE_PGP = new Pose(131.5, 59.8, 0);
         public static final Pose RED_POST_INTAKE_GPP = new Pose(130.5, 35.4, 0);
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.8, 10.4, Math.toRadians(285));
-        public static final Pose RED_HIT_GATE = new Pose(127, 77.5, Math.toRadians(270)); // 3, 3
+        public static final Pose RED_HIT_GATE = new Pose(127, 75.5, Math.toRadians(270)); // 3, 3
         public static final Pose RED_LEAVE_CLOSE = new Pose(99.5, 78.4, Math.toRadians(270));
         public static final Pose RED_LEAVE_FAR = new Pose(91, 26.5, Math.toRadians(270));
 
@@ -104,7 +104,7 @@ public class RobotConstants {
         // This just mirrors the red positions.
         public static final Pose BLUE_STARTING_CLOSE = RED_STARTING_CLOSE.mirror();
         public static final Pose BLUE_STARTING_FAR = RED_STARTING_FAR.mirror();
-        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(-1.5, .5, Math.toRadians(-3)));
+        public static final Pose BLUE_SHOOT_CLOSE = RED_SHOOT_CLOSE.mirror().plus(new Pose(1, .5, Math.toRadians(-3)));
         public static final Pose BLUE_SHOOT_FAR = RED_SHOOT_FAR.mirror().plus(new Pose(0, 0, Math.toRadians(-9)));
         public static final Pose BLUE_PRE_INTAKE_HUMAN = RED_PRE_INTAKE_HUMAN.mirror();
         public static final Pose BLUE_PRE_INTAKE_PPG = RED_PRE_INTAKE_PPG.mirror();
@@ -115,7 +115,7 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_PPG = RED_POST_INTAKE_PPG.mirror();
         public static final Pose BLUE_POST_INTAKE_PGP = RED_POST_INTAKE_PGP.mirror();
         public static final Pose BLUE_POST_INTAKE_GPP = RED_POST_INTAKE_GPP.mirror();
-        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1.25, -2.5, 0));
+        public static final Pose BLUE_HIT_GATE = RED_HIT_GATE.mirror().plus(new Pose(1.25, -1, 0));
         public static final Pose BLUE_LEAVE_CLOSE = RED_LEAVE_CLOSE.mirror();
         public static final Pose BLUE_LEAVE_FAR = RED_LEAVE_FAR.mirror();
 

@@ -55,19 +55,19 @@ public class RedClose12 extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(1, 2, Math.toRadians(1))),
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(-1, 2, Math.toRadians(1))),
                 autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(1)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(-3, 2, Math.toRadians(1)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 0, Math.toRadians(1))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(0, 1, Math.toRadians(-4))),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(-3, 2, Math.toRadians(0)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(2, 2, Math.toRadians(1))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, 2, Math.toRadians(-2))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(-3, 2, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
