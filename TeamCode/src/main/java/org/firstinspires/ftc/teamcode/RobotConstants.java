@@ -60,7 +60,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(157, 157);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 

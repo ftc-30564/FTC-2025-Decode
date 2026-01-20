@@ -48,8 +48,7 @@ public class Drivetrain {
         lastTime = now;
 
         double derivative = ((errorDegrees - lastError) / dt);
-        double targetPower = (errorDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P)
-                + (derivative * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D);
+        double targetPower = (errorDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P);
 
         if (targetPower > 0.3)
             targetPower = 0.3;
