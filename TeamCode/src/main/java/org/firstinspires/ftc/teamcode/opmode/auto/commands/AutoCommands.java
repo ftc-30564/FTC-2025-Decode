@@ -45,12 +45,16 @@ public class AutoCommands {
         return new SequentialCommand(
                 new ParallelCommand(
                         new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(1000)
-                ),
-                new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
-                        new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                        new ChargeFlywheelCommand(shooter, vel).timeout(500),
+                        new SequentialCommand(
+                                new DelayCommand(1800),
+                                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                        )
                 )
+//                new RaceCommand(
+//                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
+//
+//                )
         ) ;
     }
 
@@ -68,15 +72,18 @@ public class AutoCommands {
                 new RaceCommand(
                         new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
-                ),
-                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+                )
+               // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
     }
 
     public Command knockGate(boolean red, boolean fromFirstLine) {
         return new SequentialCommand(
-                new FollowPathCommand(drivetrain, knockGateFromFirstPath(drivetrain, red)).timeout(1500),
-                new DelayCommand(500)
+                new ParallelCommand(
+                        new FollowPathCommand(drivetrain, fromFirstLine ? knockGateFromFirstPath(drivetrain, red) : knockGateFromSecondPath(drivetrain, red)).timeout(2500),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300)
+                ),
+                new DelayCommand(0)
         );
     }
 
@@ -88,19 +95,19 @@ public class AutoCommands {
      * @param drift a pose that offsets the end position in case the dead wheels experience drift
      * @return a command where the robot drives to the shooting position and shoots balls
      */
-    public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, boolean fromGate, Pose drift) {
+    public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, GatePose gatePose, Pose drift) {
         VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
 
         return new SequentialCommand(
                 new ParallelCommand(
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(700),
-                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, fromGate, drift)),
+                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
                         new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new SequentialCommand(
-                                new DelayCommand(300),
+                                new DelayCommand(200),//300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )

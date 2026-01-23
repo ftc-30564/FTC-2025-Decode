@@ -12,6 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -57,18 +58,18 @@ public class BlueClose12GateTwice extends LinearOpMode {
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
                 autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.FIRST_LINE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
                 autoCommands.knockGate(red, false),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, true, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(1, 2.5, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));

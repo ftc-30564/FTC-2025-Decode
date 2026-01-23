@@ -134,6 +134,10 @@ public class Drivetrain {
         return follower.isBusy();
     }
 
+    public boolean atParametricEnd() {
+        return follower.atParametricEnd();
+    }
+
     public PathBuilder pathBuilder() {
         return follower.pathBuilder();
     }

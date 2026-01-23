@@ -12,6 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -55,17 +56,17 @@ public class RedFar12 extends LinearOpMode {
         // Named in order of how they are intaked
         Command intakeAndShootGPP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(5, -2, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(5, -4, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, false, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(7, -4, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, false, new Pose(0, 0, Math.toRadians(1)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(1)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
