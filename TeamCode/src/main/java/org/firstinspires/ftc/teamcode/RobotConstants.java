@@ -89,7 +89,7 @@ public class RobotConstants {
         public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(242));
 
         public static final Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
-        public static final Pose RED_POST_INTAKE_PPG   = new Pose(124, 83.9, 0);
+        public static final Pose RED_POST_INTAKE_PPG   = new Pose(122.5, 83.9, 0);
 
         public static final Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.2, 0);
         public static final Pose RED_POST_INTAKE_PGP   = new Pose(130, 58.8, 0);
@@ -114,30 +114,30 @@ public class RobotConstants {
         public static final Pose BLUE_STARTING_CLOSE   = new Pose(34.0, 134.57, Math.toRadians(270)); // 144 - 110
         public static final Pose BLUE_STARTING_FAR     = new Pose(55.0, 8.15,   Math.toRadians(270)); // 144 - 89
 
-        public static final Pose BLUE_SHOOT_CLOSE      = new Pose(61, 76.4,  Math.toRadians(307)); // 144 - 84
+        public static final Pose BLUE_SHOOT_CLOSE      = new Pose(59.5, 78,  Math.toRadians(307)); // 144 - 84
         public static final Pose BLUE_SHOOT_FAR        = new Pose(57.0, 18.4,  Math.toRadians(289)); // 144 - 87
 
         public static final Pose BLUE_PRE_INTAKE_PPG   = new Pose(58.0, 83.9,  Math.toRadians(180)); // 144 - 86
-        public static final Pose BLUE_POST_INTAKE_PPG  = new Pose(17.5, 83.9,  Math.toRadians(180)); // 144 - 125.5
+        public static final Pose BLUE_POST_INTAKE_PPG  = new Pose(20.5, 83.9,  Math.toRadians(180)); // 144 - 125.5
 
         public static final Pose BLUE_PRE_INTAKE_PGP   = new Pose(56.0, 60.2,  Math.toRadians(180)); // 144 - 88
-        public static final Pose BLUE_POST_INTAKE_PGP  = new Pose(11.7, 58.8,  Math.toRadians(180)); // 144 - 131.5
+        public static final Pose BLUE_POST_INTAKE_PGP  = new Pose(14, 58.8,  Math.toRadians(180)); // 144 - 131.5
 
         public static final Pose BLUE_PRE_INTAKE_GPP   = new Pose(52.0, 35.4,  Math.toRadians(180)); // 144 - 92
-        public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(10.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
+        public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(12.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
 
-        public static final Pose BLUE_PRE_INTAKE_HUMAN = new Pose(144-135.6, 27.8,  Math.toRadians(270)); // 144 - 132.7
-        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(144-135.6, 8.5, Math.toRadians(270)); // 144 - 133.8
+        public static final Pose BLUE_PRE_INTAKE_HUMAN = new Pose(12, 27.8,  Math.toRadians(270)); // 144 - 132.7
+        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(12, 8.5, Math.toRadians(270)); // 144 - 133.8
 
         public static final Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
         public static final Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
 
-        public static final Pose BLUE_HIT_GATE_1 = new Pose(18.25, 74.8, Math.toRadians(270)); // 144 - 127
+        public static final Pose BLUE_HIT_GATE_1 = new Pose(18.25, 75.8, Math.toRadians(270)); // 144 - 127
         public static final Pose BLUE_HIT_GATE_2         = new Pose(18.25, 74.8, Math.toRadians(270)); // 144 - 127
         public static final Pose BLUE_LEAVE_CLOSE      = new Pose(44.5, 78.4, Math.toRadians(270)); // 144 - 99.5
         public static final Pose BLUE_LEAVE_FAR        = new Pose(53.0, 26.5, Math.toRadians(270)); // 144 - 91
 
-        public static final long SHOOT_TIME_MS = 1400;//1800;
+        public static final long SHOOT_TIME_MS = 1600;//1800;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
@@ -213,16 +213,14 @@ public class RobotConstants {
 
                     .addPath(new BezierLine(ballPre, ballPost))
                     .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
-                    .setTValueConstraint(.95)
 
                     // nudge routine to help with intaking (for now)
                     .addPath(new BezierLine(ballPost, nudgePose))
                     .setLinearHeadingInterpolation(ballPost.getHeading(), nudgePose.getHeading())
-                    .setTValueConstraint(1)
 
                     .addPath(new BezierLine(nudgePose, ballPost))
                     .setLinearHeadingInterpolation(nudgePose.getHeading(), ballPost.getHeading())
-
+                    .setBrakingStart(40)
 
                     .build();
         }

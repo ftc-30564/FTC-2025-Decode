@@ -20,6 +20,7 @@ public class Intake {
       firstIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.FIRST_INTAKE_NAME);
       secondIntake = hardwareMap.get(CRServo.class, RobotConstants.Intake.SECOND_INTAKE_NAME);
 
+      firstIntake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void run() {
         firstIntake.setPower(RobotConstants.Intake.FIRST_INTAKE_RUN_SPEED);

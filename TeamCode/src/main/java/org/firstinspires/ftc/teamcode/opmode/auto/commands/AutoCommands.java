@@ -45,16 +45,15 @@ public class AutoCommands {
         return new SequentialCommand(
                 new ParallelCommand(
                         new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(500),
+                        new ChargeFlywheelCommand(shooter, vel).timeout(500)
+                ),
+                new RaceCommand(
+                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
                         new SequentialCommand(
-                                new DelayCommand(1800),
+                                new DelayCommand(100),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )
-//                new RaceCommand(
-//                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
-//
-//                )
         ) ;
     }
 
@@ -100,7 +99,7 @@ public class AutoCommands {
 
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(700),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(750),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
