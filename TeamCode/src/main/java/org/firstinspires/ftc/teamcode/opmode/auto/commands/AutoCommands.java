@@ -107,7 +107,7 @@ public class AutoCommands {
                 new RaceCommand(
                         new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new SequentialCommand(
-                                new DelayCommand(200),//300),
+                                new DelayCommand(400),//300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )

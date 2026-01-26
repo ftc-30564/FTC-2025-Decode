@@ -89,13 +89,13 @@ public class RobotConstants {
         public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(242));
 
         public static final Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
-        public static final Pose RED_POST_INTAKE_PPG   = new Pose(127, 83.9, 0);
+        public static final Pose RED_POST_INTAKE_PPG   = new Pose(124, 83.9, 0);
 
         public static final Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.2, 0);
-        public static final Pose RED_POST_INTAKE_PGP   = new Pose(133, 58.8, 0);
+        public static final Pose RED_POST_INTAKE_PGP   = new Pose(130, 58.8, 0);
 
         public static final Pose RED_PRE_INTAKE_GPP    = new Pose(92,    35.4, 0);
-        public static final Pose RED_POST_INTAKE_GPP   = new Pose(131, 35.4, 0);
+        public static final Pose RED_POST_INTAKE_GPP   = new Pose(126, 35.4, 0);
 
         public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(128.5, 35, Math.toRadians(270));
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(128.5, 13, Math.toRadians(270));
@@ -204,13 +204,25 @@ public class RobotConstants {
             ballPre = ballPre.plus(drift);
             ballPost = ballPost.plus(drift);
 
+            final double NUDGE_AMOUNT_OUT = 3;
+            Pose nudgePose = new Pose(ballPost.getX() - (Math.signum(ballPost.getX() - 72)*NUDGE_AMOUNT_OUT), ballPost.getY(), ballPost.getHeading());
+
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, ballPre))
                     .setLinearHeadingInterpolation(start.getHeading(), ballPre.getHeading())
 
                     .addPath(new BezierLine(ballPre, ballPost))
                     .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
-                    .setTValueConstraint(0.97)
+                    .setTValueConstraint(.95)
+
+                    // nudge routine to help with intaking (for now)
+                    .addPath(new BezierLine(ballPost, nudgePose))
+                    .setLinearHeadingInterpolation(ballPost.getHeading(), nudgePose.getHeading())
+                    .setTValueConstraint(1)
+
+                    .addPath(new BezierLine(nudgePose, ballPost))
+                    .setLinearHeadingInterpolation(nudgePose.getHeading(), ballPost.getHeading())
+
 
                     .build();
         }

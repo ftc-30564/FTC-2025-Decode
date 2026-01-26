@@ -26,15 +26,14 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-
-public class BlueClose15 extends LinearOpMode {
+public class BlueFar15 extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
     public Limelight limelight;
     public AutoCommands autoCommands;
 
-    public final boolean close = true;
+    public final boolean close = false;
     public final boolean red = false;
 
     @Override
@@ -56,19 +55,24 @@ public class BlueClose15 extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(0, 0, Math.toRadians(3))),
-                autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.FIRST_LINE, new Pose(0, 0, Math.toRadians(-2)))
-        );
-
-        Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(1, 0, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+                autoCommands.driveAndIntakeBalls(BallPose.PPG, close, red, new Pose(-6, -5, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-1)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(1, 2.5, Math.toRadians(3))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(-4, -2, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+        );
+
+        Command intakeAndShootPGP = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.PGP, close, red, new Pose(-4, -3, Math.toRadians(3))),
+                autoCommands.knockGate(red, false),
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.SECOND_LINE, new Pose(0, 0, Math.toRadians(-1)))
+        );
+
+        Command intakeAndShootHumanPlayer = new SequentialCommand(
+                autoCommands.driveAndIntakeBalls(BallPose.HUMAN_PLAYER, close, red, new Pose(0, 0, Math.toRadians(0))),
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
@@ -76,9 +80,10 @@ public class BlueClose15 extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPGP,
                 intakeAndShootPPG,
+                intakeAndShootPGP,
                 intakeAndShootGPP,
+                intakeAndShootHumanPlayer,
                 leave
                 );
 
