@@ -61,7 +61,7 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_P = 0.005;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(157, 157);
         public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
@@ -89,13 +89,13 @@ public class RobotConstants {
         public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(242));
 
         public static final Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
-        public static final Pose RED_POST_INTAKE_PPG   = new Pose(122.5, 83.9, 0);
+        public static final Pose RED_POST_INTAKE_PPG   = new Pose(123.5, 83.9, 0);
 
         public static final Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.2, 0);
         public static final Pose RED_POST_INTAKE_PGP   = new Pose(130, 58.8, 0);
 
         public static final Pose RED_PRE_INTAKE_GPP    = new Pose(92,    35.4, 0);
-        public static final Pose RED_POST_INTAKE_GPP   = new Pose(126, 35.4, 0);
+        public static final Pose RED_POST_INTAKE_GPP   = new Pose(125.5, 35.4, 0);
 
         public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(128.5, 35, Math.toRadians(270));
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(128.5, 13, Math.toRadians(270));
@@ -204,7 +204,7 @@ public class RobotConstants {
             ballPre = ballPre.plus(drift);
             ballPost = ballPost.plus(drift);
 
-            final double NUDGE_AMOUNT_OUT = 3;
+            final double NUDGE_AMOUNT_OUT = 2;
             Pose nudgePose = new Pose(ballPost.getX() - (Math.signum(ballPost.getX() - 72)*NUDGE_AMOUNT_OUT), ballPost.getY(), ballPost.getHeading());
 
             return drivetrain.pathBuilder()
