@@ -9,7 +9,6 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FA
 import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.leavePath;
 
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -54,12 +53,12 @@ public class RedFarCycle extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(0, -2, Math.toRadians(0))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBalls(BallPose.HUMAN_PLAYER, close, red, new Pose(0, -2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER, close, red, new Pose(0, -2, Math.toRadians(0))),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.util.VelocityPair;
 public class Shooter {
     private DcMotorEx bottomFlywheel;
     private DcMotorEx topFlywheel;
-    private CRServo shooterPusher;
+    private DcMotorEx shooterPusher;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
     private double bottomVelocityP = RobotConstants.Shooter.VELOCITY_BOTTOM_P;
@@ -23,7 +23,7 @@ public class Shooter {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        shooterPusher = hardwareMap.get(CRServo.class, RobotConstants.Intake.PUSHER_NAME);
+        shooterPusher = hardwareMap.get(DcMotorEx.class, RobotConstants.Intake.PUSHER_NAME);
         shooterPusher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         bottomFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.LEFT_FLYWHEEL_NAME);
@@ -75,6 +75,7 @@ public class Shooter {
         topFlywheel.setPower(percent);
     }
 
+
     public void updateTopShooterP(double p) {
         this.topVelocityP = p;
     }
@@ -94,7 +95,7 @@ public class Shooter {
     }
 
     public void runPusher() {
-        shooterPusher.setPower(1);
+        shooterPusher.setPower(0.78);
     }
 
     public void stopPusher() {
@@ -102,8 +103,8 @@ public class Shooter {
     }
 
     public void barfPusher() {
-        shooterPusher.setPower(-1);
+        shooterPusher.setPower(-0.8);
     }
 
-    public void runBackPusher(){shooterPusher.setPower(-.45);}
+    public void runBackPusher(){shooterPusher.setPower(-0.4);}
 }

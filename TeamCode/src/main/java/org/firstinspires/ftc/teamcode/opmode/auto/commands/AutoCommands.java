@@ -65,14 +65,25 @@ public class AutoCommands {
      * @param drift an offset pose in case the dead wheels experience drift
      * @return a command where the robot drives and intakes balls from the shooting position
      */
-    public Command driveAndIntakeBalls(BallPose ballPose, boolean close, boolean red, Pose drift) {
+    public Command driveAndIntakeBallsBounce(BallPose ballPose, boolean close, boolean red, Pose drift) {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, intakeBallsPath(drivetrain, ballPose, close, red, drift)),
+                        new FollowPathCommand(drivetrain, intakeBallsPathBounce(drivetrain, ballPose, close, red, drift)),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command driveAndIntakeBallsUnbounce(BallPose ballPose, boolean close, boolean red, Pose drift) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, intakeBallsPathUnbounce(drivetrain, ballPose, close, red, drift)),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
     }
 
@@ -80,7 +91,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 new ParallelCommand(
                         new FollowPathCommand(drivetrain, fromFirstLine ? knockGateFromFirstPath(drivetrain, red) : knockGateFromSecondPath(drivetrain, red)).timeout(2500),
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(300)
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(700)
                 ),
                 new DelayCommand(0)
         );
@@ -91,8 +102,7 @@ public class AutoCommands {
      * @param ballPose the group of balls that the robot starts at (ex. PPG, PGP, GPP)
      * @param close if the robot is shooting close or far
      * @param red if the robot is red or blue
-     * @param drift a pose that offsets the end position in case the dead wheels experience drift
-     * @return a command where the robot drives to the shooting position and shoots balls
+     * @param drift a pose that offsets the end position in case the dead wheels experience drift     * @return a command where the robot drives to the shooting position and shoots balls
      */
     public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, GatePose gatePose, Pose drift) {
         VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
@@ -106,7 +116,7 @@ public class AutoCommands {
                 new RaceCommand(
                         new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new SequentialCommand(
-                                new DelayCommand(400),//300),
+                                new DelayCommand(100),//300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )

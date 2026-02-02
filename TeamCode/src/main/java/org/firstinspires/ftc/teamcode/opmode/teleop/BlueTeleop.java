@@ -72,6 +72,9 @@ public class BlueTeleop extends LinearOpMode {
         boolean chargeButton;
         boolean shootButton;
 
+        boolean isCharged = false;
+        double lowestRpm = 500;
+
         double turnAmt = 0;
 
         waitForStart();
@@ -137,12 +140,18 @@ public class BlueTeleop extends LinearOpMode {
                 if (USING_INTERPOLATION) {
                     double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
                     shooter.setToVelocityPair(new VelocityPair(vel, vel));
+
+                    if (shooter.isAtVelocityPair(new VelocityPair(vel-10, vel-10))) {
+                        isCharged = true;
+                    }
                 }
                 else {
                     shooter.setToVelocityPair(shootingPosition.vel);
                 }
             }
             else {
+                isCharged = false;
+                lowestRpm = 500;
                 shooter.setTopShooterToVelocity(0);
                 shooter.setBottomShooterToVelocity(0);
             }
@@ -174,6 +183,12 @@ public class BlueTeleop extends LinearOpMode {
             else indicator.blue();
 
             telemetry.addLine("SHOOTER");
+            if (isCharged) {
+                if (shooter.getVelocityTop() < lowestRpm) {
+                    lowestRpm = shooter.getVelocityTop();
+                }
+            }
+            telemetry.addData("LOWEST RPM", lowestRpm);
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
             telemetry.addLine("DRIVETRAIN");

@@ -4,7 +4,6 @@ import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -52,8 +51,8 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.4 / 132.5;
-        public static final double VELOCITY_TOP_FEEDFORWARD = 0.4 / 137.5;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.00315;//0.00301;
+        public static final double VELOCITY_TOP_FEEDFORWARD = 0.00315;//0.0029;
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
@@ -137,7 +136,7 @@ public class RobotConstants {
         public static final Pose BLUE_LEAVE_CLOSE      = new Pose(44.5, 78.4, Math.toRadians(270)); // 144 - 99.5
         public static final Pose BLUE_LEAVE_FAR        = new Pose(53.0, 26.5, Math.toRadians(270)); // 144 - 91
 
-        public static final long SHOOT_TIME_MS = 1600;//1800;
+        public static final long SHOOT_TIME_MS = 1250;//1600;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
@@ -195,7 +194,7 @@ public class RobotConstants {
                     .build();
         }
 
-        public static PathChain intakeBallsPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+        public static PathChain intakeBallsPathBounce(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
             Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
 
             Pose ballPre = getPreBallPose(ballPose, isRed);
@@ -221,6 +220,26 @@ public class RobotConstants {
                     .addPath(new BezierLine(nudgePose, ballPost))
                     .setLinearHeadingInterpolation(nudgePose.getHeading(), ballPost.getHeading())
                     .setBrakingStart(40)
+
+                    .build();
+        }
+
+        public static PathChain intakeBallsPathUnbounce(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
+            Pose start = isRed ? (close ? RED_SHOOT_CLOSE : RED_SHOOT_FAR) : (close ? BLUE_SHOOT_CLOSE : BLUE_SHOOT_FAR);
+
+            Pose ballPre = getPreBallPose(ballPose, isRed);
+            Pose ballPost = getPostBallPose(ballPose, isRed);
+
+            ballPre = ballPre.plus(drift);
+            ballPost = ballPost.plus(drift);
+
+            return drivetrain.pathBuilder()
+                    .addPath(new BezierLine(start, ballPre))
+                    .setLinearHeadingInterpolation(start.getHeading(), ballPre.getHeading())
+
+                    .addPath(new BezierLine(ballPre, ballPost))
+                    .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
+                    .setTValueConstraint(0.97)
 
                     .build();
         }
