@@ -15,6 +15,10 @@ public class IndicatorRGB {
         lightRGB.setPosition(0.277);
         secondLightRGB.setPosition(0.277);
     }
+    public void orange() {
+        lightRGB.setPosition(0.333);
+        secondLightRGB.setPosition(0.333);
+    }
     public void green(){
         lightRGB.setPosition(0.500);
         secondLightRGB.setPosition(0.500);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -38,7 +39,7 @@ public class BlueTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        drivetrain = new Drivetrain(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap, false);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
@@ -71,6 +72,7 @@ public class BlueTeleop extends LinearOpMode {
         boolean barfButton;
         boolean chargeButton;
         boolean shootButton;
+        boolean isShootingWhileMoving = false;
 
         boolean isCharged = false;
         double lowestRpm = 500;
@@ -90,21 +92,42 @@ public class BlueTeleop extends LinearOpMode {
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
 
+            isShootingWhileMoving = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2)) + Math.pow(gamepad1.left_stick_y, 2) > 0.5;
+
             drivetrain.update();
 
             if (gamepad1.left_bumper) {
-                turnAmt = drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
-                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                        limelight.getYawTarget());
+                if (isShootingWhileMoving) {
+                    drivetrain.setGoalCentricDriveV2(
+                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                            telemetry);
+                }
+                else {
+                    drivetrain.setTeleopDrive(
+                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                            limelight.getYawTarget()
+                    );
+                }
             }
             else {
                 drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (IS_RED ? 1 : -1),
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (IS_RED ? 1 : -1),
+                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                         false);
+
+                // Try to update position of robot
+                Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
+                if (estPose != null) {
+                    drivetrain.setPose(estPose);
+
+                    telemetry.addData("LL POSE X", estPose.getX());
+                    telemetry.addData("LL POSE Y", estPose.getY());
+                }
             }
 
 
@@ -176,26 +199,22 @@ public class BlueTeleop extends LinearOpMode {
                 drivetrain.setMaxPower(1);
             }
 
-            
-            if (limelight.isAlignedWithGoal()) {
+            if (isShootingWhileMoving)
+                indicator.orange();
+            else if (limelight.isAlignedWithGoal())
                 indicator.green();
-            }
-            else indicator.blue();
+            else
+                indicator.blue();
 
             telemetry.addLine("SHOOTER");
-            if (isCharged) {
-                if (shooter.getVelocityTop() < lowestRpm) {
-                    lowestRpm = shooter.getVelocityTop();
-                }
-            }
             telemetry.addData("LOWEST RPM", lowestRpm);
             telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
             telemetry.addData("Top shooter vel", shooter.getVelocityTop());
             telemetry.addLine("DRIVETRAIN");
-            telemetry.addData("Robot X", drivetrain.getPose().getX());
-            telemetry.addData("Robot Y", drivetrain.getPose().getY());
-            telemetry.addData("Robot Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
-            telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleDegrees());
+            telemetry.addData("X", drivetrain.getPose().getX());
+            telemetry.addData("Y", drivetrain.getPose().getY());
+            telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
+            telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleRadians());
             telemetry.addLine("LIMELIGHT");
             telemetry.addData("Turn Amount", turnAmt);
             telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());

@@ -90,16 +90,18 @@ public class Limelight {
     }
 
     public Pose getPoseEstimate(double heading) {
-        LLResult result = limelight.getLatestResult();
         limelight.updateRobotOrientation(heading);
 
-        if (result != null && result.isValid()) {
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid() && (result.getStaleness() < 30)) {
             Pose3D botpose_mt2 = result.getBotpose_MT2();
             if (botpose_mt2 != null) {
-                double x = botpose_mt2.getPosition().x;
-                double y = botpose_mt2.getPosition().y;
+                // converting limelight's weird coordinate system to pedro
+                double x = (botpose_mt2.getPosition().y) * 38.3701 + 72;
+                double y = (-botpose_mt2.getPosition().x) * 39.3701 + 72;
 
-                return new Pose(x, y, heading);
+                return new Pose(x, y, Math.toRadians(heading - 90));
             }
         }
 
