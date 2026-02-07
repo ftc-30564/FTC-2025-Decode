@@ -95,7 +95,7 @@ public class Shooter {
     }
 
     public void runPusher() {
-        shooterPusher.setPower(0.78);
+        shooterPusher.setPower(0.75);
     }
 
     public void stopPusher() {

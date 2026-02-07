@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class BlueFarCycle extends LinearOpMode {
+public class RedFarCycle extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -35,7 +35,7 @@ public class BlueFarCycle extends LinearOpMode {
     public AutoCommands autoCommands;
 
     public final boolean close = false;
-    public final boolean red = false;
+    public final boolean red = true;
 
     @Override
     public void runOpMode() {
@@ -44,6 +44,7 @@ public class BlueFarCycle extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, limelight, telemetry);
+        limelight.setRedGoalPipeline();
 
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
@@ -56,12 +57,19 @@ public class BlueFarCycle extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(-4, -2, Math.toRadians(3))),
+
+
+                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(2, -2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER, close, red, new Pose(0, 2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER, close, red, new Pose(8, 0, Math.toRadians(0))),
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+        );
+
+        Command intakeAndShootHumanPlayer2 = new SequentialCommand(
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER, close, red, new Pose(8, 1, Math.toRadians(0))),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
@@ -72,7 +80,7 @@ public class BlueFarCycle extends LinearOpMode {
                 shootPreload,
                 intakeAndShootGPP,
                 intakeAndShootHumanPlayer,
-                intakeAndShootHumanPlayer,
+                intakeAndShootHumanPlayer2,
                 leave
         );
 

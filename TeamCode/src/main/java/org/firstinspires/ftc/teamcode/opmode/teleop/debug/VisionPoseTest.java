@@ -38,7 +38,7 @@ public class VisionPoseTest extends LinearOpMode {
                     -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                     false);
 
-            Pose estPose = limelight.getPoseEstimate(drivetrain.getImuAngleDegrees());
+            Pose estPose = limelight.getPoseEstimate(drivetrain.getImuAngleRadians());
 
             telemetry.addData("Limelight offset", limelight.getYawTarget());
             telemetry.update();

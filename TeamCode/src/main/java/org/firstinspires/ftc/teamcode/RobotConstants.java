@@ -56,12 +56,12 @@ public class RobotConstants {
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static final double VELOCITY_BOTTOM_P = 0.005;
-        public static final double VELOCITY_TOP_P = 0.005;
+        public static final double VELOCITY_BOTTOM_P = 0.0055;
+        public static final double VELOCITY_TOP_P = 0.0055;
         public static final double VELOCITY_DEADBAND = 10;
 
         public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(157, 157);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(163, 163);
     }
 
     public static class Intake {

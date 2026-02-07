@@ -89,7 +89,7 @@ public class RedTeleop extends LinearOpMode {
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
 
-            isShootingWhileMoving = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2)) + Math.pow(gamepad1.left_stick_y, 2) > 0.5;
+            isShootingWhileMoving = false;//Math.sqrt(Math.pow(gamepad1.left_stick_x, 2)) + Math.pow(gamepad1.left_stick_y, 2) > 0.5;
 
             drivetrain.update();
 
@@ -118,13 +118,13 @@ public class RedTeleop extends LinearOpMode {
                         false);
 
                 // Try to update position of robot
-                Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
-                if (estPose != null) {
-                    drivetrain.setPose(estPose);
-
-                    telemetry.addData("LL POSE X", estPose.getX());
-                    telemetry.addData("LL POSE Y", estPose.getY());
-                }
+//                Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
+//                if (estPose != null) {
+//                    drivetrain.setPose(estPose);
+//
+//                    telemetry.addData("LL POSE X", estPose.getX());
+//                    telemetry.addData("LL POSE Y", estPose.getY());
+//                }
             }
 
 
