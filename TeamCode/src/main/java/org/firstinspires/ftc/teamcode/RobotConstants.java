@@ -51,17 +51,17 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.00315;//0.00301;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.0031;//0.00301;
         public static final double VELOCITY_TOP_FEEDFORWARD = 0.00315;//0.0029;
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static final double VELOCITY_BOTTOM_P = 0.0055;
-        public static final double VELOCITY_TOP_P = 0.0055;
+        public static final double VELOCITY_BOTTOM_P = 0.008;
+        public static final double VELOCITY_TOP_P = 0.008;
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(157, 157);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(163, 163);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
     }
 
     public static class Intake {
@@ -85,7 +85,7 @@ public class RobotConstants {
         public static final Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
         // Shooting positions
         public static final Pose RED_SHOOT_CLOSE       = new Pose(84, 75.9, Math.toRadians(227));
-        public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(242));
+        public static final Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(238));
 
         public static final Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
         public static final Pose RED_POST_INTAKE_PPG   = new Pose(123.5, 83.9, 0);
@@ -96,8 +96,8 @@ public class RobotConstants {
         public static final Pose RED_PRE_INTAKE_GPP    = new Pose(92,    35.4, 0);
         public static final Pose RED_POST_INTAKE_GPP   = new Pose(125.5, 35.4, 0);
 
-        public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(128.5, 35, Math.toRadians(270));
-        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(128.5, 13, Math.toRadians(270));
+        public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
+        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.5, 9, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
 
         public static final Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
         public static final Pose RED_LINEUP_2          = new Pose(118, 61, Math.toRadians(270));
@@ -126,7 +126,7 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(12.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
 
         public static final Pose BLUE_PRE_INTAKE_HUMAN = new Pose(12, 27.8,  Math.toRadians(270)); // 144 - 132.7
-        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(12, 8.5, Math.toRadians(270)); // 144 - 133.8
+        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(12, 7.5, Math.toRadians(270)); // 144 - 133.8
 
         public static final Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
         public static final Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));

@@ -50,7 +50,7 @@ public class AutoCommands {
                 new RaceCommand(
                         new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
                         new SequentialCommand(
-                                new DelayCommand(100),
+                                new DelayCommand(close ? 100 : 300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )
@@ -69,7 +69,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, intakeBallsPathBounce(drivetrain, ballPose, close, red, drift)),
+                        new FollowPathCommand(drivetrain, intakeBallsPathBounce(drivetrain, ballPose, close, red, drift)).timeout(5000),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
@@ -80,7 +80,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, intakeBallsPathUnbounce(drivetrain, ballPose, close, red, drift)),
+                        new FollowPathCommand(drivetrain, intakeBallsPathUnbounce(drivetrain, ballPose, close, red, drift)).timeout(5000),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)

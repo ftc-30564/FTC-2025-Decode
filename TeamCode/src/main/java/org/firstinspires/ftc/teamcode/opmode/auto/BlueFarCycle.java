@@ -27,15 +27,15 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class RedClose15 extends LinearOpMode {
+public class BlueFarCycle extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
     public Limelight limelight;
     public AutoCommands autoCommands;
 
-    public final boolean close = true;
-    public final boolean red = true;
+    public final boolean close = false;
+    public final boolean red = false;
 
     @Override
     public void runOpMode() {
@@ -44,6 +44,7 @@ public class RedClose15 extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, limelight, telemetry);
+        limelight.setRedGoalPipeline();
 
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
@@ -55,24 +56,19 @@ public class RedClose15 extends LinearOpMode {
 
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
-        Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose(1.5, 2, Math.toRadians(1))),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
-        );
-
-        Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(2.2, 1, Math.toRadians(-2))),
-                autoCommands.knockGate(red, false),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.SECOND_LINE, new Pose(-1, 0, Math.toRadians(-2)))
-        );
-
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(2, 2, Math.toRadians(-5))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
+
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(7.5, -2, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER, close, red, new Pose(-5.5, 0, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER, close, red, new Pose(0, 0, Math.toRadians(0))),
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+        );
+
+        Command intakeAndShootHumanPlayer2 = new SequentialCommand(
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER, close, red, new Pose(0, 0, Math.toRadians(0))),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
@@ -81,15 +77,13 @@ public class RedClose15 extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPPG,
-                intakeAndShootPGP,
                 intakeAndShootGPP,
                 intakeAndShootHumanPlayer,
+                intakeAndShootHumanPlayer2,
                 leave
-                );
+        );
 
         waitForStart();
-
         limelight.start();
         shooter.stopPusher();
         while (opModeIsActive()) {

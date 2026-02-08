@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -21,6 +22,7 @@ public class BlueTeleop extends LinearOpMode {
     private Shooter shooter;
     private Limelight limelight;
     private Interpolator interpolator;
+    private ElapsedTime loopTimer = new ElapsedTime();
 
     private IndicatorRGB indicator;
 
@@ -43,7 +45,7 @@ public class BlueTeleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
-        interpolator = new Interpolator(InterpolationPoints.points_1_4);
+        interpolator = new Interpolator(InterpolationPoints.points_2_7);
         indicator = new IndicatorRGB(hardwareMap);
 
         ShootingPosition shootingPosition = ShootingPosition.CLOSE;
@@ -86,6 +88,8 @@ public class BlueTeleop extends LinearOpMode {
         drivetrain.resetImu();
 
         while (opModeIsActive()) {
+            loopTimer.reset();
+
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
             chargeButton = gamepad2.left_bumper;
@@ -164,9 +168,9 @@ public class BlueTeleop extends LinearOpMode {
                     double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
                     shooter.setToVelocityPair(new VelocityPair(vel, vel));
 
-                    if (shooter.isAtVelocityPair(new VelocityPair(vel-10, vel-10))) {
-                        isCharged = true;
-                    }
+//                    if (shooter.isAtVelocityPair(new VelocityPair(vel-10, vel-10))) {
+//                        isCharged = true;
+//                    }
                 }
                 else {
                     shooter.setToVelocityPair(shootingPosition.vel);
@@ -199,9 +203,7 @@ public class BlueTeleop extends LinearOpMode {
                 drivetrain.setMaxPower(1);
             }
 
-            if (isShootingWhileMoving)
-                indicator.orange();
-            else if (limelight.isAlignedWithGoal())
+            if (limelight.isAlignedWithGoal())
                 indicator.green();
             else
                 indicator.blue();
@@ -220,6 +222,7 @@ public class BlueTeleop extends LinearOpMode {
             telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
             telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
+            telemetry.addData("Timer Loop", loopTimer.milliseconds());
             telemetry.update();
 
         }
