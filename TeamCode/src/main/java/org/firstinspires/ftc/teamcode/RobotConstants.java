@@ -99,6 +99,9 @@ public class RobotConstants {
         public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
         public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.5, 9, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
 
+        public static final Pose RED_PRE_INTAKE_HUMAN2 = new Pose(119.3, 10.4, Math.toRadians(10));
+        public static final Pose RED_POST_INTAKE_HUMAN2 = new Pose(134.3, 10.4, Math.toRadians(10));
+
         public static final Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
         public static final Pose RED_LINEUP_2          = new Pose(118, 61, Math.toRadians(270));
 
@@ -125,8 +128,11 @@ public class RobotConstants {
         public static final Pose BLUE_PRE_INTAKE_GPP   = new Pose(52.0, 35.4,  Math.toRadians(180)); // 144 - 92
         public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(12.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
 
-        public static final Pose BLUE_PRE_INTAKE_HUMAN = new Pose(12, 27.8,  Math.toRadians(270)); // 144 - 132.7
-        public static final Pose BLUE_POST_INTAKE_HUMAN= new Pose(12, 7.5, Math.toRadians(270)); // 144 - 133.8
+        public static final Pose BLUE_PRE_INTAKE_HUMAN  = new Pose(10.5, 18.5, Math.toRadians(210));
+        public static final Pose BLUE_POST_INTAKE_HUMAN = new Pose(10.5, 9, Math.toRadians(210));
+
+        public static final Pose BLUE_PRE_INTAKE_HUMAN2 = new Pose(24.7, 10.4, Math.toRadians(170));
+        public static final Pose BLUE_POST_INTAKE_HUMAN2 = new Pose(9.7, 10.4, Math.toRadians(170));
 
         public static final Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
         public static final Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
@@ -143,7 +149,8 @@ public class RobotConstants {
             PPG,
             PGP,
             GPP,
-            HUMAN_PLAYER
+            HUMAN_PLAYER1,
+            HUMAN_PLAYER2
         }
 
         public enum GatePose {
@@ -160,8 +167,10 @@ public class RobotConstants {
                     return red ? RED_PRE_INTAKE_PGP : BLUE_PRE_INTAKE_PGP;
                 case PPG:
                     return red ? RED_PRE_INTAKE_PPG : BLUE_PRE_INTAKE_PPG;
-                case HUMAN_PLAYER:
+                case HUMAN_PLAYER1:
                     return red ? RED_PRE_INTAKE_HUMAN : BLUE_PRE_INTAKE_HUMAN;
+                case HUMAN_PLAYER2:
+                    return red ? RED_PRE_INTAKE_HUMAN2 : BLUE_PRE_INTAKE_HUMAN2;
             }
 
             throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human somehow");
@@ -175,8 +184,10 @@ public class RobotConstants {
                     return red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP;
                 case PPG:
                     return red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG;
-                case HUMAN_PLAYER:
+                case HUMAN_PLAYER1:
                     return red ? RED_POST_INTAKE_HUMAN : BLUE_POST_INTAKE_HUMAN;
+                case HUMAN_PLAYER2:
+                    return red ? RED_POST_INTAKE_HUMAN2 : BLUE_POST_INTAKE_HUMAN2;
             }
 
             throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human");

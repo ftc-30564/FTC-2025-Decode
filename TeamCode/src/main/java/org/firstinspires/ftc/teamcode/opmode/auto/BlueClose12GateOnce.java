@@ -56,24 +56,24 @@ public class BlueClose12GateOnce extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.PPG, close, red, new Pose(0, 2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose(-2, 2, Math.toRadians(0))),
                 autoCommands.knockGate(red, true),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.FIRST_LINE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.PGP, close, red, new Pose(1, 1, Math.toRadians(8))),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(-2, 1, Math.toRadians(8))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(5, 2.5, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(-6, 2.5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER, close, red, new Pose(0, 0, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))),
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
