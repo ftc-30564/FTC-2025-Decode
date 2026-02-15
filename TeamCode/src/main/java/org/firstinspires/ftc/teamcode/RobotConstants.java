@@ -93,14 +93,14 @@ public class RobotConstants {
         public static final Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.2, 0);
         public static final Pose RED_POST_INTAKE_PGP   = new Pose(130, 58.8, 0);
 
-        public static final Pose RED_PRE_INTAKE_GPP    = new Pose(92,    35.4, 0);
+        public static final Pose RED_PRE_INTAKE_GPP    = new Pose(89,    34, 0);
         public static final Pose RED_POST_INTAKE_GPP   = new Pose(125.5, 35.4, 0);
 
         public static final Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
-        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(133.5, 9, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
+        public static final Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
 
-        public static final Pose RED_PRE_INTAKE_HUMAN2 = new Pose(119.3, 10.4, Math.toRadians(10));
-        public static final Pose RED_POST_INTAKE_HUMAN2 = new Pose(134.3, 10.4, Math.toRadians(10));
+        public static final Pose RED_PRE_INTAKE_HUMAN2 = new Pose(112, 10.4, Math.toRadians(10));
+        public static final Pose RED_POST_INTAKE_HUMAN2 = new Pose(138, 13, Math.toRadians(10));
 
         public static final Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
         public static final Pose RED_LINEUP_2          = new Pose(118, 61, Math.toRadians(270));
@@ -214,7 +214,7 @@ public class RobotConstants {
             ballPre = ballPre.plus(drift);
             ballPost = ballPost.plus(drift);
 
-            final double NUDGE_AMOUNT_OUT = 2;
+            final double NUDGE_AMOUNT_OUT = 1.5;
             Pose nudgePose = new Pose(ballPost.getX() - (Math.signum(ballPost.getX() - 72)*NUDGE_AMOUNT_OUT), ballPost.getY(), ballPost.getHeading());
 
             return drivetrain.pathBuilder()
@@ -223,14 +223,17 @@ public class RobotConstants {
 
                     .addPath(new BezierLine(ballPre, ballPost))
                     .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
+                    .setBrakingStart(10)
 
                     // nudge routine to help with intaking (for now)
                     .addPath(new BezierLine(ballPost, nudgePose))
                     .setLinearHeadingInterpolation(ballPost.getHeading(), nudgePose.getHeading())
+                    .setBrakingStart(10)
+
 
                     .addPath(new BezierLine(nudgePose, ballPost))
                     .setLinearHeadingInterpolation(nudgePose.getHeading(), ballPost.getHeading())
-                    .setBrakingStart(40)
+
 
                     .build();
         }
@@ -251,6 +254,7 @@ public class RobotConstants {
                     .addPath(new BezierLine(ballPre, ballPost))
                     .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
                     .setTValueConstraint(0.97)
+                    .setBrakingStart(10)
 
                     .build();
         }

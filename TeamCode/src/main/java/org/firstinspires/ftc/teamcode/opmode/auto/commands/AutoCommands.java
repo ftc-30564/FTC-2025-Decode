@@ -109,14 +109,14 @@ public class AutoCommands {
 
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(750),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(900),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
                         new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new SequentialCommand(
-                                new DelayCommand(100),//300),
+                                new DelayCommand(300),//300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )

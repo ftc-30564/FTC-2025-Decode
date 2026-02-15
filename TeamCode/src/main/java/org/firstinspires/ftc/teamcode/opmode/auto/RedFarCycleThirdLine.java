@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous
-public class RedFarCycle extends LinearOpMode {
+public class RedFarCycleThirdLine extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -59,23 +59,43 @@ public class RedFarCycle extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootGPP = new SequentialCommand(
-
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(7.5, -2, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(8, -2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
-        Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
-        );
 
-        Command intakeAndShootHumanPlayer2 = new SequentialCommand(
+        Command intakeAndShootGPP2 = new SequentialCommand(
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(9, -2.1, Math.toRadians(3))),
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+        );
+//
+//        Command intakeAndShootGPP3 = new SequentialCommand(
+//                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(9, -8, Math.toRadians(3))),
+//                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+//        );
+//
+//        Command intakeAndShootGPP4 = new SequentialCommand(
+//                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(9, -5, Math.toRadians(3))),
+//                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+//        );
+//
+//        Command intakeAndShootGPP5 = new SequentialCommand(
+//                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(9, -2, Math.toRadians(3))),
+//                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
+//        );
+
+        Command intakeAndShootHumanPlayer = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
+        Command intakeAndShootHumanPlayer2 = new SequentialCommand(
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 2, Math.toRadians(0))).timeout(3000),
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+        );
+
         Command intakeAndShootHumanPlayer3 = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, -4, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
@@ -89,10 +109,11 @@ public class RedFarCycle extends LinearOpMode {
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
+                intakeAndShootGPP,
                 intakeAndShootHumanPlayer,
                 intakeAndShootHumanPlayer2,
                 intakeAndShootHumanPlayer3,
-                intakeAndShootHumanPlayer4,
+
                 leave
         );
 
