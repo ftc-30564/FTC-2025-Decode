@@ -17,7 +17,7 @@ public class FlywheelTest extends LinearOpMode {
         Shooter shooter = new Shooter(hardwareMap, telemetry);
         Intake intake = new Intake(hardwareMap);
         Limelight limelight = new Limelight(hardwareMap);
-        Interpolator interpolator = new Interpolator(InterpolationPoints.points);
+        Interpolator interpolator = new Interpolator(InterpolationPoints.points_2_7);
 
         limelight.setRedGoalPipeline();
 

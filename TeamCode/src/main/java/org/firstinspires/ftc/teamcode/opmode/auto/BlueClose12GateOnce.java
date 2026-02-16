@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-@Autonomous
+@Autonomous(group = "Blue")
 public class BlueClose12GateOnce extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
@@ -56,18 +56,18 @@ public class BlueClose12GateOnce extends LinearOpMode {
         Command shootPreload = autoCommands.startAndShoot(close, red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose(-2, 2, Math.toRadians(0))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.PPG, close, red, new Pose(0, 2, Math.toRadians(0))),
                 autoCommands.knockGate(red, true),
                 autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.FIRST_LINE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(-2, 1, Math.toRadians(8))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.PGP, close, red, new Pose(1, 1, Math.toRadians(8))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(-6, 2.5, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(5, 2.5, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
@@ -84,9 +84,8 @@ public class BlueClose12GateOnce extends LinearOpMode {
                 intakeAndShootPPG,
                 intakeAndShootPGP,
                 intakeAndShootGPP,
-                intakeAndShootHumanPlayer,
                 leave
-                );
+        );
 
         waitForStart();
 

@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-@Autonomous
+@Autonomous(group = "Blue")
 public class BlueClose15 extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;

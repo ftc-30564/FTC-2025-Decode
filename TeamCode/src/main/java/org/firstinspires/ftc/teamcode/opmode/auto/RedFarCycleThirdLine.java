@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
-@Autonomous
+@Autonomous(group = "Red")
 public class RedFarCycleThirdLine extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
@@ -52,7 +52,7 @@ public class RedFarCycleThirdLine extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
-        limelight.setBlueGoalPipeline();
+        limelight.setRedGoalPipeline();
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
@@ -95,7 +95,7 @@ public class RedFarCycleThirdLine extends LinearOpMode {
         );
 
         Command intakeAndShootHumanPlayer3 = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, -4, Math.toRadians(0))).timeout(3000),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, -2, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 

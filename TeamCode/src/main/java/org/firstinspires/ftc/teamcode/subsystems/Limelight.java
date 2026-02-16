@@ -11,6 +11,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
 
+// RED:
+// forward -0.4  right 0.17  up 0
+// BLUE:
+// forward -0.1  right 0.12  up 0
+
 public class Limelight {
     private Limelight3A limelight;
     private HardwareMap hardwareMap;
@@ -18,6 +23,11 @@ public class Limelight {
     private final int RED_GOAL_PIPELINE = 0;
     private final int BLUE_GOAL_PIPELINE = 1;
     private final int OBELISK_PIPELINE = 2;
+
+    private final int BLUE_OFFSET = -3;
+    private final int RED_OFFSET = -5;
+
+    private int offset = 0;
 
     public Limelight(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -27,10 +37,12 @@ public class Limelight {
 
     public void setRedGoalPipeline() {
         limelight.pipelineSwitch(RED_GOAL_PIPELINE);
+        offset = RED_OFFSET;
     }
 
     public void setBlueGoalPipeline() {
         limelight.pipelineSwitch(BLUE_GOAL_PIPELINE);
+        offset = BLUE_OFFSET;
     }
 
     public void setObeliskPipeline() {
@@ -47,8 +59,8 @@ public class Limelight {
 
     public double getYawTarget() {
         LLResult result = limelight.getLatestResult();
-        if (result != null && result.isValid() && result.getStaleness() < 100) {
-            return result.getTx();
+        if (result != null && result.isValid()) {
+            return result.getTx() + offset;
         }
 
         return 0;
@@ -58,7 +70,7 @@ public class Limelight {
     public boolean isAlignedWithGoal() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid() && result.getStaleness() < 100) {
-            return result.getTx() <= 3.0 && result.getTx() >= -3.0;
+            return (result.getTx() + offset) <= 3.0 && (result.getTx() + offset) >= -3.0;
         }
 
         return false;
@@ -79,9 +91,9 @@ public class Limelight {
                     continue;
                 Pose3D targetPose = fiducial.getCameraPoseTargetSpace();
 
-                telemetry.addData("Pose X", targetPose.getPosition().x);
-                telemetry.addData("Pose Y", targetPose.getPosition().y);
-                telemetry.addData("Pose Z", targetPose.getPosition().z);
+//                telemetry.addData("Pose X", targetPose.getPosition().x);
+//                telemetry.addData("Pose Y", targetPose.getPosition().y);
+//                telemetry.addData("Pose Z", targetPose.getPosition().z);
 
                 return Math.sqrt(Math.pow(targetPose.getPosition().x, 2) + Math.pow(targetPose.getPosition().z, 2));
             }

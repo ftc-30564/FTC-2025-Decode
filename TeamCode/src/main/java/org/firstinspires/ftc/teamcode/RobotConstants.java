@@ -51,13 +51,13 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.0031;//0.00301;
-        public static final double VELOCITY_TOP_FEEDFORWARD = 0.00315;//0.0029;
+        public static final double VELOCITY_BOTTOM_FEEDFORWARD = 0.00291970802;//0.00301; 137
+        public static final double VELOCITY_TOP_FEEDFORWARD = 0.00275862068;//0.0029;  145
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static final double VELOCITY_BOTTOM_P = 0.008;
-        public static final double VELOCITY_TOP_P = 0.008;
+        public static final double VELOCITY_BOTTOM_P = 0.01;
+        public static final double VELOCITY_TOP_P = 0.01;
         public static final double VELOCITY_DEADBAND = 10;
 
         public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
@@ -129,10 +129,10 @@ public class RobotConstants {
         public static final Pose BLUE_POST_INTAKE_GPP  = new Pose(12.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
 
         public static final Pose BLUE_PRE_INTAKE_HUMAN  = new Pose(10.5, 18.5, Math.toRadians(210));
-        public static final Pose BLUE_POST_INTAKE_HUMAN = new Pose(10.5, 9, Math.toRadians(210));
+        public static final Pose BLUE_POST_INTAKE_HUMAN = new Pose(10, 11, Math.toRadians(210));
 
-        public static final Pose BLUE_PRE_INTAKE_HUMAN2 = new Pose(24.7, 10.4, Math.toRadians(170));
-        public static final Pose BLUE_POST_INTAKE_HUMAN2 = new Pose(9.7, 10.4, Math.toRadians(170));
+        public static final Pose BLUE_PRE_INTAKE_HUMAN2 = new Pose(40, 10.4, Math.toRadians(180));
+        public static final Pose BLUE_POST_INTAKE_HUMAN2 = new Pose(6, 13, Math.toRadians(180));
 
         public static final Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
         public static final Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
