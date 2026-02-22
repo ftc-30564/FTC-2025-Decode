@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
@@ -67,6 +68,7 @@ public class BlueFarCycle extends LinearOpMode {
         );
 
         Command intakeAndShootHumanPlayer2 = new SequentialCommand(
+                new DelayCommand(1500),
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 2, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );

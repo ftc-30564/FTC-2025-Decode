@@ -24,10 +24,10 @@ public class Limelight {
     private final int BLUE_GOAL_PIPELINE = 1;
     private final int OBELISK_PIPELINE = 2;
 
-    private final int BLUE_OFFSET = -3;
-    private final int RED_OFFSET = -5;
+    private final double BLUE_OFFSET = -3;
+    private final double RED_OFFSET = -6.425;
 
-    private int offset = 0;
+    private double offset = 0;
 
     public Limelight(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");

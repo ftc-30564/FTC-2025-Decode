@@ -59,9 +59,9 @@ public class InterpolationPoints {
             new Point(1.74, 155),
             new Point(1.97, 155),
             new Point(2.25, 152),
-            new Point(2.5, 150),
-            new Point(2.9, 158),
-            new Point(3.25, 163),
-            new Point(3.4, 167)
+            new Point(2.5, 153),
+            new Point(2.9, 161),
+            new Point(3.25, 166),
+            new Point(3.4, 170)
     ));
 }

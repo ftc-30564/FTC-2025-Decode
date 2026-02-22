@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.DelayCommand;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
@@ -60,27 +61,28 @@ public class RedFarCycle extends LinearOpMode {
 
         Command intakeAndShootGPP = new SequentialCommand(
 
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(7.5, -2, Math.toRadians(3))),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(7.5, -2, Math.toRadians(3))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootHumanPlayer2 = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
+                new DelayCommand(1500),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(-4, 0, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootHumanPlayer3 = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(-4, 0, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command intakeAndShootHumanPlayer4 = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(0, 0, Math.toRadians(0))).timeout(3000),
+                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER2, close, red, new Pose(-4, 0, Math.toRadians(0))).timeout(3000),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER2, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
