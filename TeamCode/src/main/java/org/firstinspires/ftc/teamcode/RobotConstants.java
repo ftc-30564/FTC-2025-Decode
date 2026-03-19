@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.util.VelocityPair;
 public class RobotConstants {
     public static class Drive {
         // front and back is swapped
-        public static final String FRONT_LEFT_MOTOR_NAME = "frontRight";
-        public static final String FRONT_RIGHT_MOTOR_NAME = "frontLeft";
-        public static final String BACK_LEFT_MOTOR_NAME = "backLeft";
-        public static final String BACK_RIGHT_MOTOR_NAME = "backRight";
+        public static final String FRONT_LEFT_MOTOR_NAME = "backRight"; //backRight
+        public static final String FRONT_RIGHT_MOTOR_NAME = "backLeft"; //backLeft
+        public static final String BACK_LEFT_MOTOR_NAME = "frontLeft"; //frontLeft
+        public static final String BACK_RIGHT_MOTOR_NAME = "frontRight"; // frontRight
 
         public static final String DEAD_WHEEL_LEFT_NAME = "frontLeft";
         public static final String DEAD_WHEEL_RIGHT_NAME = "backRight";
@@ -30,10 +30,9 @@ public class RobotConstants {
         public static final double DEAD_WHEEL_RIGHT_DIRECTION = Encoder.REVERSE;
         public static final double DEAD_WHEEL_PERP_DIRECTION = Encoder.REVERSE;
 
-        public static final double DEAD_WHEEL_LEFT_OFFSET = 6.14;
         // right one should always be negative
-        public static final double DEAD_WHEEL_RIGHT_OFFSET = -6.14;
-        public static final double DEAD_WHEEL_PERP_OFFSET = -6.67;
+        public static final double DEAD_WHEEL_FORWARD_OFFSET = -6.14;
+        public static final double DEAD_WHEEL_PERP_OFFSET = -6.8;
 
         public static final double FORWARD_SPEEDLIMIT = 1;
         public static final double STRAFE_SPEEDLIMIT = 1;

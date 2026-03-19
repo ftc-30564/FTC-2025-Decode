@@ -6,11 +6,13 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.ftc.localization.constants.ThreeWheelConstants;
 import com.pedropathing.paths.PathConstraints;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class Constants {
@@ -40,23 +42,18 @@ public class Constants {
             .yVelocity((52.869557 + 55.94934)/2)
             .useBrakeModeInTeleOp(true);
 
-    public static ThreeWheelConstants localizerConstants = new ThreeWheelConstants()
-            .forwardTicksToInches(0.0019737796)
-            .strafeTicksToInches(0.001971613)
-            .turnTicksToInches(0.0019725611)
-            .leftPodY(RobotConstants.Drive.DEAD_WHEEL_LEFT_OFFSET)    // ditto
-            .rightPodY(RobotConstants.Drive.DEAD_WHEEL_RIGHT_OFFSET)    // ditto
-            .strafePodX(RobotConstants.Drive.DEAD_WHEEL_PERP_OFFSET)    // ditto
-            .leftEncoder_HardwareMapName(RobotConstants.Drive.DEAD_WHEEL_LEFT_NAME)
-            .rightEncoder_HardwareMapName(RobotConstants.Drive.DEAD_WHEEL_RIGHT_NAME)
-            .strafeEncoder_HardwareMapName(RobotConstants.Drive.DEAD_WHEEL_PERP_NAME)
-            .leftEncoderDirection(RobotConstants.Drive.DEAD_WHEEL_LEFT_DIRECTION)
-            .rightEncoderDirection(RobotConstants.Drive.DEAD_WHEEL_RIGHT_DIRECTION)
-            .strafeEncoderDirection(RobotConstants.Drive.DEAD_WHEEL_PERP_DIRECTION);
+    public static PinpointConstants pinpointConstants = new PinpointConstants()
+            .forwardPodY(RobotConstants.Drive.DEAD_WHEEL_FORWARD_OFFSET)
+            .strafePodX(RobotConstants.Drive.DEAD_WHEEL_PERP_OFFSET)
+            .distanceUnit(DistanceUnit.INCH)
+            .hardwareMapName("pinpoint")
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .threeWheelLocalizer(localizerConstants)
+                .pinpointLocalizer(pinpointConstants)
                 .mecanumDrivetrain(driveConstants)
                 .pathConstraints(pathConstraints)
                 .build();

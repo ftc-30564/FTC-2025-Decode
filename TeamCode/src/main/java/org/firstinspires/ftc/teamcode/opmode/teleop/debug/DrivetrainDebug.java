@@ -17,19 +17,10 @@ public class DrivetrainDebug extends LinearOpMode {
         DcMotorEx backLeftMotor =   hardwareMap.get(DcMotorEx.class, RobotConstants.Drive.BACK_LEFT_MOTOR_NAME);
         DcMotorEx backRightMotor =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drive.BACK_RIGHT_MOTOR_NAME);
 
-        DcMotorEx deadWheelLeft =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drive.DEAD_WHEEL_LEFT_NAME);
-        DcMotorEx deadWheelRight = hardwareMap.get(DcMotorEx.class, RobotConstants.Drive.DEAD_WHEEL_RIGHT_NAME);
-        DcMotorEx deadWheelPerp =  hardwareMap.get(DcMotorEx.class, RobotConstants.Drive.DEAD_WHEEL_PERP_NAME);
-
         frontLeftMotor.setDirection(RobotConstants.Drive.FRONT_LEFT_MOTOR_DIRECTION);
         frontRightMotor.setDirection(RobotConstants.Drive.FRONT_RIGHT_MOTOR_DIRECTION);
         backLeftMotor.setDirection(RobotConstants.Drive.BACK_LEFT_MOTOR_DIRECTION);
         backRightMotor.setDirection(RobotConstants.Drive.BACK_RIGHT_MOTOR_DIRECTION);
-
-        // convert Encoder direction to DcMotorSimple
-        deadWheelLeft.setDirection(RobotConstants.Drive.DEAD_WHEEL_LEFT_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
-        deadWheelRight.setDirection(RobotConstants.Drive.DEAD_WHEEL_RIGHT_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
-        deadWheelPerp.setDirection(RobotConstants.Drive.DEAD_WHEEL_PERP_DIRECTION == 1.0 ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -37,10 +28,6 @@ public class DrivetrainDebug extends LinearOpMode {
             telemetry.addData("DPAD Left", "Back Left Motor");
             telemetry.addData("DPAD Right", "Front Right Motor");
             telemetry.addData("DPAD Down", "Back Right Motor");
-
-            telemetry.addData("Odometry Left (+ when forward)", deadWheelLeft.getCurrentPosition());
-            telemetry.addData("Odometry Right (+ when forward)", deadWheelRight.getCurrentPosition());
-            telemetry.addData("Odometry Perp (+ when left)", deadWheelPerp.getCurrentPosition());
 
             // Front Left Motor
             if (gamepad1.dpad_up) {
