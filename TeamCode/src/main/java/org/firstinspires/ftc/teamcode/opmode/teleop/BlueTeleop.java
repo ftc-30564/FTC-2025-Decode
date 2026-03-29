@@ -29,26 +29,14 @@ public class BlueTeleop extends LinearOpMode {
     private final boolean IS_RED = false;
     private final boolean USING_INTERPOLATION = true;
 
-    public enum ShootingPosition {
-        CLOSE(RobotConstants.Shooter.CLOSE_VELOCITY),
-        FAR(RobotConstants.Shooter.FAR_VELOCITY);
-
-        VelocityPair vel;
-        ShootingPosition(VelocityPair vel) {
-            this.vel = vel;
-        }
-    }
-
     @Override
     public void runOpMode() {
-        drivetrain = new Drivetrain(hardwareMap, false);
+        drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
         interpolator = new Interpolator(InterpolationPoints.points_2_15);
         indicator = new IndicatorRGB(hardwareMap);
-
-        ShootingPosition shootingPosition = ShootingPosition.CLOSE;
 
         if (IS_RED) {
             limelight.setRedGoalPipeline();
@@ -85,7 +73,6 @@ public class BlueTeleop extends LinearOpMode {
 
         limelight.start();
         drivetrain.startTeleopDrive();
-        drivetrain.resetImu();
 
         while (opModeIsActive()) {
             loopTimer.reset();
@@ -101,21 +88,12 @@ public class BlueTeleop extends LinearOpMode {
             drivetrain.update();
 
             if (gamepad1.left_bumper) {
-                if (isShootingWhileMoving) {
-                    drivetrain.setGoalCentricDriveV2(
-                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                            telemetry);
-                }
-                else {
-                    drivetrain.setTeleopDrive(
-                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                            limelight.getYawTarget()
-                    );
-                }
+                drivetrain.setTeleopDrive(
+                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                        limelight.getYawTarget()
+                );
             }
             else {
                 drivetrain.setTeleopDrive(
@@ -123,17 +101,7 @@ public class BlueTeleop extends LinearOpMode {
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                         false);
-
-                // Try to update position of robot
-//                Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
-//                if (estPose != null) {
-//                    drivetrain.setPose(estPose);
-//
-//                    telemetry.addData("LL POSE X", estPose.getX());
-//                    telemetry.addData("LL POSE Y", estPose.getY());
-//                }
             }
-
 
             if (zeroButton) {
                 if (IS_RED) {
@@ -157,12 +125,6 @@ public class BlueTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-            if (gamepad1.dpad_down)
-                shootingPosition = ShootingPosition.FAR;
-            if (gamepad1.dpad_up) {
-                shootingPosition = ShootingPosition.CLOSE;
-            }
-
             if (chargeButton) {
                 if (USING_INTERPOLATION) {
                     double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
@@ -171,9 +133,6 @@ public class BlueTeleop extends LinearOpMode {
 //                    if (shooter.isAtVelocityPair(new VelocityPair(vel-10, vel-10))) {
 //                        isCharged = true;
 //                    }
-                }
-                else {
-                    shooter.setToVelocityPair(shootingPosition.vel);
                 }
             }
             else {
@@ -208,19 +167,18 @@ public class BlueTeleop extends LinearOpMode {
             else
                 indicator.blue();
 
-            telemetry.addLine("SHOOTER");
-            telemetry.addData("LOWEST RPM", lowestRpm);
-            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
-            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
-            telemetry.addLine("DRIVETRAIN");
-            telemetry.addData("X", drivetrain.getPose().getX());
-            telemetry.addData("Y", drivetrain.getPose().getY());
-            telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
-            telemetry.addData("Robot IMU Heading", drivetrain.getImuAngleRadians());
-            telemetry.addLine("LIMELIGHT");
-            telemetry.addData("Turn Amount", turnAmt);
-            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
-            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
+//            telemetry.addLine("SHOOTER");
+//            telemetry.addData("LOWEST RPM", lowestRpm);
+//            telemetry.addData("Bottom shooter vel", shooter.getVelocityBottom());
+//            telemetry.addData("Top shooter vel", shooter.getVelocityTop());
+//            telemetry.addLine("DRIVETRAIN");
+//            telemetry.addData("X", drivetrain.getPose().getX());
+//            telemetry.addData("Y", drivetrain.getPose().getY());
+//            telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
+//            telemetry.addLine("LIMELIGHT");
+//            telemetry.addData("Turn Amount", turnAmt);
+//            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
+//            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
             telemetry.addData("Timer Loop", loopTimer.milliseconds());
             telemetry.update();
