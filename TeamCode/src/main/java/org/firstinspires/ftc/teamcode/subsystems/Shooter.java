@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -28,8 +29,10 @@ public class Shooter {
 
         bottomFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.LEFT_FLYWHEEL_NAME);
         bottomFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
-
         topFlywheel = hardwareMap.get(DcMotorEx.class, RobotConstants.Shooter.RIGHT_FLYWHEEL_NAME);
+
+        bottomFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        topFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void setPercent(double percent) {
@@ -75,6 +78,10 @@ public class Shooter {
         topFlywheel.setPower(percent);
     }
 
+    public void coast() {
+        bottomFlywheel.setPower(0);
+        topFlywheel.setPower(0);
+    }
 
     public void updateTopShooterP(double p) {
         this.topVelocityP = p;
@@ -95,7 +102,7 @@ public class Shooter {
     }
 
     public void runPusher() {
-        shooterPusher.setPower(0.78);
+        shooterPusher.setPower(1.0);
     }
 
     public void stopPusher() {

@@ -36,7 +36,7 @@ public class AlignToTargetTest extends LinearOpMode {
                         -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
                         -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                        limelight.getYawTarget());
+                        false);
             }
             else {
                 drivetrain.setTeleopDrive(

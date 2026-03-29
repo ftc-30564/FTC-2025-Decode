@@ -46,15 +46,15 @@ public class BlueTeleop extends LinearOpMode {
         }
 
 
-        if (IS_RED) {
-            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
-        }
-        else {
-            if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
-                RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
-            }
-            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
-        }
+//        if (IS_RED) {
+//            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+//        }
+//        else {
+//            if (RobotConstants.Auto.LAST_REMEMBERED_POSE.getHeading() == 0) {
+//                RobotConstants.Auto.LAST_REMEMBERED_POSE = RobotConstants.Auto.LAST_REMEMBERED_POSE.setHeading(Math.toRadians(180));
+//            }
+//            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+//        }
 
 
         boolean zeroButton;
@@ -73,6 +73,7 @@ public class BlueTeleop extends LinearOpMode {
 
         limelight.start();
         drivetrain.startTeleopDrive();
+        drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
 
         while (opModeIsActive()) {
             loopTimer.reset();
@@ -88,17 +89,16 @@ public class BlueTeleop extends LinearOpMode {
             drivetrain.update();
 
             if (gamepad1.left_bumper) {
-                drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                        limelight.getYawTarget()
-                );
+                drivetrain.setAimedTeleopDrive(
+                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                        false,
+                        telemetry);
             }
             else {
                 drivetrain.setTeleopDrive(
-                        -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                        -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
+                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
+                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
                         false);
             }
@@ -136,10 +136,7 @@ public class BlueTeleop extends LinearOpMode {
                 }
             }
             else {
-                isCharged = false;
-                lowestRpm = 500;
-                shooter.setTopShooterToVelocity(0);
-                shooter.setBottomShooterToVelocity(0);
+                shooter.coast();
             }
 
             if (intakeButton) {
@@ -179,6 +176,12 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Turn Amount", turnAmt);
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
+
+            telemetry.addData("Target angle (degrees)", Math.toDegrees(drivetrain.targetAngle(false)));
+
+            telemetry.addData("X", drivetrain.getPose().getX());
+            telemetry.addData("Y", drivetrain.getPose().getY());
+            telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
 
             telemetry.addData("Timer Loop", loopTimer.milliseconds());
             telemetry.update();

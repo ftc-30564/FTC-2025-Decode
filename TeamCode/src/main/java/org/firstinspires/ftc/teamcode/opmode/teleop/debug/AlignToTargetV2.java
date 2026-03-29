@@ -27,7 +27,7 @@ public class AlignToTargetV2 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        drivetrain = new Drivetrain(hardwareMap, true);
+        drivetrain = new Drivetrain(hardwareMap);
         limelight = new Limelight(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
@@ -44,7 +44,7 @@ public class AlignToTargetV2 extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.resetImu();
+        //drivetrain.resetImu();
         drivetrain.startTeleopDrive();
         limelight.start();
 
@@ -59,21 +59,17 @@ public class AlignToTargetV2 extends LinearOpMode {
 
             if (gamepad1.left_bumper) {
                 if (Math.sqrt(Math.pow(gamepad1.left_stick_x, 2)) + Math.pow(gamepad1.left_stick_y, 2) > 0.5) {
-                    drivetrain.setGoalCentricDriveV2(
-                            -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
-                            -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
-                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                            telemetry);
                 }
                 else {
                     drivetrain.setTeleopDrive(
                             -gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
                             -gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                             -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                            limelight.getYawTarget()
+                            false
+                            //limelight.getYawTarget()
                     );
 
-                    Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
+                    Pose estPose = limelight.getPoseEstimate(Math.toDegrees(drivetrain.getPose().getHeading()) + 90);
                     if (estPose != null) {
                         drivetrain.setPose(estPose);
 
@@ -132,7 +128,6 @@ public class AlignToTargetV2 extends LinearOpMode {
 
             telemetry.addData("EST POSE X", drivetrain.getPose().getX());
             telemetry.addData("EST POSE Y", drivetrain.getPose().getY());
-            telemetry.addData("HEADING DEG", Math.toDegrees(drivetrain.getImuAngleRadians()) + 90);
 
             telemetry.addData("Limelight offset", limelight.getYawTarget());
 

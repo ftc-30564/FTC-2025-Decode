@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathBuilder;
@@ -16,6 +18,18 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 public class Drivetrain {
     private Follower follower;
 
+    public Pose redGoal = new Pose(144,144);
+    public Pose blueGoal = new Pose(0,144);
+
+    private final PIDFController pidfController = new PIDFController(
+            new PIDFCoefficients(
+                    RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P,
+                    0,
+                    RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D,
+                    0
+            )
+    );
+
     public Drivetrain(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
     }
@@ -28,21 +42,32 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public double setTeleopDrive(double forward, double strafe, double turn, double errorDegrees){
-        double targetPower = (errorDegrees * RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P);
+    public void setAimedTeleopDrive(double forward, double strafe, boolean red, Telemetry telemetry){
+        double targetAngle = targetAngle(red);
+        double error = targetAngle - (getPose().getHeading());
 
-        if (targetPower > 0.3)
-            targetPower = 0.3;
+        telemetry.addData("error before", Math.toDegrees(error));
 
-        if (targetPower < -0.3)
-            targetPower = -0.3;
-
-        if (errorDegrees != 0) {
-            setTeleopDrive(forward, strafe, targetPower, false);
-            return targetPower;
+        if (Math.abs(error) > Math.PI) {
+            error -= (Math.PI * 2) * Math.signum(error);
         }
-        follower.setTeleOpDrive(forward, strafe, turn, false);
-        return 0;
+
+        telemetry.addData("error after", Math.toDegrees(error));
+
+        pidfController.updateError(error);
+
+        double targetPower = pidfController.run();
+
+//        if (targetPower > )
+//            targetPower = 0.8;
+//
+//        if (targetPower < -0.8)
+//            targetPower = -0.8;
+
+        telemetry.addData("Target power", targetPower);
+
+        follower.setTeleOpDrive(forward, strafe, targetPower, false);
+
     }
 
     public void update(){
@@ -50,7 +75,7 @@ public class Drivetrain {
     }
 
     public Pose getPose() {
-        return follower.getPose();
+        return follower.getPose();//new Pose(-follower.getPose().getY(), follower.getPose().getX(), follower.getHeading());
     }
 
     public void setStartingPose(Pose pose){
@@ -81,5 +106,18 @@ public class Drivetrain {
 
     public PathBuilder pathBuilder() {
         return follower.pathBuilder();
+    }
+
+    public double targetAngle(boolean red) {
+        Pose goalPose;
+        if (red) {
+            goalPose = redGoal;
+        }
+        else {
+            goalPose = blueGoal;
+        }
+
+        Pose poseDifference = getPose().minus(goalPose);
+        return Math.atan2(poseDifference.getY(), poseDifference.getX());
     }
 }
