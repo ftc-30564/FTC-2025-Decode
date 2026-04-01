@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -22,7 +25,9 @@ public class BlueTeleop extends LinearOpMode {
     private Shooter shooter;
     private Limelight limelight;
     private Interpolator interpolator;
+    private AimCalculator aimCalculator;
     private ElapsedTime loopTimer = new ElapsedTime();
+    private TelemetryManager panels = PanelsTelemetry.INSTANCE.getTelemetry();
 
     private IndicatorRGB indicator;
 
@@ -31,12 +36,15 @@ public class BlueTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap);
-        interpolator = new Interpolator(InterpolationPoints.points_2_15);
+        interpolator = new Interpolator(InterpolationPoints.rpms_2_15);
         indicator = new IndicatorRGB(hardwareMap);
+        aimCalculator = new AimCalculator(drivetrain, false);
 
         if (IS_RED) {
             limelight.setRedGoalPipeline();
@@ -69,6 +77,8 @@ public class BlueTeleop extends LinearOpMode {
 
         double turnAmt = 0;
 
+
+
         waitForStart();
 
         limelight.start();
@@ -78,22 +88,23 @@ public class BlueTeleop extends LinearOpMode {
         while (opModeIsActive()) {
             loopTimer.reset();
 
+            aimCalculator.update();
+            drivetrain.update();
+
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
 
-            isShootingWhileMoving = false;//Math.sqrt(Math.pow(gamepad1.left_stick_x, 2)) + Math.pow(gamepad1.left_stick_y, 2) > 0.5;
-
-            drivetrain.update();
+            AimCalculator.ShotData shotData = aimCalculator.getShotData();
 
             if (gamepad1.left_bumper) {
                 drivetrain.setAimedTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT,
                         false,
-                        telemetry);
+                        shotData.angle);
             }
             else {
                 drivetrain.setTeleopDrive(
@@ -127,12 +138,7 @@ public class BlueTeleop extends LinearOpMode {
 
             if (chargeButton) {
                 if (USING_INTERPOLATION) {
-                    double vel = interpolator.getVelocity(limelight.getDistanceTarget(IS_RED, telemetry));
-                    shooter.setToVelocityPair(new VelocityPair(vel, vel));
-
-//                    if (shooter.isAtVelocityPair(new VelocityPair(vel-10, vel-10))) {
-//                        isCharged = true;
-//                    }
+                    shooter.setToVelocityPair(new VelocityPair(shotData.rpm, shotData.rpm));
                 }
             }
             else {
@@ -150,13 +156,6 @@ public class BlueTeleop extends LinearOpMode {
             }
             else {
                 shooter.stopPusher();
-            }
-
-            if (shootButton){
-                drivetrain.setMaxPower(0.5);
-            }
-            else {
-                drivetrain.setMaxPower(1);
             }
 
             if (limelight.isAlignedWithGoal())
@@ -177,13 +176,21 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
-            telemetry.addData("Target angle (degrees)", Math.toDegrees(drivetrain.targetAngle(false)));
+            telemetry.addData("Target angle (degrees)", shotData.angle);
+
+            telemetry.addData("Target rpm", shotData.rpm);
+            telemetry.addData("Distance from target", shotData.distance);
 
             telemetry.addData("X", drivetrain.getPose().getX());
             telemetry.addData("Y", drivetrain.getPose().getY());
             telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
 
             telemetry.addData("Timer Loop", loopTimer.milliseconds());
+
+            panels.addData("Current RPM bottom", shooter.getVelocityBottom());
+            panels.addData("Current RPM top", shooter.getVelocityTop());
+
+            panels.update(telemetry);
             telemetry.update();
 
         }

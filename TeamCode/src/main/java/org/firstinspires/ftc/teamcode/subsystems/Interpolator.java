@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Interpolator {
     private ArrayList<Point> points;
-    private double lastValid = RobotConstants.Shooter.CLOSE_VELOCITY.bottom;
 
     public Interpolator(ArrayList<Point> points) {
         this.points = points;
@@ -26,10 +25,8 @@ public class Interpolator {
         return points.size() - 2;
     }
 
-    // Returns the ideal wheel velocity based off of the distance from the goal
-    public double getVelocity(double distance) {
-        if (distance == 0)
-            return lastValid;
+    // Returns the interpolated number
+    public double get(double distance) {
 
         Point leftPoint = points.get(getNearestPointIndex(distance));
         Point rightPoint = points.get(getNearestPointIndex(distance) + 1);
@@ -38,7 +35,6 @@ public class Interpolator {
         double slope = (rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x);
         double yIntercept = (leftPoint.y - (slope * leftPoint.x));
 
-        lastValid = (slope * distance) + yIntercept;
-        return lastValid;
+        return (slope * distance) + yIntercept;
     }
 }

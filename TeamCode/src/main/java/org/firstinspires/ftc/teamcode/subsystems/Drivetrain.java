@@ -4,6 +4,7 @@ import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -17,9 +18,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class Drivetrain {
     private Follower follower;
-
-    public Pose redGoal = new Pose(144,144);
-    public Pose blueGoal = new Pose(0,144);
 
     private final PIDFController pidfController = new PIDFController(
             new PIDFCoefficients(
@@ -42,17 +40,17 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public void setAimedTeleopDrive(double forward, double strafe, boolean red, Telemetry telemetry){
-        double targetAngle = targetAngle(red);
+    public void setAimedTeleopDrive(double forward, double strafe, boolean red, double angle){
+        double targetAngle = angle;
         double error = targetAngle - (getPose().getHeading());
 
-        telemetry.addData("error before", Math.toDegrees(error));
+        //telemetry.addData("error before", Math.toDegrees(error));
 
         if (Math.abs(error) > Math.PI) {
             error -= (Math.PI * 2) * Math.signum(error);
         }
 
-        telemetry.addData("error after", Math.toDegrees(error));
+        //telemetry.addData("error after", Math.toDegrees(error));
 
         pidfController.updateError(error);
 
@@ -64,7 +62,7 @@ public class Drivetrain {
 //        if (targetPower < -0.8)
 //            targetPower = -0.8;
 
-        telemetry.addData("Target power", targetPower);
+        //telemetry.addData("Target power", targetPower);
 
         follower.setTeleOpDrive(forward, strafe, targetPower, false);
 
@@ -76,6 +74,10 @@ public class Drivetrain {
 
     public Pose getPose() {
         return follower.getPose();//new Pose(-follower.getPose().getY(), follower.getPose().getX(), follower.getHeading());
+    }
+
+    public Vector getVelocity() {
+        return follower.getVelocity();
     }
 
     public void setStartingPose(Pose pose){
@@ -106,18 +108,5 @@ public class Drivetrain {
 
     public PathBuilder pathBuilder() {
         return follower.pathBuilder();
-    }
-
-    public double targetAngle(boolean red) {
-        Pose goalPose;
-        if (red) {
-            goalPose = redGoal;
-        }
-        else {
-            goalPose = blueGoal;
-        }
-
-        Pose poseDifference = getPose().minus(goalPose);
-        return Math.atan2(poseDifference.getY(), poseDifference.getX());
     }
 }

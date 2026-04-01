@@ -55,13 +55,21 @@ public class InterpolationPoints {
             new Point(3.6,170)
     ));
 
-    public static ArrayList<Point> points_2_15 = new ArrayList<>(Arrays.asList(
-            new Point(1.74, 160),
-            new Point(1.97, 160),
-            new Point(2.25, 157),
-            new Point(2.5, 158),
-            new Point(2.9, 166),
-            new Point(3.25, 171),
-            new Point(3.4, 175)
+    public static ArrayList<Point> rpms_2_15 = new ArrayList<>(Arrays.asList(
+            new Point(83.27, 160),
+            new Point(99.25, 165),
+            new Point(120, 170),
+            new Point(141.8, 170),
+            new Point(159.6, 180)
     ));
+
+    public static ArrayList<Point> tof = new ArrayList<>(Arrays.asList(
+            new Point(87, .7),
+new Point(125, 1)
+//            new Point(87, .42),
+//            new Point(106,.53),
+//            new Point(145,.67)
+    ));
+
+
 }

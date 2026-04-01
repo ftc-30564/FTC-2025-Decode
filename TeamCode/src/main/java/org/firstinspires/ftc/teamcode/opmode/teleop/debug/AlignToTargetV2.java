@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop.debug;
 
-import com.pedropathing.ftc.FTCCoordinates;
-import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.InterpolationPoints;
 import org.firstinspires.ftc.teamcode.RobotConstants;
-import org.firstinspires.ftc.teamcode.opmode.teleop.BlueTeleop;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Interpolator;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
@@ -101,7 +97,7 @@ public class AlignToTargetV2 extends LinearOpMode {
 
             if (chargeButton) {
                 if (true) {
-                    double vel = interpolator.getVelocity(limelight.getDistanceTarget(true, telemetry));
+                    double vel = interpolator.get(limelight.getDistanceTarget(true, telemetry));
                     shooter.setToVelocityPair(new VelocityPair(vel, vel));
                 }
                 else {
