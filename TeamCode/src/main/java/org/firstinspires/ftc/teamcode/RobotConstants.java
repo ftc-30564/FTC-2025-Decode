@@ -68,7 +68,7 @@ public class RobotConstants {
         public static final String SECOND_INTAKE_NAME = "secondIntake";
         public static final String PUSHER_NAME = "shooterPusher";
 
-        public static double FIRST_INTAKE_RUN_SPEED = 1;
+        public static double FIRST_INTAKE_RUN_SPEED = 0.85;
         public static double SECOND_INTAKE_RUN_SPEED = 1;
     }
     public static class Auto {
