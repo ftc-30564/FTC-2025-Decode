@@ -45,15 +45,24 @@ public class AimCalculator {
         else {
             goalPose = blueGoal;
         }
-        double distance = this.pose.distanceFrom(goalPose);
-        double timeOfFlight = tofInterpolator.get(distance);
 
-        Pose newPose = goalPose.minus(
-                new Pose(
-                        timeOfFlight * this.velocity.getXComponent(),
-                        timeOfFlight * this.velocity.getYComponent()
-                )
-        );
+        Pose newPose = goalPose;
+
+        double distance = 0;
+        double timeOfFlight;
+
+        // iterate 15 times to accurately calculate the target position
+        for (int x = 0; x < 15; x ++) {
+            distance = this.pose.distanceFrom(newPose);
+            timeOfFlight = tofInterpolator.get(distance);
+
+            newPose = newPose.minus(
+                    new Pose(
+                            timeOfFlight * this.velocity.getXComponent(),
+                            timeOfFlight * this.velocity.getYComponent()
+                    )
+            );
+        }
 
         double newRpm = rpmInterpolator.get(this.pose.distanceFrom(newPose));
         double newAngle = targetAngle(newPose);

@@ -40,29 +40,17 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public void setAimedTeleopDrive(double forward, double strafe, boolean red, double angle){
+    public void setAimedTeleopDrive(double forward, double strafe, double angle){
         double targetAngle = angle;
         double error = targetAngle - (getPose().getHeading());
-
-        //telemetry.addData("error before", Math.toDegrees(error));
 
         if (Math.abs(error) > Math.PI) {
             error -= (Math.PI * 2) * Math.signum(error);
         }
 
-        //telemetry.addData("error after", Math.toDegrees(error));
-
         pidfController.updateError(error);
 
         double targetPower = pidfController.run();
-
-//        if (targetPower > )
-//            targetPower = 0.8;
-//
-//        if (targetPower < -0.8)
-//            targetPower = -0.8;
-
-        //telemetry.addData("Target power", targetPower);
 
         follower.setTeleOpDrive(forward, strafe, targetPower, false);
 
@@ -73,7 +61,7 @@ public class Drivetrain {
     }
 
     public Pose getPose() {
-        return follower.getPose();//new Pose(-follower.getPose().getY(), follower.getPose().getX(), follower.getHeading());
+        return follower.getPose();
     }
 
     public Vector getVelocity() {

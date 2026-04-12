@@ -77,6 +77,7 @@ public class RobotConstants {
         // when we create a Pose object we must convert each angle into radians via Math.toRadians(deg).
 
         public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
+        public static boolean HAS_POSE = false;
 
         public static final Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
