@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.Pose;
@@ -24,7 +26,7 @@ public class BlueTeleop extends LinearOpMode {
     private Limelight limelight;
     private AimCalculator aimCalculator;
     private ElapsedTime loopTimer = new ElapsedTime();
-    private TelemetryManager panels = PanelsTelemetry.INSTANCE.getTelemetry();
+    private MultipleTelemetry multipleTelemetry;
 
     private IndicatorRGB indicator;
 
@@ -41,6 +43,7 @@ public class BlueTeleop extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         indicator = new IndicatorRGB(hardwareMap);
         aimCalculator = new AimCalculator(drivetrain, false);
+        multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         boolean zeroButton;
         boolean intakeButton;
@@ -53,8 +56,8 @@ public class BlueTeleop extends LinearOpMode {
         limelight.start();
         drivetrain.startTeleopDrive();
 
-        if (RobotConstants.Auto.HAS_POSE) {
-            drivetrain.setStartingPose(RobotConstants.Auto.LAST_REMEMBERED_POSE);
+        if (RobotConstants.AutoPaths.HAS_POSE) {
+            drivetrain.setStartingPose(RobotConstants.AutoPaths.LAST_REMEMBERED_POSE);
         }
         else {
             drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
@@ -147,27 +150,23 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
-            telemetry.addData("Target angle (degrees)", shotData.angle);
+            multipleTelemetry.addData("Target angle (degrees)", shotData.angle);
 
-            telemetry.addData("Target rpm", shotData.rpm);
-            telemetry.addData("Distance from target", shotData.distance);
+            multipleTelemetry.addData("Target rpm", shotData.rpm);
+            multipleTelemetry.addData("Distance from target", shotData.distance);
 
-            telemetry.addData("X", drivetrain.getPose().getX());
-            telemetry.addData("Y", drivetrain.getPose().getY());
-            telemetry.addData("Heading", Math.toDegrees(drivetrain.getPose().getHeading()));
+            multipleTelemetry.addData("Robot x", drivetrain.getPose().getX());
+            multipleTelemetry.addData("Robot y", drivetrain.getPose().getY());
+            multipleTelemetry.addData("Robot heading", drivetrain.getPose().getHeading());
 
-            telemetry.addData("Timer Loop", loopTimer.milliseconds());
+            multipleTelemetry.addData("Timer Loop", loopTimer.milliseconds());
 
-            panels.addData("Current RPM bottom", shooter.getVelocityBottom());
-            panels.addData("Current RPM top", shooter.getVelocityTop());
-
-            panels.update(telemetry);
-            telemetry.update();
+            multipleTelemetry.update();
 
         }
 
         // update last remembered pose
-        RobotConstants.Auto.LAST_REMEMBERED_POSE = drivetrain.getPose();
-        RobotConstants.Auto.HAS_POSE = true;
+        RobotConstants.AutoPaths.LAST_REMEMBERED_POSE = drivetrain.getPose();
+        RobotConstants.AutoPaths.HAS_POSE = true;
     }
 }

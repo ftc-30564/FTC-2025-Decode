@@ -64,11 +64,11 @@ public class InterpolationPoints {
     ));
 
     public static ArrayList<Point> tof = new ArrayList<>(Arrays.asList(
-            new Point(87, .7),
-new Point(125, 1)
-//            new Point(87, .42),
-//            new Point(106,.53),
-//            new Point(145,.67)
+//            new Point(87, .7),
+//new Point(125, 1)
+            new Point(87, .42),
+            new Point(106,.53),
+            new Point(145,.67)
     ));
 
 

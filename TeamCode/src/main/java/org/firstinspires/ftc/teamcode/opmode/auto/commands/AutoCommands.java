@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.commands;
 
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.*;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.*;
 import static org.firstinspires.ftc.teamcode.RobotConstants.Shooter.*;
 
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
@@ -65,7 +66,7 @@ public class AutoCommands {
      * @param drift an offset pose in case the dead wheels experience drift
      * @return a command where the robot drives and intakes balls from the shooting position
      */
-    public Command driveAndIntakeBallsBounce(BallPose ballPose, boolean close, boolean red, Pose drift) {
+    public Command driveAndIntakeBallsBounce(RobotConstants.AutoPaths.BallPose ballPose, boolean close, boolean red, Pose drift) {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -65,7 +66,7 @@ public class Shooter {
 
         telemetry.addData("voltage", voltage);
 
-        double percent = (targetVelocity * adjustedFeedforward) + ((targetVelocity - currentVelocity) * bottomVelocityP);
+        double percent = (targetVelocity * adjustedFeedforward) + (RobotConstants.Shooter.IS_P_ENABLED ? ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_BOTTOM_P) : 0);
         bottomFlywheel.setPower(percent);
     }
 
@@ -74,7 +75,7 @@ public class Shooter {
         // voltage compensation
         double adjustedFeedforward = RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD_12V * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
 
-        double percent = (targetVelocity * adjustedFeedforward) + ((targetVelocity - currentVelocity) * topVelocityP);
+        double percent = (targetVelocity * adjustedFeedforward) + (RobotConstants.Shooter.IS_P_ENABLED ? ((targetVelocity - currentVelocity) * RobotConstants.Shooter.VELOCITY_TOP_P) : 0);
         topFlywheel.setPower(percent);
     }
 

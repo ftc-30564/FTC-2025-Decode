@@ -1,12 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_CLOSE;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BLUE_STARTING_FAR;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.BallPose;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.LAST_REMEMBERED_POSE;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_CLOSE;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.RED_STARTING_FAR;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Auto.leavePath;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.*;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.*;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -58,25 +53,25 @@ public class RedClose12GateTwice extends LinearOpMode {
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose(2.7, 2, Math.toRadians(1))),
                 autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.Auto.GatePose.FIRST_LINE, new Pose(-1, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.AutoPaths.GatePose.FIRST_LINE, new Pose(-1, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(3.3, 1, Math.toRadians(-2))),
                 autoCommands.driveAndIntakeBallsBounce(BallPose.PGP, close, red, new Pose(0, 1, Math.toRadians(-2))),
                 autoCommands.knockGate(red, false),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.Auto.GatePose.SECOND_LINE, new Pose(-1, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.AutoPaths.GatePose.SECOND_LINE, new Pose(-1, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
                 autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(4, 2, Math.toRadians(-5))),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.Auto.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
