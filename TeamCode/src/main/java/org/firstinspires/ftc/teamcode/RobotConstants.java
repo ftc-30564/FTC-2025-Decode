@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -53,13 +54,16 @@ public class RobotConstants {
         public static final String RIGHT_FLYWHEEL_NAME = "leftShooter";
 
         // (TargetVelocity * FeedForward) + ((TargetVelocity - CurrentVelocity) * P) = Percent
-        public static double VELOCITY_BOTTOM_FEEDFORWARD = 0.00291970802;//0.00301; 137
-        public static double VELOCITY_TOP_FEEDFORWARD = 0.00275862068;//0.0029;  145
+        public static double VELOCITY_BOTTOM_FEEDFORWARD = 0.0028;//0.00301; 137
+        public static double VELOCITY_TOP_FEEDFORWARD = 0.0028;//0.0029;  145
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static double VELOCITY_BOTTOM_P = 0.047;
-        public static double VELOCITY_TOP_P = 0.047;
+        public static double VELOCITY_BOTTOM_P_STANDBY = 0.047;
+        public static double VELOCITY_TOP_P_STANDBY = 0.047;
+
+        public static double VELOCITY_BOTTOM_P_SHOOT = 0.08;
+        public static double VELOCITY_TOP_P_SHOOT = 0.08;
         public static boolean IS_P_ENABLED = true;
 
         public static final double VELOCITY_DEADBAND = 10;
@@ -74,7 +78,7 @@ public class RobotConstants {
         public static final String SECOND_INTAKE_NAME = "secondIntake";
         public static final String PUSHER_NAME = "shooterPusher";
 
-        public static double FIRST_INTAKE_RUN_SPEED = 0.85;
+        public static double FIRST_INTAKE_RUN_SPEED = 0.95;
     }
     @Config
     public static class AutoPoses {

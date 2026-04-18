@@ -17,13 +17,16 @@ import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(5)
-            .forwardZeroPowerAcceleration(-37.1841065)
-            .lateralZeroPowerAcceleration(-74.017442)
-            .centripetalScaling(0.0012)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0, 0.01))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(.015, 0, 0.00001, 0.6, 0)); //p// 0.01
+            .mass(12.7006)
+            .forwardZeroPowerAcceleration(-32)
+            .lateralZeroPowerAcceleration(-56)
+            .centripetalScaling(0.006)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.25, 0, 0.03, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(2.0, 0, 0.1, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.05, 0, 0.000001, 0.6, 0)) //p// 0.01
+            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.03, 0, 0.000003, 0.6, 0.01))
+            .useSecondaryDrivePIDF(true);
+
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
@@ -38,8 +41,8 @@ public class Constants {
             .leftRearMotorDirection(RobotConstants.Drive.BACK_LEFT_MOTOR_DIRECTION)
             .rightFrontMotorDirection(RobotConstants.Drive.FRONT_RIGHT_MOTOR_DIRECTION)
             .rightRearMotorDirection(RobotConstants.Drive.BACK_RIGHT_MOTOR_DIRECTION)
-            .xVelocity((63.69953 + 63.160463)/2)
-            .yVelocity((52.869557 + 55.94934)/2)
+            .xVelocity(76)
+            .yVelocity(60.3)
             .useBrakeModeInTeleOp(true);
 
     public static PinpointConstants pinpointConstants = new PinpointConstants()

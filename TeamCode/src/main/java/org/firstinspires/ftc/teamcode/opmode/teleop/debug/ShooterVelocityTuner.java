@@ -16,7 +16,7 @@ public class ShooterVelocityTuner extends LinearOpMode {
     private ElapsedTime timer = new ElapsedTime();
     private double measuredTime = 0;
 
-    private double kP = RobotConstants.Shooter.VELOCITY_TOP_P;
+    private double kP = RobotConstants.Shooter.VELOCITY_TOP_P_STANDBY;
 
     private double derivativeMeasure = 0;
 
@@ -57,7 +57,6 @@ public class ShooterVelocityTuner extends LinearOpMode {
                 if (gamepad1.dpadDownWasPressed())
                     kP -= 0.0001;
 
-                shooter.updateTopShooterP(kP);
             }
             else {
                 shooter.setPercent(0);

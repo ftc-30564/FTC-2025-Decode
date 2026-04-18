@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,7 +25,6 @@ public class BlueTeleop extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
-    private Limelight limelight;
     private AimCalculator aimCalculator;
     private ElapsedTime loopTimer = new ElapsedTime();
     private MultipleTelemetry multipleTelemetry;
@@ -42,7 +43,7 @@ public class BlueTeleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         indicator = new IndicatorRGB(hardwareMap);
-        aimCalculator = new AimCalculator(drivetrain, false);
+        aimCalculator = new AimCalculator(drivetrain, this.red);
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         boolean zeroButton;
@@ -53,7 +54,6 @@ public class BlueTeleop extends LinearOpMode {
 
         waitForStart();
 
-        limelight.start();
         drivetrain.startTeleopDrive();
 
         if (RobotConstants.AutoPaths.HAS_POSE) {
@@ -100,6 +100,10 @@ public class BlueTeleop extends LinearOpMode {
                 }
             }
 
+            if (gamepad1.back) {
+                drivetrain.setPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
+            }
+
             if (intakeButton && barfButton) {
                 intake.spit();
             }
@@ -132,10 +136,7 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
-            if (limelight.isAlignedWithGoal())
-                indicator.green();
-            else
-                indicator.blue();
+            indicator.blue();
 
 //            telemetry.addLine("SHOOTER");
 //            telemetry.addData("LOWEST RPM", lowestRpm);
@@ -153,11 +154,14 @@ public class BlueTeleop extends LinearOpMode {
             multipleTelemetry.addData("Target angle (degrees)", shotData.angle);
 
             multipleTelemetry.addData("Target rpm", shotData.rpm);
+            multipleTelemetry.addData("Actual Bottom rpm", shooter.getVelocityBottom());
+            multipleTelemetry.addData("Actual top rpm", shooter.getVelocityTop());
             multipleTelemetry.addData("Distance from target", shotData.distance);
 
-            multipleTelemetry.addData("Robot x", drivetrain.getPose().getX());
-            multipleTelemetry.addData("Robot y", drivetrain.getPose().getY());
-            multipleTelemetry.addData("Robot heading", drivetrain.getPose().getHeading());
+
+            multipleTelemetry.addData("Robot x", pedroToAdvScope(drivetrain.getPose()).getX());
+            multipleTelemetry.addData("Robot y", pedroToAdvScope(drivetrain.getPose()).getY());
+            multipleTelemetry.addData("Robot heading", pedroToAdvScope(drivetrain.getPose()).getHeading());
 
             multipleTelemetry.addData("Timer Loop", loopTimer.milliseconds());
 
@@ -168,5 +172,11 @@ public class BlueTeleop extends LinearOpMode {
         // update last remembered pose
         RobotConstants.AutoPaths.LAST_REMEMBERED_POSE = drivetrain.getPose();
         RobotConstants.AutoPaths.HAS_POSE = true;
+    }
+
+    public Pose pedroToAdvScope(Pose pose) {
+        Pose ret = pose.unaryMinus().plus(new Pose(144, 144, 0));
+        ret = ret.setHeading(ret.getHeading() * -1).getAsCoordinateSystem(FTCCoordinates.INSTANCE);
+        return ret;
     }
 }

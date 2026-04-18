@@ -10,6 +10,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -47,6 +48,9 @@ public class Drivetrain {
         if (Math.abs(error) > Math.PI) {
             error -= (Math.PI * 2) * Math.signum(error);
         }
+
+        pidfController.setP(RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P);
+        pidfController.setD(RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D);
 
         pidfController.updateError(error);
 
