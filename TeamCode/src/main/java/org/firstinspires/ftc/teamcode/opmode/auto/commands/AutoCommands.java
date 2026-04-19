@@ -23,14 +23,12 @@ public class AutoCommands {
     private final Drivetrain drivetrain;
     private final Shooter shooter;
     private final Intake intake;
-    private final Limelight limelight;
     private final Telemetry telemetry;
 
-    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Limelight limelight, Telemetry telemetry) {
+    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Telemetry telemetry) {
         this.drivetrain = drivetrain;
         this.shooter = shooter;
         this.intake = intake;
-        this.limelight = limelight;
         this.telemetry = telemetry;
     }
 
@@ -49,10 +47,9 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(500)
                 ),
                 new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
+                        new AlignToTargetCommand(drivetrain, telemetry, red),
                         new SequentialCommand(
-                                new DelayCommand(close ? 100 : 300),
-                                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                                new ShootCommand(shooter, intake, vel).timeout(700)
                         )
                 )
         ) ;
@@ -115,9 +112,8 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, vel).timeout(1000)
                 ),
                 new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
+                        new AlignToTargetCommand(drivetrain, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
                         new SequentialCommand(
-                                new DelayCommand(300),//300),
                                 new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
                         )
                 )

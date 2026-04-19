@@ -26,7 +26,6 @@ public class RedClose12GateOnce extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
-    public Limelight limelight;
     public AutoCommands autoCommands;
 
     public final boolean close = true;
@@ -37,14 +36,11 @@ public class RedClose12GateOnce extends LinearOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
-        limelight = new Limelight(hardwareMap);
-        autoCommands = new AutoCommands(drivetrain, shooter, intake, limelight, telemetry);
+        autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
 
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
-
-        limelight.setRedGoalPipeline();
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
@@ -58,13 +54,13 @@ public class RedClose12GateOnce extends LinearOpMode {
 
         Command intakeAndShootPGP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(3.3, 1, Math.toRadians(-2))),
-                autoCommands.driveAndIntakeBallsBounce(BallPose.PGP, close, red, new Pose(0, 1, Math.toRadians(-2))),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(0, 1, Math.toRadians(-2))),
                 autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
-                autoCommands.driveAndIntakeBallsBounce(BallPose.GPP, close, red, new Pose(4, 2, Math.toRadians(-5))),
+                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(4, 2, Math.toRadians(-5))),
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(-1, 0, Math.toRadians(-2)))
         );
 
@@ -88,7 +84,6 @@ public class RedClose12GateOnce extends LinearOpMode {
         waitForStart();
 
         shooter.stopPusher();
-        limelight.start();
         while (opModeIsActive()) {
             scheduler.run();
             player.playSequence();

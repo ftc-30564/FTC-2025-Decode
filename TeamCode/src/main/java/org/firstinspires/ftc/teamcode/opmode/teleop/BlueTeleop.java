@@ -51,6 +51,7 @@ public class BlueTeleop extends LinearOpMode {
         boolean barfButton;
         boolean chargeButton;
         boolean shootButton;
+        boolean isAimed = false;
 
         waitForStart();
 
@@ -78,12 +79,13 @@ public class BlueTeleop extends LinearOpMode {
             AimCalculator.ShotData shotData = aimCalculator.getShotData();
 
             if (gamepad1.left_bumper) {
-                drivetrain.setAimedTeleopDrive(
+                isAimed = drivetrain.setAimedTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
                         shotData.angle);
             }
             else {
+                isAimed = false;
                 drivetrain.setTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
@@ -136,7 +138,13 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
-            indicator.blue();
+
+            if (isAimed) {
+                indicator.green();
+            }
+            else {
+                indicator.blue();
+            }
 
 //            telemetry.addLine("SHOOTER");
 //            telemetry.addData("LOWEST RPM", lowestRpm);
@@ -162,6 +170,10 @@ public class BlueTeleop extends LinearOpMode {
             multipleTelemetry.addData("Robot x", pedroToAdvScope(drivetrain.getPose()).getX());
             multipleTelemetry.addData("Robot y", pedroToAdvScope(drivetrain.getPose()).getY());
             multipleTelemetry.addData("Robot heading", pedroToAdvScope(drivetrain.getPose()).getHeading());
+
+            multipleTelemetry.addData("Aim x", pedroToAdvScope(shotData.pose).getX());
+            multipleTelemetry.addData("Aim y", pedroToAdvScope(shotData.pose).getY());
+            multipleTelemetry.addData("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
 
             multipleTelemetry.addData("Timer Loop", loopTimer.milliseconds());
 

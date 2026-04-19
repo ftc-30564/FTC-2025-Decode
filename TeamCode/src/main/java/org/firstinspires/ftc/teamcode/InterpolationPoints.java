@@ -71,5 +71,18 @@ public class InterpolationPoints {
 //            new Point(145,.67)
     ));
 
+    public static ArrayList<Point> rpms_4_19 = new ArrayList<>(Arrays.asList(
+            new Point(85, 120),
+            new Point(105,125),
+            new Point(118,128),
+            new Point(141,135),
+            new Point(160,140),
+            new Point(173,150)
+
+    ));
+
+
+
+
 
 }

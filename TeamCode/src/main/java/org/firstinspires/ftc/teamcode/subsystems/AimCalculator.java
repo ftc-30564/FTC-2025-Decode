@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 
 import org.firstinspires.ftc.teamcode.InterpolationPoints;
+import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class AimCalculator {
     private final Drivetrain drivetrain;
@@ -14,18 +16,20 @@ public class AimCalculator {
     private Interpolator rpmInterpolator;
     private Interpolator tofInterpolator;
 
-    public final Pose redGoal = new Pose(131,131);
-    public final Pose blueGoal = new Pose(23,131);
+    public Pose redGoal = new Pose(145, 130);
+    public Pose blueGoal = new Pose(14,143);
 
     public static class ShotData {
         public double rpm;
         public double angle;
         public double distance;
+        public Pose pose;
 
-        public ShotData(double rpm, double angle, double distance) {
+        public ShotData(double rpm, double angle, double distance, Pose pose) {
             this.rpm = rpm;
             this.angle = angle;
             this.distance = distance;
+            this.pose = pose;
         }
     }
 
@@ -33,11 +37,12 @@ public class AimCalculator {
         this.drivetrain = drivetrain;
         this.red = red;
 
-        this.rpmInterpolator = new Interpolator(InterpolationPoints.rpms_2_15);
+        this.rpmInterpolator = new Interpolator(InterpolationPoints.rpms_4_19);
         this.tofInterpolator = new Interpolator(InterpolationPoints.tof);
     }
 
     public ShotData getShotData() {
+        //redGoal = new Pose(RobotConstants.Drive.GOAL_POSE_X,RobotConstants.Drive.GOAL_POSE_Y);
         Pose goalPose;
         if (this.red) {
             goalPose = redGoal;
@@ -80,7 +85,8 @@ public class AimCalculator {
         return new ShotData(
                 newRpm,
                 newAngle,
-                distance
+                distance,
+                newPose
         );
     }
 

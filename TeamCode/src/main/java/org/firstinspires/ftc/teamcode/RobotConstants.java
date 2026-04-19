@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -47,6 +46,11 @@ public class RobotConstants {
 
         public static double DRIVE_SNAP_TO_ANGLE_P = 1.55;
         public static double DRIVE_SNAP_TO_ANGLE_D = 0.1;
+
+        public static double IS_ALIGNED_MARGIN = 5;
+
+        public static double GOAL_POSE_X = 14;
+        public static double GOAL_POSE_Y = 143;
     }
     @Config
     public static class Shooter {
@@ -68,8 +72,8 @@ public class RobotConstants {
 
         public static final double VELOCITY_DEADBAND = 10;
 
-        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(154, 154);
-        public static final VelocityPair FAR_VELOCITY = new VelocityPair(160, 160);
+        public static final VelocityPair CLOSE_VELOCITY = new VelocityPair(120, 120);
+        public static final VelocityPair FAR_VELOCITY = new VelocityPair(130, 130);
     }
 
     @Config
@@ -154,7 +158,7 @@ public class RobotConstants {
         public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
         public static boolean HAS_POSE = false;
 
-        public static final long SHOOT_TIME_MS = 1250;//1600;
+        public static final long SHOOT_TIME_MS = 650;//1600;
 
         // This is an enum that holds the different ball positions.
         public enum BallPose {
@@ -320,6 +324,7 @@ public class RobotConstants {
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, end))
                     .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
+                    .setTValueConstraint(0.95)
                     .build();
         }
 
