@@ -1,19 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.*;
-import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.*;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.BallPose;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.GatePose;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.LAST_REMEMBERED_POSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.leavePath;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_STARTING_FAR;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_FAR;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.MorseCodeReader;
@@ -22,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous(group = "Red")
-public class RedClose12GateOnce extends LinearOpMode {
+public class RedCloseEfficientized extends LinearOpMode {
     public Drivetrain drivetrain;
     public Intake intake;
     public Shooter shooter;
@@ -49,31 +53,30 @@ public class RedClose12GateOnce extends LinearOpMode {
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose()),
                 autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.AutoPaths.GatePose.FIRST_LINE, new Pose())
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, GatePose.FIRST_LINE, new Pose())
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(3.3, 1, Math.toRadians(-2))),
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose()),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose())
+                autoCommands.goAndShootBalls(BallPose.PGP, close, red, GatePose.NONE, new Pose())
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
                 //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose()),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose())
+                autoCommands.goAndShootBalls(BallPose.GPP, close, red, GatePose.NONE, new Pose())
         );
 
         Command intakeAndShootHumanPlayer = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
         );
 
         Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPPG,
                 intakeAndShootPGP,
                 intakeAndShootGPP,
                 leave

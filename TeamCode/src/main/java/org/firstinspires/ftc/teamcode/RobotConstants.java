@@ -88,20 +88,20 @@ public class RobotConstants {
     public static class AutoPoses {
         public static Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
-        public static Pose RED_STARTING_CLOSE = new Pose(110, 134, Math.toRadians(270));
+        public static Pose RED_STARTING_CLOSE = new Pose(122, 122.3, Math.toRadians(215));
         public static Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
         // Shooting positions
         public static Pose RED_SHOOT_CLOSE       = new Pose(84, 76.7, Math.toRadians(227));
         public static Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(238));
 
-        public static Pose RED_PRE_INTAKE_PPG    = new Pose(86,    83.9, 0);
-        public static Pose RED_POST_INTAKE_PPG   = new Pose(123.5, 83.9, 0);
+        public static Pose RED_PRE_INTAKE_PPG    = new Pose(88.7,    85.9, Math.toRadians(1));
+        public static Pose RED_POST_INTAKE_PPG   = new Pose(126.2, 85.9, Math.toRadians(1));
 
-        public static Pose RED_PRE_INTAKE_PGP    = new Pose(88,    59.2, 0);
-        public static Pose RED_POST_INTAKE_PGP   = new Pose(130, 58.8, 0);
+        public static Pose RED_PRE_INTAKE_PGP    = new Pose(88,    60.2, Math.toRadians(-2));
+        public static Pose RED_POST_INTAKE_PGP   = new Pose(130, 59.8, Math.toRadians(-2));
 
-        public static Pose RED_PRE_INTAKE_GPP    = new Pose(89,    34, 0);
-        public static Pose RED_POST_INTAKE_GPP   = new Pose(125.5, 35.4, 0);
+        public static Pose RED_PRE_INTAKE_GPP    = new Pose(93,    36, Math.toRadians(-5));
+        public static Pose RED_POST_INTAKE_GPP   = new Pose(129.5, 37.4, Math.toRadians(-5));
 
         public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
         public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));

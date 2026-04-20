@@ -10,23 +10,19 @@ import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 public class ShootCommand extends Command {
     private final Shooter shooter;
     private final Intake intake;
-    private VelocityPair velocityPair;
 
     /**
      * A command that runs the shooter
      * @param shooter The shooter object
      * @param intake The intake object
-     * @param velocityPair The velocity pair to shoot at
      */
-    public ShootCommand(Shooter shooter, Intake intake, VelocityPair velocityPair) {
+    public ShootCommand(Shooter shooter, Intake intake) {
         this.shooter = shooter;
         this.intake = intake;
-        this.velocityPair = velocityPair;
     }
 
     @Override
     public void loop() {
-        shooter.setToVelocityPair(velocityPair);
         shooter.runPusher();
         intake.run();
     }

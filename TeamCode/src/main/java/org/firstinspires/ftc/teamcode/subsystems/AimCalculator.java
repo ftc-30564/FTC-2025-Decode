@@ -33,12 +33,20 @@ public class AimCalculator {
         }
     }
 
+    public AimCalculator(Drivetrain drivetrain) {
+        this(drivetrain, false);
+    }
+
     public AimCalculator(Drivetrain drivetrain, boolean red) {
         this.drivetrain = drivetrain;
         this.red = red;
 
         this.rpmInterpolator = new Interpolator(InterpolationPoints.rpms_4_19);
         this.tofInterpolator = new Interpolator(InterpolationPoints.tof);
+    }
+
+    public void setColor(boolean red) {
+        this.red = red;
     }
 
     public ShotData getShotData() {

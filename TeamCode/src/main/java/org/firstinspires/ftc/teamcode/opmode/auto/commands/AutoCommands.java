@@ -7,6 +7,7 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
@@ -24,12 +25,14 @@ public class AutoCommands {
     private final Shooter shooter;
     private final Intake intake;
     private final Telemetry telemetry;
+    private final AimCalculator aimCalculator;
 
     public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Telemetry telemetry) {
         this.drivetrain = drivetrain;
         this.shooter = shooter;
         this.intake = intake;
         this.telemetry = telemetry;
+        this.aimCalculator = new AimCalculator(drivetrain);
     }
 
     /**
@@ -39,20 +42,17 @@ public class AutoCommands {
      * @return a command where the robot drives to shooting position and shoots the preload
      */
     public Command startAndShoot(boolean close, boolean red) {
-        VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
-
         return new SequentialCommand(
                 new ParallelCommand(
+                        new ChargeFlywheelCommand(shooter, aimCalculator, red).timeout(500),
                         new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(500)
-                ),
-                new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, telemetry, red),
                         new SequentialCommand(
-                                new ShootCommand(shooter, intake, vel).timeout(700)
+                                new DelayCommand(700),
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
                         )
-                )
-        ) ;
+                ),
+                new InstantCommand(shooter::coast)
+        );
     }
 
     /**
@@ -100,23 +100,18 @@ public class AutoCommands {
      * @param ballPose the group of balls that the robot starts at (ex. PPG, PGP, GPP)
      * @param close if the robot is shooting close or far
      * @param red if the robot is red or blue
-     * @param drift a pose that offsets the end position in case the dead wheels experience drift     * @return a command where the robot drives to the shooting position and shoots balls
+     * @param drift a pose that offsets the end position in case the dead wheels experience drift
+     * @return a command where the robot drives to the shooting position and shoots balls
      */
     public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, GatePose gatePose, Pose drift) {
-        VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
-
         return new SequentialCommand(
                 new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(900),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500),
                         new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(1000)
+                        new ChargeFlywheelCommand(shooter, aimCalculator, red).timeout(1000)
                 ),
-                new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
-                        new SequentialCommand(
-                                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
-                        )
-                )
+                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                new InstantCommand(shooter::coast)
         );
     }
 }
