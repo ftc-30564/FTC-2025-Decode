@@ -16,8 +16,8 @@ public class AimCalculator {
     private Interpolator rpmInterpolator;
     private Interpolator tofInterpolator;
 
-    public Pose redGoal = new Pose(145, 130);
-    public Pose blueGoal = new Pose(14,143);
+    public Pose redGoal;
+    public Pose blueGoal;
 
     public static class ShotData {
         public double rpm;
@@ -50,7 +50,9 @@ public class AimCalculator {
     }
 
     public ShotData getShotData() {
-        //redGoal = new Pose(RobotConstants.Drive.GOAL_POSE_X,RobotConstants.Drive.GOAL_POSE_Y);
+        blueGoal = new Pose(RobotConstants.Drive.BLUE_GOAL_POSE_X, RobotConstants.Drive.BLUE_GOAL_POSE_Y);
+        redGoal = new Pose(RobotConstants.Drive.RED_GOAL_POSE_X, RobotConstants.Drive.RED_GOAL_POSE_Y);
+
         Pose goalPose;
         if (this.red) {
             goalPose = redGoal;
@@ -61,33 +63,31 @@ public class AimCalculator {
 
         Pose newPose = goalPose;
 
-        double distance = 0;
+        double distance = this.pose.distanceFrom(newPose);
         double timeOfFlight;
 
-        distance = this.pose.distanceFrom(newPose);
-        timeOfFlight = tofInterpolator.get(distance);
+        double lookAheadTargetDistance = distance;
 
-        newPose = newPose.minus(
-                new Pose(
-                        timeOfFlight * this.velocity.getXComponent(),
-                        timeOfFlight * this.velocity.getYComponent()
-                )
-        );
+//        newPose = newPose.minus(
+//                new Pose(
+//                        timeOfFlight * this.velocity.getXComponent(),
+//                        timeOfFlight * this.velocity.getYComponent()
+//                )
+//        );
 
         // iterate 15 times to accurately calculate the target position
-//        for (int x = 0; x < 15; x ++) {
-//            distance = this.pose.distanceFrom(newPose);
-//            timeOfFlight = tofInterpolator.get(distance);
-//
-//            newPose = newPose.minus(
-//                    new Pose(
-//                            timeOfFlight * this.velocity.getXComponent(),
-//                            timeOfFlight * this.velocity.getYComponent()
-//                    )
-//            );
-//        }
+        for (int x = 0; x < 15; x ++) {
+            timeOfFlight =
+                    tofInterpolator.get(lookAheadTargetDistance);
 
-        double newRpm = rpmInterpolator.get(this.pose.distanceFrom(newPose));
+            double offsetX = this.velocity.getXComponent() * timeOfFlight;
+            double offsetY = this.velocity.getYComponent() * timeOfFlight;
+
+            newPose = goalPose.plus(new Pose(offsetX, offsetY));
+            lookAheadTargetDistance = newPose.distanceFrom(this.pose);
+        }
+
+        double newRpm = rpmInterpolator.get(lookAheadTargetDistance);
         double newAngle = targetAngle(newPose);
 
         return new ShotData(

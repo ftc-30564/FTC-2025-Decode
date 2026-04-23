@@ -48,9 +48,13 @@ public class RobotConstants {
         public static double DRIVE_SNAP_TO_ANGLE_D = 0.1;
 
         public static double IS_ALIGNED_MARGIN = 5;
+        public static double IS_ALIGNED_VELOCITY_RADIANS = 2;
 
-        public static double GOAL_POSE_X = 14;
-        public static double GOAL_POSE_Y = 143;
+        public static double BLUE_GOAL_POSE_X = 14;
+        public static double BLUE_GOAL_POSE_Y = 143;
+
+        public static double RED_GOAL_POSE_X = 145;
+        public static double RED_GOAL_POSE_Y = 130;
     }
     @Config
     public static class Shooter {

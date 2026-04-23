@@ -53,7 +53,8 @@ public class Drivetrain {
 
         follower.setTeleOpDrive(forward, strafe, targetPower, false);
 
-        return error < Math.toRadians(RobotConstants.Drive.IS_ALIGNED_MARGIN) && error > Math.toRadians(-RobotConstants.Drive.IS_ALIGNED_MARGIN);
+        return error < Math.toRadians(RobotConstants.Drive.IS_ALIGNED_MARGIN) && error > Math.toRadians(-RobotConstants.Drive.IS_ALIGNED_MARGIN)
+                && (Math.abs(pidfController.getErrorDerivative()) < RobotConstants.Drive.IS_ALIGNED_VELOCITY_RADIANS);
 
     }
 

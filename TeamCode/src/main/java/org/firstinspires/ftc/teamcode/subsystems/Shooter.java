@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
@@ -90,6 +92,14 @@ public class Shooter {
     public boolean topIsAtVelocity(double targetVelocity) {
         double currentVelocity = getVelocityTop();
         return (currentVelocity >= targetVelocity - RobotConstants.Shooter.VELOCITY_DEADBAND) && (targetVelocity + RobotConstants.Shooter.VELOCITY_DEADBAND >= currentVelocity);
+    }
+
+    public double getTopCurrent() {
+        return topFlywheel.getCurrent(CurrentUnit.MILLIAMPS);
+    }
+
+    public double getBottomCurrent() {
+        return bottomFlywheel.getCurrent(CurrentUnit.MILLIAMPS);
     }
 
     public void runPusher() {
