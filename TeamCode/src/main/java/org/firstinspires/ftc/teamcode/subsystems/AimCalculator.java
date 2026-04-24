@@ -19,6 +19,9 @@ public class AimCalculator {
     public Pose redGoal;
     public Pose blueGoal;
 
+    public Pose newPose;
+    public Pose goalPose = blueGoal;
+
     public static class ShotData {
         public double rpm;
         public double angle;
@@ -53,7 +56,6 @@ public class AimCalculator {
         blueGoal = new Pose(RobotConstants.Drive.BLUE_GOAL_POSE_X, RobotConstants.Drive.BLUE_GOAL_POSE_Y);
         redGoal = new Pose(RobotConstants.Drive.RED_GOAL_POSE_X, RobotConstants.Drive.RED_GOAL_POSE_Y);
 
-        Pose goalPose;
         if (this.red) {
             goalPose = redGoal;
         }
@@ -61,7 +63,7 @@ public class AimCalculator {
             goalPose = blueGoal;
         }
 
-        Pose newPose = goalPose;
+        newPose = goalPose;
 
         double distance = this.pose.distanceFrom(newPose);
         double timeOfFlight;
@@ -83,7 +85,7 @@ public class AimCalculator {
             double offsetX = this.velocity.getXComponent() * timeOfFlight;
             double offsetY = this.velocity.getYComponent() * timeOfFlight;
 
-            newPose = goalPose.plus(new Pose(offsetX, offsetY));
+            newPose = goalPose.minus(new Pose(offsetX, offsetY));
             lookAheadTargetDistance = newPose.distanceFrom(this.pose);
         }
 

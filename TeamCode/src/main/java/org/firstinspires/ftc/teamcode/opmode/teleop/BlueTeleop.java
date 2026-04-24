@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.util.PoseConversion.pedroToAdvScope;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -23,10 +25,15 @@ import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Logging;
+import org.firstinspires.ftc.teamcode.util.PoseConversion;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @TeleOp(group = "Main")
 public class BlueTeleop extends LinearOpMode {
+    private static final Logger log = LoggerFactory.getLogger(BlueTeleop.class);
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
@@ -37,9 +44,13 @@ public class BlueTeleop extends LinearOpMode {
     private LynxModule controlHub;
     private LynxModule expansionHub;
 
+    private Logging logging;
+    private static boolean IS_DEBUGGING = false;
+
     private IndicatorRGB indicator;
 
     private boolean red = false;
+    private AimCalculator.ShotData shotData;
 
     public void setAllianceColor(boolean red) {
         this.red = red;
@@ -55,15 +66,15 @@ public class BlueTeleop extends LinearOpMode {
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetryPacket = new TelemetryPacket();
 
-        controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
-        expansionHub = hardwareMap.get(LynxModule.class, "Expansion Hub");
-
-        boolean zeroButton;
-        boolean intakeButton;
-        boolean barfButton;
+        boolean zeroButton = false;
+        boolean intakeButton = false;
+        boolean barfButton = false;
+        boolean aimButton = false;
         boolean chargeButton;
         boolean shootButton;
         boolean isAimed = false;
+
+        logging = new Logging(drivetrain, shooter, hardwareMap);
 
         waitForStart();
 
@@ -79,7 +90,6 @@ public class BlueTeleop extends LinearOpMode {
         while (opModeIsActive()) {
             loopTimer.reset();
 
-            aimCalculator.update();
             drivetrain.update();
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
@@ -87,10 +97,12 @@ public class BlueTeleop extends LinearOpMode {
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
             zeroButton = gamepad1.back;
+            aimButton = gamepad1.left_bumper;
 
-            AimCalculator.ShotData shotData = aimCalculator.getShotData();
+            aimCalculator.update();
+            shotData = aimCalculator.getShotData();
 
-            if (gamepad1.left_bumper) {
+            if (aimButton) {
                 isAimed = drivetrain.setAimedTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
@@ -171,44 +183,26 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
-            telemetryPacket.put("Shooter/Target angle (degrees)", shotData.angle);
-            telemetryPacket.put("Shooter/Target rpm", shotData.rpm);
-            telemetryPacket.put("Shooter/Actual Bottom rpm", shooter.getVelocityBottom());
-            telemetryPacket.put("Shooter/Actual top rpm", shooter.getVelocityTop());
-            telemetryPacket.put("Shooter/Distance from target", shotData.distance);
-            telemetryPacket.put("Shooter/Bottom current", shooter.getBottomCurrent());
-            telemetryPacket.put("Shooter/Top current", shooter.getTopCurrent());
+            if (IS_DEBUGGING) {
+                logging.updateTelemetryPacket(telemetryPacket);
 
-            telemetryPacket.put("Robot x", pedroToAdvScope(drivetrain.getPose()).getX());
-            telemetryPacket.put("Robot y", pedroToAdvScope(drivetrain.getPose()).getY());
-            telemetryPacket.put("Robot heading", pedroToAdvScope(drivetrain.getPose()).getHeading());
+                telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
+                telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());
+                telemetryPacket.put("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
 
-            telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
-            telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());
-            telemetryPacket.put("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
+                telemetryPacket.put("Shooter/Target angle (degrees)", shotData.angle);
+                telemetryPacket.put("Shooter/Target rpm", shotData.rpm);
 
-            telemetryPacket.put("Button/Charge", chargeButton);
-            telemetryPacket.put("Button/Shoot", shootButton);
+                telemetryPacket.put("Shooter/Distance from target", shotData.distance);
 
-            telemetryPacket.put("ControlHub/Temp", controlHub.getTemperature(TempUnit.FARENHEIT));
-            telemetryPacket.put("ControlHub/Current", controlHub.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetryPacket.put("ExpansionHub/Temp", expansionHub.getTemperature(TempUnit.FARENHEIT));
-            telemetryPacket.put("ExpansionHub/Current", expansionHub.getCurrent(CurrentUnit.MILLIAMPS));
+                telemetryPacket.put("Timer Loop", loopTimer.milliseconds());
 
-            telemetryPacket.put("Timer Loop", loopTimer.milliseconds());
-
-            FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
-
+                FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+            }
         }
 
         // update last remembered pose
         RobotConstants.AutoPaths.LAST_REMEMBERED_POSE = drivetrain.getPose();
         RobotConstants.AutoPaths.HAS_POSE = true;
-    }
-
-    public Pose pedroToAdvScope(Pose pose) {
-        Pose ret = pose.unaryMinus().plus(new Pose(144, 144, 0));
-        ret = ret.setHeading(ret.getHeading() * -1).getAsCoordinateSystem(FTCCoordinates.INSTANCE);
-        return ret;
     }
 }

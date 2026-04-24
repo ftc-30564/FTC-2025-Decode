@@ -8,18 +8,23 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_START
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_STARTING_FAR;
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_CLOSE;
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_FAR;
+import static org.firstinspires.ftc.teamcode.util.PoseConversion.pedroToAdvScope;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
+import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Logging;
 import org.firstinspires.ftc.teamcode.util.MorseCodeReader;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
@@ -27,13 +32,15 @@ import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous(group = "Red")
 public class RedCloseEfficientized extends LinearOpMode {
-    public Drivetrain drivetrain;
-    public Intake intake;
-    public Shooter shooter;
-    public AutoCommands autoCommands;
+    private Drivetrain drivetrain;
+    private Intake intake;
+    private Shooter shooter;
+    private AutoCommands autoCommands;
+    private Logging logging;
+    private TelemetryPacket telemetryPacket;
 
-    public final boolean close = true;
-    public final boolean red = true;
+    private final boolean close = true;
+    private final boolean red = true;
 
     @Override
     public void runOpMode() {
@@ -41,6 +48,10 @@ public class RedCloseEfficientized extends LinearOpMode {
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
+
+        logging = new Logging(drivetrain, shooter, hardwareMap);
+
+        TelemetryPacket telemetryPacket = new TelemetryPacket();
 
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
@@ -52,8 +63,7 @@ public class RedCloseEfficientized extends LinearOpMode {
 
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose()),
-                autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, GatePose.FIRST_LINE, new Pose())
+                autoCommands.goAndShootBalls(BallPose.PPG, close, red, GatePose.NONE, new Pose())
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
@@ -68,6 +78,24 @@ public class RedCloseEfficientized extends LinearOpMode {
                 autoCommands.goAndShootBalls(BallPose.GPP, close, red, GatePose.NONE, new Pose())
         );
 
+        Command intakeAndShootGate = new SequentialCommand(
+                //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
+                autoCommands.gateTake(red, 100),
+                autoCommands.goAndShootBalls(BallPose.GATETAKE, close, red, GatePose.NONE, new Pose())
+        );
+
+        Command intakeAndShootGate1 = new SequentialCommand(
+                //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
+                autoCommands.gateTake(red, 800),
+                autoCommands.goAndShootBalls(BallPose.GATETAKE, close, red, GatePose.NONE, new Pose())
+        );
+
+        Command intakeAndShootGate2 = new SequentialCommand(
+                //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
+                autoCommands.gateTake(red, 600),
+                autoCommands.goAndShootBalls(BallPose.GATETAKE, close, red, GatePose.NONE, new Pose())
+        );
+
         Command intakeAndShootHumanPlayer = new SequentialCommand(
                 autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))),
                 autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
@@ -78,7 +106,10 @@ public class RedCloseEfficientized extends LinearOpMode {
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
                 intakeAndShootPGP,
+                intakeAndShootGate,
+                intakeAndShootGate1,
                 intakeAndShootGPP,
+                intakeAndShootPPG,
                 leave
                 );
 
@@ -87,9 +118,11 @@ public class RedCloseEfficientized extends LinearOpMode {
         shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();
-            player.playSequence();
+            //player.playSequence();
 
-            telemetry.update();
+            //logging.updateTelemetryPacket(telemetryPacket);
+
+            //FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
         }
 
         // update the pose for field centric

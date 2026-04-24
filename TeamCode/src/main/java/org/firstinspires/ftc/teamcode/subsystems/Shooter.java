@@ -80,8 +80,8 @@ public class Shooter {
     }
 
     public void coast() {
-        bottomFlywheel.setPower(0);
-        topFlywheel.setPower(0);
+        bottomFlywheel.setPower(0.3);
+        topFlywheel.setPower(0.3);
     }
 
     public boolean bottomIsAtVelocity(double targetVelocity) {

@@ -43,11 +43,11 @@ public class AutoCommands {
      */
     public Command startAndShoot(boolean close, boolean red) {
         return new SequentialCommand(
-                new ParallelCommand(
-                        new ChargeFlywheelCommand(shooter, aimCalculator, red).timeout(500),
+                new RaceCommand(
+                        new ChargeFlywheelCommand(shooter, aimCalculator, red),
                         new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
                         new SequentialCommand(
-                                new DelayCommand(700),
+                                new DelayCommand(950),
                                 new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
                         )
                 ),
@@ -85,6 +85,23 @@ public class AutoCommands {
         );
     }
 
+    public Command gateTake(boolean red, long delay) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, gateTakePath(drivetrain, red)),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                ),
+                new RaceCommand(
+                        new DelayCommand(delay),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+
+    }
+
     public Command knockGate(boolean red, boolean fromFirstLine) {
         return new SequentialCommand(
                 new ParallelCommand(
@@ -104,14 +121,19 @@ public class AutoCommands {
      * @return a command where the robot drives to the shooting position and shoots balls
      */
     public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, GatePose gatePose, Pose drift) {
-        return new SequentialCommand(
-                new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500),
-                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
-                        new ChargeFlywheelCommand(shooter, aimCalculator, red).timeout(1000)
-                ),
-                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
-                new InstantCommand(shooter::coast)
-        );
+        return new SequentialCommand(new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new ParallelCommand(
+                                new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500)
+                        ),
+                        new RaceCommand(
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                                new AlignToTargetCommand(drivetrain, red)
+                        )
+
+                )
+        ), new InstantCommand(shooter::coast));
     }
 }

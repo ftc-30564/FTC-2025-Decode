@@ -44,6 +44,7 @@ public class RobotConstants {
         public static final Pose RED_GOAL_POSE = new Pose(137.5, 143.2, 0);
         public static final Pose BLUE_GOAL_POSE = RED_GOAL_POSE.mirror();
 
+        // good but loop time: 1.6, 0.15
         public static double DRIVE_SNAP_TO_ANGLE_P = 1.55;
         public static double DRIVE_SNAP_TO_ANGLE_D = 0.1;
 
@@ -54,7 +55,7 @@ public class RobotConstants {
         public static double BLUE_GOAL_POSE_Y = 143;
 
         public static double RED_GOAL_POSE_X = 145;
-        public static double RED_GOAL_POSE_Y = 130;
+        public static double RED_GOAL_POSE_Y = 128;
     }
     @Config
     public static class Shooter {
@@ -67,11 +68,11 @@ public class RobotConstants {
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static double VELOCITY_BOTTOM_P_STANDBY = 0.047;
-        public static double VELOCITY_TOP_P_STANDBY = 0.047;
+        public static double VELOCITY_BOTTOM_P_STANDBY = 0.03;
+        public static double VELOCITY_TOP_P_STANDBY = 0.03;
 
-        public static double VELOCITY_BOTTOM_P_SHOOT = 0.08;
-        public static double VELOCITY_TOP_P_SHOOT = 0.08;
+        public static double VELOCITY_BOTTOM_P_SHOOT = 0.03;
+        public static double VELOCITY_TOP_P_SHOOT = 0.03;
         public static boolean IS_P_ENABLED = true;
 
         public static final double VELOCITY_DEADBAND = 10;
@@ -92,20 +93,20 @@ public class RobotConstants {
     public static class AutoPoses {
         public static Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
         // Starting positions
-        public static Pose RED_STARTING_CLOSE = new Pose(122, 122.3, Math.toRadians(215));
+        public static Pose RED_STARTING_CLOSE = new Pose(122.54, 123.8, Math.toRadians(215));
         public static Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
         // Shooting positions
         public static Pose RED_SHOOT_CLOSE       = new Pose(84, 76.7, Math.toRadians(227));
         public static Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(238));
 
-        public static Pose RED_PRE_INTAKE_PPG    = new Pose(88.7,    85.9, Math.toRadians(1));
-        public static Pose RED_POST_INTAKE_PPG   = new Pose(126.2, 85.9, Math.toRadians(1));
+        public static Pose RED_PRE_INTAKE_PPG    = new Pose(90,    85.9, Math.toRadians(1));
+        public static Pose RED_POST_INTAKE_PPG   = new Pose(117, 85.9, Math.toRadians(1));
 
-        public static Pose RED_PRE_INTAKE_PGP    = new Pose(88,    60.2, Math.toRadians(-2));
-        public static Pose RED_POST_INTAKE_PGP   = new Pose(130, 59.8, Math.toRadians(-2));
+        public static Pose RED_PRE_INTAKE_PGP    = new Pose(93,    59, Math.toRadians(-2));
+        public static Pose RED_POST_INTAKE_PGP   = new Pose(124, 59, Math.toRadians(-2));
 
-        public static Pose RED_PRE_INTAKE_GPP    = new Pose(93,    36, Math.toRadians(-5));
-        public static Pose RED_POST_INTAKE_GPP   = new Pose(129.5, 37.4, Math.toRadians(-5));
+        public static Pose RED_PRE_INTAKE_GPP    = new Pose(100,    36, Math.toRadians(-5));
+        public static Pose RED_POST_INTAKE_GPP   = new Pose(122, 37.4, Math.toRadians(-5));
 
         public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
         public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
@@ -118,6 +119,8 @@ public class RobotConstants {
 
         public static Pose RED_HIT_GATE_1 = new Pose(127,   75.5, Math.toRadians(270)); // 3, 3
         public static Pose RED_HIT_GATE_2 = new Pose(126,   69, Math.toRadians(270)); // 3, 3
+
+        public static Pose RED_GATETAKE = new Pose(130, 59.6, Math.toRadians(40));
 
         public static Pose RED_LEAVE_CLOSE       = new Pose(99.5,  78.4, Math.toRadians(270));
         public static Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270));
@@ -170,7 +173,8 @@ public class RobotConstants {
             PGP,
             GPP,
             HUMAN_PLAYER1,
-            HUMAN_PLAYER2
+            HUMAN_PLAYER2,
+            GATETAKE
         }
 
         public enum GatePose {
@@ -191,6 +195,8 @@ public class RobotConstants {
                     return red ? AutoPoses.RED_PRE_INTAKE_HUMAN : AutoPoses.BLUE_PRE_INTAKE_HUMAN;
                 case HUMAN_PLAYER2:
                     return red ? AutoPoses.RED_PRE_INTAKE_HUMAN2 : AutoPoses.BLUE_PRE_INTAKE_HUMAN2;
+                case GATETAKE:
+                    return AutoPoses.RED_GATETAKE;
             }
 
             throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human somehow");
@@ -208,6 +214,8 @@ public class RobotConstants {
                     return red ? AutoPoses.RED_POST_INTAKE_HUMAN : AutoPoses.BLUE_POST_INTAKE_HUMAN;
                 case HUMAN_PLAYER2:
                     return red ? AutoPoses.RED_POST_INTAKE_HUMAN2 : AutoPoses.BLUE_POST_INTAKE_HUMAN2;
+                case GATETAKE:
+                    return AutoPoses.RED_GATETAKE;
             }
 
             throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human");
@@ -293,6 +301,16 @@ public class RobotConstants {
                     .build();
         }
 
+        public static PathChain gateTakePath(Drivetrain drivetrain, boolean isRed) {
+            Pose start = isRed ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_CLOSE;
+            Pose end = AutoPoses.RED_GATETAKE;
+
+            return drivetrain.pathBuilder()
+                    .addPath(new BezierLine(start, end))
+                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
+                    .build();
+        }
+
         public static PathChain knockGateFromSecondPath(Drivetrain drivetrain, boolean isRed) {
             Pose start = (isRed ? AutoPoses.RED_POST_INTAKE_PGP : AutoPoses.BLUE_POST_INTAKE_PGP);
 
@@ -328,7 +346,7 @@ public class RobotConstants {
             return drivetrain.pathBuilder()
                     .addPath(new BezierLine(start, end))
                     .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .setTValueConstraint(0.95)
+                    .setTValueConstraint(1.0)
                     .build();
         }
 
