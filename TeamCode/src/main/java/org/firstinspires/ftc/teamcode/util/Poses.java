@@ -10,7 +10,7 @@ public class Poses {
         return ret;
     }
 
-    public static Pose mirrorPose(Pose pose, double x) {
-        return pose;
+    public static Pose mirrorPose(Pose pose) {
+        return pose.mirror();
     }
 }
