@@ -14,6 +14,9 @@ import org.firstinspires.ftc.teamcode.util.VelocityPair;
 public class RobotConstants {
     @Config
     public static class Drive {
+        public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
+        public static boolean HAS_POSE = false;
+
         // front and back is swapped
         public static final String FRONT_LEFT_MOTOR_NAME = "backRight"; //backRight
         public static final String FRONT_RIGHT_MOTOR_NAME = "backLeft"; //backLeft
@@ -91,11 +94,8 @@ public class RobotConstants {
     }
     @Config
     public static class AutoPoses {
-        public static Pose RED_GOAL_POSE = new Pose(127, 132.67, 0);
-        // Starting positions
         public static Pose RED_STARTING_CLOSE = new Pose(122.54, 123.8, Math.toRadians(215));
         public static Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
-        // Shooting positions
         public static Pose RED_SHOOT_CLOSE       = new Pose(84, 76.7, Math.toRadians(227));
         public static Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(238));
 
@@ -108,17 +108,17 @@ public class RobotConstants {
         public static Pose RED_PRE_INTAKE_GPP    = new Pose(100,    36, Math.toRadians(-5));
         public static Pose RED_POST_INTAKE_GPP   = new Pose(122, 37.4, Math.toRadians(-5));
 
-        public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
-        public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
+//        public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
+//        public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
+//
+//        public static Pose RED_PRE_INTAKE_HUMAN2 = new Pose(112, 10.4, Math.toRadians(10));
+//        public static Pose RED_POST_INTAKE_HUMAN2 = new Pose(138, 13, Math.toRadians(10));
 
-        public static Pose RED_PRE_INTAKE_HUMAN2 = new Pose(112, 10.4, Math.toRadians(10));
-        public static Pose RED_POST_INTAKE_HUMAN2 = new Pose(138, 13, Math.toRadians(10));
-
-        public static Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
-        public static Pose RED_LINEUP_2          = new Pose(118, 61, Math.toRadians(270));
-
-        public static Pose RED_HIT_GATE_1 = new Pose(127,   75.5, Math.toRadians(270)); // 3, 3
-        public static Pose RED_HIT_GATE_2 = new Pose(126,   69, Math.toRadians(270)); // 3, 3
+//        public static Pose RED_LINEUP_1          = new Pose(120, 81, Math.toRadians(270));
+//        public static Pose RED_LINEUP_2          = new Pose(118, 61, Math.toRadians(270));
+//
+//        public static Pose RED_HIT_GATE_1 = new Pose(127,   75.5, Math.toRadians(270)); // 3, 3
+//        public static Pose RED_HIT_GATE_2 = new Pose(126,   69, Math.toRadians(270)); // 3, 3
 
         public static Pose RED_GATETAKE = new Pose(130, 59.6, Math.toRadians(40));
 
@@ -155,209 +155,5 @@ public class RobotConstants {
         public static Pose BLUE_HIT_GATE_2         = new Pose(18.25, 74.8, Math.toRadians(270)); // 144 - 127
         public static Pose BLUE_LEAVE_CLOSE      = new Pose(44.5, 78.4, Math.toRadians(270)); // 144 - 99.5
         public static Pose BLUE_LEAVE_FAR        = new Pose(53.0, 26.5, Math.toRadians(270)); // 144 - 91
-    }
-
-    public static class AutoPaths {
-        // Here are the various positions for autonomous. Each position is stored
-        // as a Pose object, which takes an x, y, and a heading (in Radians). This means
-        // when we create a Pose object we must convert each angle into radians via Math.toRadians(deg).
-
-        public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
-        public static boolean HAS_POSE = false;
-
-        public static final long SHOOT_TIME_MS = 650;//1600;
-
-        // This is an enum that holds the different ball positions.
-        public enum BallPose {
-            PPG,
-            PGP,
-            GPP,
-            HUMAN_PLAYER1,
-            HUMAN_PLAYER2,
-            GATETAKE
-        }
-
-        public enum GatePose {
-            NONE,
-            FIRST_LINE,
-            SECOND_LINE
-        }
-
-        public static Pose getPreBallPose(BallPose ballPose, boolean red) {
-            switch (ballPose) {
-                case GPP:
-                    return red ? AutoPoses.RED_PRE_INTAKE_GPP : AutoPoses.BLUE_PRE_INTAKE_GPP;
-                case PGP:
-                    return red ? AutoPoses.RED_PRE_INTAKE_PGP : AutoPoses.BLUE_PRE_INTAKE_PGP;
-                case PPG:
-                    return red ? AutoPoses.RED_PRE_INTAKE_PPG : AutoPoses.BLUE_PRE_INTAKE_PPG;
-                case HUMAN_PLAYER1:
-                    return red ? AutoPoses.RED_PRE_INTAKE_HUMAN : AutoPoses.BLUE_PRE_INTAKE_HUMAN;
-                case HUMAN_PLAYER2:
-                    return red ? AutoPoses.RED_PRE_INTAKE_HUMAN2 : AutoPoses.BLUE_PRE_INTAKE_HUMAN2;
-                case GATETAKE:
-                    return AutoPoses.RED_GATETAKE;
-            }
-
-            throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human somehow");
-        }
-
-        public static Pose getPostBallPose(BallPose ballPose, boolean red) {
-            switch (ballPose) {
-                case GPP:
-                    return red ? AutoPoses.RED_POST_INTAKE_GPP : AutoPoses.BLUE_POST_INTAKE_GPP;
-                case PGP:
-                    return red ? AutoPoses.RED_POST_INTAKE_PGP : AutoPoses.BLUE_POST_INTAKE_PGP;
-                case PPG:
-                    return red ? AutoPoses.RED_POST_INTAKE_PPG : AutoPoses.BLUE_POST_INTAKE_PPG;
-                case HUMAN_PLAYER1:
-                    return red ? AutoPoses.RED_POST_INTAKE_HUMAN : AutoPoses.BLUE_POST_INTAKE_HUMAN;
-                case HUMAN_PLAYER2:
-                    return red ? AutoPoses.RED_POST_INTAKE_HUMAN2 : AutoPoses.BLUE_POST_INTAKE_HUMAN2;
-                case GATETAKE:
-                    return AutoPoses.RED_GATETAKE;
-            }
-
-            throw new IllegalArgumentException("ballPose isn't GPP, PGP, PPG, or human");
-        }
-
-        public static PathChain startToShootPath(Drivetrain drivetrain, boolean close, boolean isRed) {
-            // this is an inline if statement that will determine the correct starting and ending position,
-            // depending on whether it is close or far, and red or blue;
-            Pose start = isRed ? (close ? AutoPoses.RED_STARTING_CLOSE : AutoPoses.RED_STARTING_FAR) : (close ? AutoPoses.BLUE_STARTING_CLOSE : AutoPoses.BLUE_STARTING_FAR);
-            Pose end = isRed ? (close ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.RED_SHOOT_FAR) : (close ? AutoPoses.BLUE_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_FAR);
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .build();
-        }
-
-        public static PathChain intakeBallsPathBounce(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
-            Pose start = isRed ? (close ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.RED_SHOOT_FAR) : (close ? AutoPoses.BLUE_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_FAR);
-
-            Pose ballPre = getPreBallPose(ballPose, isRed);
-            Pose ballPost = getPostBallPose(ballPose, isRed);
-
-            ballPre = ballPre.plus(drift);
-            ballPost = ballPost.plus(drift);
-
-            final double NUDGE_AMOUNT_OUT = 1.5;
-            Pose nudgePose = new Pose(ballPost.getX() - (Math.signum(ballPost.getX() - 72)*NUDGE_AMOUNT_OUT), ballPost.getY(), ballPost.getHeading());
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, ballPre))
-                    .setLinearHeadingInterpolation(start.getHeading(), ballPre.getHeading())
-
-                    .addPath(new BezierLine(ballPre, ballPost))
-                    .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
-                    .setBrakingStart(10)
-
-                    // nudge routine to help with intaking (for now)
-                    .addPath(new BezierLine(ballPost, nudgePose))
-                    .setLinearHeadingInterpolation(ballPost.getHeading(), nudgePose.getHeading())
-                    .setBrakingStart(10)
-
-
-                    .addPath(new BezierLine(nudgePose, ballPost))
-                    .setLinearHeadingInterpolation(nudgePose.getHeading(), ballPost.getHeading())
-
-
-                    .build();
-        }
-
-        public static PathChain intakeBallsPathUnbounce(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, Pose drift) {
-            Pose start = isRed ? (close ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.RED_SHOOT_FAR) : (close ? AutoPoses.BLUE_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_FAR);
-
-            Pose ballPre = getPreBallPose(ballPose, isRed);
-            Pose ballPost = getPostBallPose(ballPose, isRed);
-
-            ballPre = ballPre.plus(drift);
-            ballPost = ballPost.plus(drift);
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, ballPre))
-                    .setLinearHeadingInterpolation(start.getHeading(), ballPre.getHeading())
-
-                    .addPath(new BezierLine(ballPre, ballPost))
-                    .setLinearHeadingInterpolation(ballPre.getHeading(), ballPost.getHeading())
-                    .setTValueConstraint(0.97)
-                    .setBrakingStart(10)
-
-                    .build();
-        }
-
-        public static PathChain knockGateFromFirstPath(Drivetrain drivetrain, boolean isRed) {
-            Pose start = (isRed ? AutoPoses.RED_POST_INTAKE_PPG : AutoPoses.BLUE_POST_INTAKE_PPG);
-
-            Pose lineUp = isRed ? AutoPoses.RED_LINEUP_1 : AutoPoses.BLUE_LINEUP_1;
-            Pose end = isRed ? AutoPoses.RED_HIT_GATE_1 : AutoPoses.BLUE_HIT_GATE_1;
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, lineUp))
-                    .setLinearHeadingInterpolation(start.getHeading(), lineUp.getHeading())
-                    .addPath(new BezierLine(lineUp, end))
-                    .setLinearHeadingInterpolation(lineUp.getHeading(), end.getHeading())
-                    .build();
-        }
-
-        public static PathChain gateTakePath(Drivetrain drivetrain, boolean isRed) {
-            Pose start = isRed ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_CLOSE;
-            Pose end = AutoPoses.RED_GATETAKE;
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .build();
-        }
-
-        public static PathChain knockGateFromSecondPath(Drivetrain drivetrain, boolean isRed) {
-            Pose start = (isRed ? AutoPoses.RED_POST_INTAKE_PGP : AutoPoses.BLUE_POST_INTAKE_PGP);
-
-            Pose lineUp = isRed ? AutoPoses.RED_LINEUP_2 : AutoPoses.BLUE_LINEUP_2;
-            Pose end = isRed ? AutoPoses.RED_HIT_GATE_2 : AutoPoses.BLUE_HIT_GATE_2;
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, lineUp))
-                    .setLinearHeadingInterpolation(start.getHeading(), lineUp.getHeading())
-                    .addPath(new BezierLine(lineUp, end))
-                    .setLinearHeadingInterpolation(lineUp.getHeading(), end.getHeading())
-                    .build();
-        }
-
-        public static PathChain intakeToShootPath(Drivetrain drivetrain, BallPose ballPose, boolean close, boolean isRed, GatePose gatePose, Pose drift) {
-            Pose start = null;
-            if (gatePose == GatePose.NONE) {
-                start = getPostBallPose(ballPose, isRed);
-            }
-            else if (gatePose == GatePose.FIRST_LINE) {
-                start = (isRed ? AutoPoses.RED_HIT_GATE_1 : AutoPoses.BLUE_HIT_GATE_1);
-            }
-            else if (gatePose == GatePose.SECOND_LINE) {
-                start = (isRed ? AutoPoses.RED_HIT_GATE_2 : AutoPoses.BLUE_HIT_GATE_2);
-            }
-
-            Pose end = isRed ? (close ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.RED_SHOOT_FAR) : (close ? AutoPoses.BLUE_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_FAR);
-            end = end.plus(drift);
-
-            if (start == null)
-                throw(new IllegalArgumentException("gatePose wasn't NONE, FIRST_LINE, or SECOND_LINE"));
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .setTValueConstraint(1.0)
-                    .build();
-        }
-
-        public static PathChain leavePath(Drivetrain drivetrain, boolean close, boolean isRed) {
-            Pose start = isRed ? (close ? AutoPoses.RED_SHOOT_CLOSE : AutoPoses.RED_SHOOT_FAR) : (close ? AutoPoses.BLUE_SHOOT_CLOSE : AutoPoses.BLUE_SHOOT_FAR);
-            Pose end = isRed ? (close ? AutoPoses.RED_LEAVE_CLOSE : AutoPoses.RED_LEAVE_FAR) : (close ? AutoPoses.BLUE_LEAVE_CLOSE : AutoPoses.BLUE_LEAVE_FAR);
-
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .build();
-        }
     }
 }

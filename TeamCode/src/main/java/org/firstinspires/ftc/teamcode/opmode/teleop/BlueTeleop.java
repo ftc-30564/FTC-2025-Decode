@@ -1,32 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import static org.firstinspires.ftc.teamcode.util.PoseConversion.pedroToAdvScope;
+import static org.firstinspires.ftc.teamcode.util.Poses.pedroToAdvScope;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.ftc.FTCCoordinates;
-import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.TempUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.Logging;
-import org.firstinspires.ftc.teamcode.util.PoseConversion;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +71,7 @@ public class BlueTeleop extends LinearOpMode {
 
         drivetrain.startTeleopDrive();
 
-        if (RobotConstants.AutoPaths.HAS_POSE) {
-            drivetrain.setStartingPose(RobotConstants.AutoPaths.LAST_REMEMBERED_POSE);
-        }
-        else {
+        if (!RobotConstants.Drive.HAS_POSE) {
             drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
         }
 
@@ -202,7 +190,6 @@ public class BlueTeleop extends LinearOpMode {
         }
 
         // update last remembered pose
-        RobotConstants.AutoPaths.LAST_REMEMBERED_POSE = drivetrain.getPose();
-        RobotConstants.AutoPaths.HAS_POSE = true;
+        RobotConstants.Drive.HAS_POSE = true;
     }
 }

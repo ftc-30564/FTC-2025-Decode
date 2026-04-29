@@ -1,35 +1,38 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.*;
-import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.*;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.*;
 
-import com.pedropathing.geometry.Pose;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Paths;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Logging;
 import org.firstinspires.ftc.teamcode.util.MorseCodeReader;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous(group = "Red")
-public class RedClose12GateOnce extends LinearOpMode {
-    public Drivetrain drivetrain;
-    public Intake intake;
-    public Shooter shooter;
-    public AutoCommands autoCommands;
+public class RedCloseGreedy extends LinearOpMode {
+    private Drivetrain drivetrain;
+    private Intake intake;
+    private Shooter shooter;
+    private AutoCommands autoCommands;
+    private Logging logging;
+    private TelemetryPacket telemetryPacket;
 
-    public final boolean close = true;
-    public final boolean red = true;
+    private final boolean close = true;
+    private final boolean red = true;
 
     @Override
     public void runOpMode() {
@@ -38,44 +41,50 @@ public class RedClose12GateOnce extends LinearOpMode {
         shooter = new Shooter(hardwareMap, telemetry);
         autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
 
+        logging = new Logging(drivetrain, shooter, hardwareMap);
+
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
         drivetrain.setStartingPose(red ? (close ? RED_STARTING_CLOSE : RED_STARTING_FAR) : (close ? BLUE_STARTING_CLOSE : BLUE_STARTING_FAR));
 
-        Command shootPreload = autoCommands.startAndShoot(close, red);
+        Command shootPreload = autoCommands.startAndShootClose(red);
 
         Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PPG, close, red, new Pose()),
-                autoCommands.knockGate(red, true),
-                autoCommands.goAndShootBalls(BallPose.PPG, close, red, RobotConstants.AutoPaths.GatePose.FIRST_LINE, new Pose())
+                autoCommands.intakeLineClose(PPG, red),
+                autoCommands.goAndShootBallsClose(RED_POST_INTAKE_PPG, red)
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
-                //autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose(3.3, 1, Math.toRadians(-2))),
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.PGP, close, red, new Pose()),
-                autoCommands.goAndShootBalls(BallPose.PGP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose())
+                autoCommands.intakeLineClose(PGP, red),
+                autoCommands.goAndShootBallsClose(RED_POST_INTAKE_PGP, red)
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                //autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose(5.7, 2, Math.toRadians(-5))),
-                autoCommands.driveAndIntakeBallsUnbounce(BallPose.GPP, close, red, new Pose()),
-                autoCommands.goAndShootBalls(BallPose.GPP, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose())
+                autoCommands.intakeLineClose(GPP, red),
+                autoCommands.goAndShootBallsClose(RED_POST_INTAKE_GPP, red)
         );
 
-        Command intakeAndShootHumanPlayer = new SequentialCommand(
-                autoCommands.driveAndIntakeBallsBounce(BallPose.HUMAN_PLAYER1, close, red, new Pose(0, 0, Math.toRadians(0))),
-                autoCommands.goAndShootBalls(BallPose.HUMAN_PLAYER1, close, red, RobotConstants.AutoPaths.GatePose.NONE, new Pose(0, 0, Math.toRadians(0)))
+        Command intakeAndShootGate = new SequentialCommand(
+                autoCommands.intakeGateClose(red, 100),
+                autoCommands.goAndShootBallsClose(RED_GATETAKE, red)
         );
 
-        Command leave = new FollowPathCommand(drivetrain, leavePath(drivetrain, close, red));
+        Command intakeAndShootGate1 = new SequentialCommand(
+                autoCommands.intakeGateClose(red, 100),
+                autoCommands.goAndShootBallsClose(RED_GATETAKE, red)
+        );
+
+        Command leave = new FollowPathCommand(drivetrain, Paths.Close.leave(drivetrain, red));
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPPG,
                 intakeAndShootPGP,
+                intakeAndShootGate,
+                intakeAndShootGate1,
                 intakeAndShootGPP,
+                intakeAndShootPPG,
                 leave
                 );
 
@@ -84,13 +93,16 @@ public class RedClose12GateOnce extends LinearOpMode {
         shooter.stopPusher();
         while (opModeIsActive()) {
             scheduler.run();
-            player.playSequence();
+            //player.playSequence();
 
-            telemetry.update();
+            //logging.updateTelemetryPacket(telemetryPacket);
+
+            //FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
         }
 
-        // update the pose for field centric
-        LAST_REMEMBERED_POSE = drivetrain.getPose();
+        // update the pose for teleop
+//        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
+        RobotConstants.Drive.HAS_POSE = true;
 
     }
 }
