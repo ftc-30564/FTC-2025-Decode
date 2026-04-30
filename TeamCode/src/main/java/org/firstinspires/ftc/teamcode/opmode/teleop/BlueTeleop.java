@@ -57,23 +57,23 @@ public class BlueTeleop extends LinearOpMode {
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetryPacket = new TelemetryPacket();
 
-        boolean zeroButton = false;
         boolean intakeButton = false;
         boolean barfButton = false;
         boolean aimButton = false;
         boolean chargeButton;
         boolean shootButton;
         boolean isAimed = false;
+        boolean calculateSotm = false;
 
         logging = new Logging(drivetrain, shooter, hardwareMap);
-
-        waitForStart();
-
-        drivetrain.startTeleopDrive();
 
         if (!RobotConstants.Drive.HAS_POSE) {
             drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
         }
+
+        waitForStart();
+
+        drivetrain.startTeleopDrive();
 
         while (opModeIsActive()) {
             loopTimer.reset();
@@ -84,11 +84,13 @@ public class BlueTeleop extends LinearOpMode {
             barfButton = gamepad1.b;
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
-            zeroButton = gamepad1.back;
             aimButton = gamepad1.left_bumper;
 
             aimCalculator.update();
-            shotData = aimCalculator.getShotData();
+            shotData = aimCalculator.getShotData(calculateSotm);
+
+            // only run shoot on the move calculations if the joystick is far enough
+            calculateSotm = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2) + Math.pow(gamepad1.left_stick_y, 2)) > 0.25;
 
             if (aimButton) {
                 isAimed = drivetrain.setAimedTeleopDrive(
@@ -105,23 +107,11 @@ public class BlueTeleop extends LinearOpMode {
                         false);
             }
 
-            if (zeroButton) {
-                if (red) {
-                    drivetrain.zeroHeading();
-                }
-                else {
-                    drivetrain.oneEightyHeading();
-                }
-            }
-
             if (gamepad1.back) {
                 drivetrain.setPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
             }
 
-            if (intakeButton && barfButton) {
-                intake.spit();
-            }
-            else if (intakeButton || shootButton){
+            if (intakeButton || shootButton){
                 intake.run();
             }
             else if (barfButton) {

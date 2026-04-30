@@ -10,6 +10,7 @@ public class Poses {
         return ret;
     }
 
+    // i promise there's a reason for this
     public static Pose mirrorPose(Pose pose) {
         return pose.mirror();
     }

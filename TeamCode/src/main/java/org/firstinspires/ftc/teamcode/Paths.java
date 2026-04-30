@@ -53,6 +53,16 @@ public class Paths {
                     .build();
         }
 
+        public static PathChain hitGate(Drivetrain drivetrain, boolean isRed, Pose from) {
+            Pose end = isRed ? RED_GATEMPTY : BLUE_GATEMPTY;
+
+            return drivetrain.pathBuilder()
+                    .addPath(new BezierLine(from, end))
+                    .setLinearHeadingInterpolation(from.getHeading(), end.getHeading())
+
+                    .build();
+        }
+
         // MARK PGP
         public static PathChain intakePGP(Drivetrain drivetrain, boolean isRed) {
             Pose start = isRed ? RED_SHOOT_CLOSE : BLUE_SHOOT_CLOSE;

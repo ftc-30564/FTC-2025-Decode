@@ -8,6 +8,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.util.Poses;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
 // The @Config allows us to configure these numbers in FtcDashboard
@@ -108,6 +109,8 @@ public class RobotConstants {
         public static Pose RED_PRE_INTAKE_GPP    = new Pose(100,    36, Math.toRadians(-5));
         public static Pose RED_POST_INTAKE_GPP   = new Pose(122, 37.4, Math.toRadians(-5));
 
+        public static Pose RED_GATEMPTY = new Pose(127.8, 62.4, Math.toRadians(0));
+
 //        public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
 //        public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
 //
@@ -125,35 +128,35 @@ public class RobotConstants {
         public static Pose RED_LEAVE_CLOSE       = new Pose(99.5,  78.4, Math.toRadians(270));
         public static Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270));
 
-        public static Pose BLUE_GOAL_POSE = new Pose(0, 132.67, 0);
+        public static Pose BLUE_STARTING_CLOSE   = Poses.mirrorPose(RED_STARTING_CLOSE);
+        public static Pose BLUE_STARTING_FAR     = Poses.mirrorPose(RED_STARTING_FAR);
 
-        public static Pose BLUE_STARTING_CLOSE   = new Pose(34.0, 134, Math.toRadians(270)); // 144 - 110
-        public static Pose BLUE_STARTING_FAR     = new Pose(55.0, 8.15,   Math.toRadians(270)); // 144 - 89
+        public static Pose BLUE_SHOOT_CLOSE      = Poses.mirrorPose(RED_SHOOT_CLOSE);
+        public static Pose BLUE_SHOOT_FAR        = Poses.mirrorPose(RED_SHOOT_FAR);
 
-        public static Pose BLUE_SHOOT_CLOSE      = new Pose(59.5, 78,  Math.toRadians(307)); // 144 - 84
-        public static Pose BLUE_SHOOT_FAR        = new Pose(57.0, 18.4,  Math.toRadians(289)); // 144 - 87
+        public static Pose BLUE_PRE_INTAKE_PPG   = Poses.mirrorPose(RED_PRE_INTAKE_PPG);
+        public static Pose BLUE_POST_INTAKE_PPG  = Poses.mirrorPose(RED_POST_INTAKE_PPG);
 
-        public static Pose BLUE_PRE_INTAKE_PPG   = new Pose(58.0, 83.9,  Math.toRadians(180)); // 144 - 86
-        public static Pose BLUE_POST_INTAKE_PPG  = new Pose(20.5, 83.9,  Math.toRadians(180)); // 144 - 125.5
+        public static Pose BLUE_PRE_INTAKE_PGP   = Poses.mirrorPose(RED_PRE_INTAKE_PGP);
+        public static Pose BLUE_POST_INTAKE_PGP  = Poses.mirrorPose(RED_POST_INTAKE_PGP);
 
-        public static Pose BLUE_PRE_INTAKE_PGP   = new Pose(56.0, 60.2,  Math.toRadians(180)); // 144 - 88
-        public static Pose BLUE_POST_INTAKE_PGP  = new Pose(14, 58.8,  Math.toRadians(180)); // 144 - 131.5
+        public static Pose BLUE_PRE_INTAKE_GPP   = Poses.mirrorPose(RED_PRE_INTAKE_GPP);
+        public static Pose BLUE_POST_INTAKE_GPP  = Poses.mirrorPose(RED_POST_INTAKE_GPP);
 
-        public static Pose BLUE_PRE_INTAKE_GPP   = new Pose(52.0, 35.4,  Math.toRadians(180)); // 144 - 92
-        public static Pose BLUE_POST_INTAKE_GPP  = new Pose(12.5, 35.4,  Math.toRadians(180)); // 144 - 130.5
+//        public static Pose BLUE_PRE_INTAKE_HUMAN  = new Pose(10.5, 18.5, Math.toRadians(210));
+//        public static Pose BLUE_POST_INTAKE_HUMAN = new Pose(10, 11, Math.toRadians(210));
+//
+//        public static Pose BLUE_PRE_INTAKE_HUMAN2 = new Pose(40, 10.4, Math.toRadians(180));
+//        public static Pose BLUE_POST_INTAKE_HUMAN2 = new Pose(6, 13, Math.toRadians(180));
+//
+//        public static Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
+//        public static Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
 
-        public static Pose BLUE_PRE_INTAKE_HUMAN  = new Pose(10.5, 18.5, Math.toRadians(210));
-        public static Pose BLUE_POST_INTAKE_HUMAN = new Pose(10, 11, Math.toRadians(210));
+        public static Pose BLUE_GATETAKE = Poses.mirrorPose(RED_GATETAKE);
 
-        public static Pose BLUE_PRE_INTAKE_HUMAN2 = new Pose(40, 10.4, Math.toRadians(180));
-        public static Pose BLUE_POST_INTAKE_HUMAN2 = new Pose(6, 13, Math.toRadians(180));
+        public static Pose BLUE_GATEMPTY = Poses.mirrorPose(RED_GATEMPTY);
 
-        public static Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
-        public static Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
-
-        public static Pose BLUE_HIT_GATE_1 = new Pose(18.25, 75.8, Math.toRadians(270)); // 144 - 127
-        public static Pose BLUE_HIT_GATE_2         = new Pose(18.25, 74.8, Math.toRadians(270)); // 144 - 127
-        public static Pose BLUE_LEAVE_CLOSE      = new Pose(44.5, 78.4, Math.toRadians(270)); // 144 - 99.5
-        public static Pose BLUE_LEAVE_FAR        = new Pose(53.0, 26.5, Math.toRadians(270)); // 144 - 91
+        public static Pose BLUE_LEAVE_CLOSE = Poses.mirrorPose(RED_LEAVE_CLOSE);
+        public static Pose BLUE_LEAVE_FAR   = Poses.mirrorPose(RED_LEAVE_FAR);
     }
 }

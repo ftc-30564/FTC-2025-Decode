@@ -59,7 +59,7 @@ public class AutoCommands {
     }
 
     public Command intakeLineClose(BallPose ballPose, boolean red) {
-        PathChain pathChain = Close.intakeGPP(drivetrain, red);
+        PathChain pathChain = new PathChain();
 
         switch (ballPose) {
             case PPG:
@@ -81,6 +81,10 @@ public class AutoCommands {
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
+    }
+
+    public Command hitGate(boolean red, Pose from) {
+        return new FollowPathCommand(drivetrain, Close.hitGate(drivetrain, red, from));
     }
 
     public Command intakeGateClose(boolean red, long delay) {

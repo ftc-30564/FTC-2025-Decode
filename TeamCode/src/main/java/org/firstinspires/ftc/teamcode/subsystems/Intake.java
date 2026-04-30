@@ -30,7 +30,4 @@ public class Intake {
     public void barf() {
         firstIntake.setPower(-RobotConstants.Intake.FIRST_INTAKE_RUN_SPEED);
     }
-    public void spit() {
-        firstIntake.setPower(1);
-    }
 }

@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous(group = "Red")
-public class RedCloseGreedy extends LinearOpMode {
+public class RedCloseGateTwice extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
@@ -32,10 +32,6 @@ public class RedCloseGreedy extends LinearOpMode {
     private TelemetryPacket telemetryPacket;
 
     private boolean red = true;
-
-    public void setAlliance(boolean red) {
-        this.red = red;
-    }
 
     @Override
     public void runOpMode() {
@@ -56,12 +52,14 @@ public class RedCloseGreedy extends LinearOpMode {
 
         Command intakeAndShootPPG = new SequentialCommand(
                 autoCommands.intakeLineClose(PPG, red),
-                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG, red)
+                autoCommands.hitGate(red, red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG),
+                autoCommands.goAndShootBallsClose(red ? RED_GATEMPTY : BLUE_GATEMPTY, red)
         );
 
         Command intakeAndShootPGP = new SequentialCommand(
                 autoCommands.intakeLineClose(PGP, red),
-                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP, red)
+                autoCommands.hitGate(red, red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP),
+                autoCommands.goAndShootBallsClose(red ? RED_GATEMPTY : BLUE_GATEMPTY, red)
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
@@ -89,7 +87,7 @@ public class RedCloseGreedy extends LinearOpMode {
                 intakeAndShootGPP,
                 intakeAndShootPPG,
                 leave
-        );
+                );
 
         waitForStart();
 

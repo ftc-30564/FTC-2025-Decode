@@ -52,7 +52,7 @@ public class AimCalculator {
         this.red = red;
     }
 
-    public ShotData getShotData() {
+    public ShotData getShotData(boolean calculateSotm) {
         blueGoal = new Pose(RobotConstants.Drive.BLUE_GOAL_POSE_X, RobotConstants.Drive.BLUE_GOAL_POSE_Y);
         redGoal = new Pose(RobotConstants.Drive.RED_GOAL_POSE_X, RobotConstants.Drive.RED_GOAL_POSE_Y);
 
@@ -76,18 +76,21 @@ public class AimCalculator {
 //                        timeOfFlight * this.velocity.getYComponent()
 //                )
 //        );
+        if (calculateSotm) {
+            // iterate 15 times to accurately calculate the target position
+            for (int x = 0; x < 15; x ++) {
+                timeOfFlight =
+                        tofInterpolator.get(lookAheadTargetDistance);
 
-        // iterate 15 times to accurately calculate the target position
-        for (int x = 0; x < 15; x ++) {
-            timeOfFlight =
-                    tofInterpolator.get(lookAheadTargetDistance);
+                double offsetX = this.velocity.getXComponent() * timeOfFlight;
+                double offsetY = this.velocity.getYComponent() * timeOfFlight;
 
-            double offsetX = this.velocity.getXComponent() * timeOfFlight;
-            double offsetY = this.velocity.getYComponent() * timeOfFlight;
-
-            newPose = goalPose.minus(new Pose(offsetX, offsetY));
-            lookAheadTargetDistance = newPose.distanceFrom(this.pose);
+                newPose = goalPose.minus(new Pose(offsetX, offsetY));
+                lookAheadTargetDistance = newPose.distanceFrom(this.pose);
+            }
         }
+
+
 
         double newRpm = rpmInterpolator.get(lookAheadTargetDistance);
         double newAngle = targetAngle(newPose);
