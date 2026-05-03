@@ -92,6 +92,10 @@ public class Drivetrain {
         follower.followPath(pathChain, false);
     }
 
+    public void holdPoint(Pose pose) {
+        follower.holdPoint(pose);
+    }
+
     public boolean isBusy() {
         return follower.isBusy();
     }

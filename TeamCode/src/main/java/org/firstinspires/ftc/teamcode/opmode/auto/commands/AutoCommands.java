@@ -91,11 +91,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, Close.intakeGate(drivetrain, red)),
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
-                ),
-                new RaceCommand(
-                        new DelayCommand(delay),
+                        new FollowPathCommand(drivetrain, Close.intakeGate(drivetrain, red), delay),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
 
@@ -126,6 +122,66 @@ public class AutoCommands {
                                 new AlignToTargetCommand(drivetrain, red)
                         )
 
+                )
+        ), new InstantCommand(shooter::coast));
+    }
+
+
+    public Command startAndShootFar(boolean red) {
+        return new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new FollowPathCommand(drivetrain, Far.startToShoot(drivetrain, red)),
+                        new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
+                )
+        );
+    }
+
+    public Command intakeGPPFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Close.intakeGPP(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command intakeHPFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayer(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command intakeHPOffsetFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayerOffsetABit(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command goAndShootBallsFar(Pose from, boolean red) {
+        return new SequentialCommand(new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new ParallelCommand(
+                                new FollowPathCommand(drivetrain, Far.shoot(drivetrain, from, red)),
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
+                        ),
+                        new RaceCommand(
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                                new AlignToTargetCommand(drivetrain, red)
+                        )
                 )
         ), new InstantCommand(shooter::coast));
     }

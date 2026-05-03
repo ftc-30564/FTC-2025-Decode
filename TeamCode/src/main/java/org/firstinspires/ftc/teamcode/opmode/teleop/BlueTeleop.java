@@ -9,6 +9,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -171,6 +172,14 @@ public class BlueTeleop extends LinearOpMode {
                 telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
                 telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());
                 telemetryPacket.put("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
+
+                telemetryPacket.put("Blue auto x", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getX());
+                telemetryPacket.put("Blue auto y", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getY());
+                telemetryPacket.put("Blue auto heading", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getHeading());
+
+                telemetryPacket.put("Red auto x", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getX());
+                telemetryPacket.put("Red auto y", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getY());
+                telemetryPacket.put("Red auto heading", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getHeading());
 
                 telemetryPacket.put("Shooter/Target angle (degrees)", shotData.angle);
                 telemetryPacket.put("Shooter/Target rpm", shotData.rpm);

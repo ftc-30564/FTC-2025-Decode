@@ -67,12 +67,12 @@ public class RedCloseGateOnce extends LinearOpMode {
         );
 
         Command intakeAndShootGate = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 100),
+                autoCommands.intakeGateClose(red, 700),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
         Command intakeAndShootGate1 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 100),
+                autoCommands.intakeGateClose(red, 700),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 

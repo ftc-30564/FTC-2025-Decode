@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.*;
-import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.*;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.GPP;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.PGP;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.PPG;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
 import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
 
 @Autonomous(group = "Red")
-public class RedCloseGreedy extends LinearOpMode {
+public class RedFar extends LinearOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
@@ -51,45 +52,42 @@ public class RedCloseGreedy extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
-        drivetrain.setStartingPose(red ? RED_STARTING_CLOSE : BLUE_STARTING_CLOSE);
+        drivetrain.setStartingPose(red ? RED_STARTING_FAR : BLUE_STARTING_CLOSE);
 
-        Command shootPreload = autoCommands.startAndShootClose(red);
+        Command shootPreload = autoCommands.startAndShootFar(red);
 
-        Command intakeAndShootPPG = new SequentialCommand(
-                autoCommands.intakeLineClose(PPG, red),
-                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG, red)
+        Command intakeAndShootHP = new SequentialCommand(
+                autoCommands.intakeHPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : RED_HUMAN_PLAYER_3, red)
         );
 
-        Command intakeAndShootPGP = new SequentialCommand(
-                autoCommands.intakeLineClose(PGP, red),
-                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP, red)
+        Command intakeAndShootHPOffset = new SequentialCommand(
+                autoCommands.intakeHPOffsetFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : RED_HUMAN_PLAYER_5, red)
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
-                autoCommands.intakeLineClose(GPP, red),
-                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP, red)
+                autoCommands.intakeGPPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP, red)
         );
 
-        Command intakeAndShootGate = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 500),
-                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
-        );
+//        Command intakeAndShootGate = new SequentialCommand(
+//                autoCommands.intakeGateClose(red, 500),
+//                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
+//        );
+//
+//        Command intakeAndShootGate1 = new SequentialCommand(
+//                autoCommands.intakeGateClose(red, 100),
+//                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
+//        );
 
-        Command intakeAndShootGate1 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 100),
-                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
-        );
-
-        Command leave = new FollowPathCommand(drivetrain, Paths.Close.leave(drivetrain, red));
+        //Command leave = new FollowPathCommand(drivetrain, Paths.Far.leave(drivetrain, red));
 
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
-                intakeAndShootPGP,
-                intakeAndShootGate,
-                intakeAndShootGate1,
-                intakeAndShootGPP,
-                intakeAndShootPPG,
-                leave
+                intakeAndShootHP,
+                intakeAndShootHPOffset,
+                intakeAndShootGPP
         );
 
         waitForStart();
