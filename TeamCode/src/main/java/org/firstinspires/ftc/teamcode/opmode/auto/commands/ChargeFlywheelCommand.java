@@ -23,7 +23,10 @@ public class ChargeFlywheelCommand extends Command {
     @Override
     public void loop() {
         aimCalculator.update();
+        shooter.update();
 
-        shooter.setToVelocityPair(new VelocityPair(this.aimCalculator.getShotData().rpm, this.aimCalculator.getShotData().rpm));
+        AimCalculator.ShotData shotData = this.aimCalculator.getShotData(true);
+
+        shooter.setToVelocityPair(new VelocityPair(shotData.rpm, shotData.rpm));
     }
 }

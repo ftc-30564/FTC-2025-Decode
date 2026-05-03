@@ -22,9 +22,10 @@ import org.firstinspires.ftc.teamcode.util.VelocityPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 @TeleOp(group = "Main")
 public class BlueTeleop extends LinearOpMode {
-    private static final Logger log = LoggerFactory.getLogger(BlueTeleop.class);
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
@@ -36,7 +37,6 @@ public class BlueTeleop extends LinearOpMode {
     private LynxModule expansionHub;
 
     private Logging logging;
-    private static boolean IS_DEBUGGING = false;
 
     private IndicatorRGB indicator;
 
@@ -70,6 +70,9 @@ public class BlueTeleop extends LinearOpMode {
         if (!RobotConstants.Drive.HAS_POSE) {
             drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
         }
+        else {
+            drivetrain.setStartingPose(RobotConstants.Drive.LAST_REMEMBERED_POSE);
+        }
 
         waitForStart();
 
@@ -79,6 +82,7 @@ public class BlueTeleop extends LinearOpMode {
             loopTimer.reset();
 
             drivetrain.update();
+            shooter.update();
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
@@ -108,7 +112,7 @@ public class BlueTeleop extends LinearOpMode {
             }
 
             if (gamepad1.back) {
-                drivetrain.setPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
+                drivetrain.setPose(new Pose(10.5, 10.5, Math.toRadians(90)));
             }
 
             if (intakeButton || shootButton){
@@ -141,10 +145,10 @@ public class BlueTeleop extends LinearOpMode {
             }
 
 
-            if (isAimed) {
+            if (isAimed && (!Objects.equals(indicator.currentColor, "green"))) {
                 indicator.green();
             }
-            else {
+            else if ((!Objects.equals(indicator.currentColor, "blue"))){
                 indicator.blue();
             }
 
@@ -161,7 +165,7 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
-            if (IS_DEBUGGING) {
+            if (RobotConstants.Drive.IS_DEBUGGING) {
                 logging.updateTelemetryPacket(telemetryPacket);
 
                 telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
@@ -177,9 +181,13 @@ public class BlueTeleop extends LinearOpMode {
 
                 FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
             }
+
+            telemetry.addData("Loop time", loopTimer.milliseconds());
+            telemetry.update();
         }
 
         // update last remembered pose
         RobotConstants.Drive.HAS_POSE = true;
+        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

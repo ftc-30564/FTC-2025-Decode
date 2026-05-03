@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.*;
 import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.*;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -75,7 +76,7 @@ public class RedCloseGreedy extends LinearOpMode {
         );
 
         Command intakeAndShootGate1 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 100),
+                autoCommands.intakeGateClose(red, 300),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
@@ -98,14 +99,14 @@ public class RedCloseGreedy extends LinearOpMode {
             scheduler.run();
             //player.playSequence();
 
-            //logging.updateTelemetryPacket(telemetryPacket);
-
-            //FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+//            logging.updateTelemetryPacket(telemetryPacket);
+//
+//            FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
         }
 
         // update the pose for teleop
 //        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
         RobotConstants.Drive.HAS_POSE = true;
-
+        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

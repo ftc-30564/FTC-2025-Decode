@@ -19,6 +19,9 @@ public class Shooter {
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
     private boolean isShooting = false;
+    private double voltage = 12.0;
+    private double velocityBottom = 0;
+    private double velocityTop = 0;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
@@ -57,10 +60,16 @@ public class Shooter {
         return bottomIsAtVelocity(pair.bottom) && topIsAtVelocity(pair.top);
     }
 
+    public void update() {
+        this.voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+        this.velocityBottom = getVelocityBottom();
+        this.velocityTop = getVelocityTop();
+    }
+
     public void setBottomShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityBottom();
+        double currentVelocity = this.velocityBottom;
         // voltage compensation
-        double voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+
 
         double velocityBottomFeedforward12v = (RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         double adjustedFeedforward = velocityBottomFeedforward12v * (12 / voltage);
@@ -70,10 +79,10 @@ public class Shooter {
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityTop();
+        double currentVelocity = this.velocityTop;
         // voltage compensation
         double velocityTopFeedforward12v = (RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
-        double adjustedFeedforward = velocityTopFeedforward12v * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
+        double adjustedFeedforward = velocityTopFeedforward12v * (12 / voltage);
 
         double percent = (targetVelocity * adjustedFeedforward) + (RobotConstants.Shooter.IS_P_ENABLED ? ((targetVelocity - currentVelocity) * (isShooting ? RobotConstants.Shooter.VELOCITY_TOP_P_SHOOT : RobotConstants.Shooter.VELOCITY_TOP_P_STANDBY)) : 0);
         topFlywheel.setPower(percent);

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class IndicatorRGB {
     private Servo lightRGB;
     private Servo secondLightRGB;
+    public String currentColor = "green";
 
     public IndicatorRGB(HardwareMap hardwareMap) {
         lightRGB = hardwareMap.get(Servo.class, "lightRGB");
@@ -22,10 +23,12 @@ public class IndicatorRGB {
     public void green(){
         lightRGB.setPosition(0.500);
         secondLightRGB.setPosition(0.500);
+        this.currentColor = "green";
     }
     public void blue(){
         lightRGB.setPosition(0.611);
         secondLightRGB.setPosition(0.611);
+        this.currentColor = "blue";
     }
     public void off(){
         lightRGB.setPosition(0.0);

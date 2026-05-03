@@ -50,7 +50,7 @@ public class AutoCommands {
                         new ChargeFlywheelCommand(shooter, aimCalculator, red),
                         new FollowPathCommand(drivetrain, Close.startToShoot(drivetrain, red)),
                         new SequentialCommand(
-                                new DelayCommand(950),
+                                new DelayCommand(900),
                                 new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
                         )
                 ),
@@ -119,7 +119,7 @@ public class AutoCommands {
                 new SequentialCommand(
                         new ParallelCommand(
                                 new FollowPathCommand(drivetrain, Close.shoot(drivetrain, from, red)),
-                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(500)
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
                         ),
                         new RaceCommand(
                                 new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),

@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.util.VelocityPair;
 public class RobotConstants {
     @Config
     public static class Drive {
+        public static boolean IS_DEBUGGING = false;
+
         public static Pose LAST_REMEMBERED_POSE = new Pose(0, 0, 0);
         public static boolean HAS_POSE = false;
 
@@ -95,21 +97,21 @@ public class RobotConstants {
     }
     @Config
     public static class AutoPoses {
-        public static Pose RED_STARTING_CLOSE = new Pose(122.54, 123.8, Math.toRadians(215));
+        public static Pose RED_STARTING_CLOSE = new Pose(122.54, 123.8, Math.toRadians(217)).plus(new Pose(4.8, -7.79));
         public static Pose RED_STARTING_FAR = new Pose(89, 8.15, Math.toRadians(270));
-        public static Pose RED_SHOOT_CLOSE       = new Pose(84, 76.7, Math.toRadians(227));
+        public static Pose RED_SHOOT_CLOSE       = new Pose(84, 76.7, Math.toRadians(227)).plus(new Pose(4.8, -7.79));
         public static Pose RED_SHOOT_FAR         = new Pose(87, 18.4, Math.toRadians(238));
 
-        public static Pose RED_PRE_INTAKE_PPG    = new Pose(90,    85.9, Math.toRadians(1));
-        public static Pose RED_POST_INTAKE_PPG   = new Pose(117, 85.9, Math.toRadians(1));
+        public static Pose RED_PRE_INTAKE_PPG    = new Pose(90,    85.9, Math.toRadians(1)).plus(new Pose(4.8, -7.79));
+        public static Pose RED_POST_INTAKE_PPG   = new Pose(124, 85.9, Math.toRadians(1)).plus(new Pose(4.8, -7.79));
 
-        public static Pose RED_PRE_INTAKE_PGP    = new Pose(93,    59, Math.toRadians(-2));
-        public static Pose RED_POST_INTAKE_PGP   = new Pose(124, 59, Math.toRadians(-2));
+        public static Pose RED_PRE_INTAKE_PGP    = new Pose(93,    59, Math.toRadians(-2)).plus(new Pose(4.8, -7.79));
+        public static Pose RED_POST_INTAKE_PGP   = new Pose(129.5, 59, Math.toRadians(-2)).plus(new Pose(4.8, -7.79));
 
-        public static Pose RED_PRE_INTAKE_GPP    = new Pose(100,    36, Math.toRadians(-5));
-        public static Pose RED_POST_INTAKE_GPP   = new Pose(122, 37.4, Math.toRadians(-5));
+        public static Pose RED_PRE_INTAKE_GPP    = new Pose(100,    36, Math.toRadians(-5)).plus(new Pose(4.8, -7.79));
+        public static Pose RED_POST_INTAKE_GPP   = new Pose(122, 37.4, Math.toRadians(-5)).plus(new Pose(4.8, -7.79));
 
-        public static Pose RED_GATEMPTY = new Pose(127.8, 62.4, Math.toRadians(0));
+        public static Pose RED_GATEMPTY = new Pose(127.8, 62.4, Math.toRadians(0)).plus(new Pose(4.8, -7.79));
 
 //        public static Pose RED_PRE_INTAKE_HUMAN  = new Pose(133.5, 18.5, Math.toRadians(330));//new Pose(128.5, 35, Math.toRadians(270));
 //        public static Pose RED_POST_INTAKE_HUMAN = new Pose(134, 11, Math.toRadians(330));//new Pose(128.5, 13, Math.toRadians(270));
@@ -123,10 +125,10 @@ public class RobotConstants {
 //        public static Pose RED_HIT_GATE_1 = new Pose(127,   75.5, Math.toRadians(270)); // 3, 3
 //        public static Pose RED_HIT_GATE_2 = new Pose(126,   69, Math.toRadians(270)); // 3, 3
 
-        public static Pose RED_GATETAKE = new Pose(130, 59.6, Math.toRadians(40));
+        public static Pose RED_GATETAKE = new Pose(130, 59.6, Math.toRadians(40)).plus(new Pose(4.8, -7.79));
 
-        public static Pose RED_LEAVE_CLOSE       = new Pose(99.5,  78.4, Math.toRadians(270));
-        public static Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270));
+        public static Pose RED_LEAVE_CLOSE       = new Pose(99.5,  78.4, Math.toRadians(270)).plus(new Pose(4.8, -7.79));
+        public static Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270)).plus(new Pose(4.8, -7.79));
 
         public static Pose BLUE_STARTING_CLOSE   = Poses.mirrorPose(RED_STARTING_CLOSE);
         public static Pose BLUE_STARTING_FAR     = Poses.mirrorPose(RED_STARTING_FAR);

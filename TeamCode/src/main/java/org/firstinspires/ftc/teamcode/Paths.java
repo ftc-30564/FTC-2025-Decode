@@ -48,7 +48,7 @@ public class Paths {
                     .addPath(new BezierLine(pre, post))
                     .setLinearHeadingInterpolation(pre.getHeading(), post.getHeading())
 
-                    .setTValueConstraint(0.97)
+                    //.setTValueConstraint(0.97)
 
                     .build();
         }
@@ -77,7 +77,7 @@ public class Paths {
                     .addPath(new BezierLine(pre, post))
                     .setLinearHeadingInterpolation(pre.getHeading(), post.getHeading())
 
-                    .setTValueConstraint(0.97)
+                    //.setTValueConstraint(0.97)
 
                     .build();
         }
@@ -96,7 +96,7 @@ public class Paths {
                     .addPath(new BezierLine(pre, post))
                     .setLinearHeadingInterpolation(pre.getHeading(), post.getHeading())
 
-                    .setTValueConstraint(0.97)
+//                    .setTValueConstraint(0.97)
 
                     .build();
         }
@@ -118,7 +118,7 @@ public class Paths {
                     .addPath(new BezierLine(from, end))
                     .setLinearHeadingInterpolation(from.getHeading(), end.getHeading())
 
-                    .setTValueConstraint(1.0)
+                    //.setTValueConstraint(1.0)
                     .build();
         }
 

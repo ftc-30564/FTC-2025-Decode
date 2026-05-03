@@ -25,7 +25,7 @@ public class AlignToTargetCommand extends Command {
         aimCalculator.update();
 
         drivetrain.update();
-        drivetrain.setAimedTeleopDrive(0, 0, aimCalculator.getShotData().angle);
+        drivetrain.setAimedTeleopDrive(0, 0, aimCalculator.getShotData(false).angle);
     }
 
     @Override
