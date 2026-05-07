@@ -1,26 +1,32 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.commands;
 
+import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 import org.firstinspires.ftc.teamcode.util.command_lib.Command;
 
 public class ChargeFlywheelCommand extends Command {
-    private Shooter shooter;
-    private VelocityPair vel;
+    private final Shooter shooter;
+    private final AimCalculator aimCalculator;
 
     /**
      * A command that charges the flywheel to prepare for shooting
      * @param shooter The shooter subsystem
-     * @param vel The velocity pair to charge to
      */
-    public ChargeFlywheelCommand(Shooter shooter, VelocityPair vel) {
+    public ChargeFlywheelCommand(Shooter shooter, AimCalculator aimCalculator, boolean red) {
         this.shooter = shooter;
-        this.vel = vel;
+        this.aimCalculator = aimCalculator;
+
+        this.aimCalculator.setColor(red);
     }
 
     @Override
     public void loop() {
-        shooter.setToVelocityPair(vel);
-        shooter.runBackPusher();
+        aimCalculator.update();
+        shooter.update();
+
+        AimCalculator.ShotData shotData = this.aimCalculator.getShotData(true);
+
+        shooter.setToVelocityPair(new VelocityPair(shotData.rpm, shotData.rpm));
     }
 }

@@ -77,7 +77,7 @@ public class FlywheelTest extends LinearOpMode {
 
             telemetry.addData("top vel actual", shooter.getVelocityTop());
             telemetry.addData("bot vel actual", shooter.getVelocityBottom());
-            telemetry.addData("Distance to target", aimCalculator.getShotData().distance);
+            telemetry.addData("Distance to target", aimCalculator.getShotData(false).distance);
             telemetry.addData("voltage", hardwareMap.voltageSensor.iterator().next().getVoltage());
 
 

@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
 
@@ -17,6 +19,9 @@ public class Shooter {
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
     private boolean isShooting = false;
+    private double voltage = 12.0;
+    private double velocityBottom = 0;
+    private double velocityTop = 0;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
@@ -55,10 +60,16 @@ public class Shooter {
         return bottomIsAtVelocity(pair.bottom) && topIsAtVelocity(pair.top);
     }
 
+    public void update() {
+        this.voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+        this.velocityBottom = getVelocityBottom();
+        this.velocityTop = getVelocityTop();
+    }
+
     public void setBottomShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityBottom();
+        double currentVelocity = this.velocityBottom;
         // voltage compensation
-        double voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+
 
         double velocityBottomFeedforward12v = (RobotConstants.Shooter.VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         double adjustedFeedforward = velocityBottomFeedforward12v * (12 / voltage);
@@ -68,18 +79,18 @@ public class Shooter {
     }
 
     public void setTopShooterToVelocity(double targetVelocity) {
-        double currentVelocity = getVelocityTop();
+        double currentVelocity = this.velocityTop;
         // voltage compensation
         double velocityTopFeedforward12v = (RobotConstants.Shooter.VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
-        double adjustedFeedforward = velocityTopFeedforward12v * (12 / hardwareMap.voltageSensor.iterator().next().getVoltage());
+        double adjustedFeedforward = velocityTopFeedforward12v * (12 / voltage);
 
         double percent = (targetVelocity * adjustedFeedforward) + (RobotConstants.Shooter.IS_P_ENABLED ? ((targetVelocity - currentVelocity) * (isShooting ? RobotConstants.Shooter.VELOCITY_TOP_P_SHOOT : RobotConstants.Shooter.VELOCITY_TOP_P_STANDBY)) : 0);
         topFlywheel.setPower(percent);
     }
 
     public void coast() {
-        bottomFlywheel.setPower(0);
-        topFlywheel.setPower(0);
+        bottomFlywheel.setPower(0.3);
+        topFlywheel.setPower(0.3);
     }
 
     public boolean bottomIsAtVelocity(double targetVelocity) {
@@ -90,6 +101,14 @@ public class Shooter {
     public boolean topIsAtVelocity(double targetVelocity) {
         double currentVelocity = getVelocityTop();
         return (currentVelocity >= targetVelocity - RobotConstants.Shooter.VELOCITY_DEADBAND) && (targetVelocity + RobotConstants.Shooter.VELOCITY_DEADBAND >= currentVelocity);
+    }
+
+    public double getTopCurrent() {
+        return topFlywheel.getCurrent(CurrentUnit.MILLIAMPS);
+    }
+
+    public double getBottomCurrent() {
+        return bottomFlywheel.getCurrent(CurrentUnit.MILLIAMPS);
     }
 
     public void runPusher() {

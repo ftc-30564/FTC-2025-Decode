@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.util.Poses.pedroToAdvScope;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.ftc.FTCCoordinates;
-import com.pedropathing.geometry.CoordinateSystem;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -16,9 +17,13 @@ import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Logging;
 import org.firstinspires.ftc.teamcode.util.VelocityPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 @TeleOp(group = "Main")
 public class BlueTeleop extends LinearOpMode {
@@ -28,10 +33,16 @@ public class BlueTeleop extends LinearOpMode {
     private AimCalculator aimCalculator;
     private ElapsedTime loopTimer = new ElapsedTime();
     private MultipleTelemetry multipleTelemetry;
+    private TelemetryPacket telemetryPacket;
+    private LynxModule controlHub;
+    private LynxModule expansionHub;
+
+    private Logging logging;
 
     private IndicatorRGB indicator;
 
     private boolean red = false;
+    private AimCalculator.ShotData shotData;
 
     public void setAllianceColor(boolean red) {
         this.red = red;
@@ -45,45 +56,55 @@ public class BlueTeleop extends LinearOpMode {
         indicator = new IndicatorRGB(hardwareMap);
         aimCalculator = new AimCalculator(drivetrain, this.red);
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetryPacket = new TelemetryPacket();
 
-        boolean zeroButton;
-        boolean intakeButton;
-        boolean barfButton;
+        boolean intakeButton = false;
+        boolean barfButton = false;
+        boolean aimButton = false;
         boolean chargeButton;
         boolean shootButton;
+        boolean isAimed = false;
+        boolean calculateSotm = false;
+
+        logging = new Logging(drivetrain, shooter, hardwareMap);
+
+        if (!RobotConstants.Drive.HAS_POSE) {
+            drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
+        }
+        else {
+            drivetrain.setStartingPose(RobotConstants.Drive.LAST_REMEMBERED_POSE);
+        }
 
         waitForStart();
 
         drivetrain.startTeleopDrive();
 
-        if (RobotConstants.AutoPaths.HAS_POSE) {
-            drivetrain.setStartingPose(RobotConstants.AutoPaths.LAST_REMEMBERED_POSE);
-        }
-        else {
-            drivetrain.setStartingPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
-        }
-
         while (opModeIsActive()) {
             loopTimer.reset();
 
-            aimCalculator.update();
             drivetrain.update();
+            shooter.update();
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
             chargeButton = gamepad2.left_bumper;
             shootButton = gamepad2.right_bumper;
-            zeroButton = gamepad1.back;
+            aimButton = gamepad1.left_bumper;
 
-            AimCalculator.ShotData shotData = aimCalculator.getShotData();
+            aimCalculator.update();
+            shotData = aimCalculator.getShotData(calculateSotm);
 
-            if (gamepad1.left_bumper) {
-                drivetrain.setAimedTeleopDrive(
+            // only run shoot on the move calculations if the joystick is far enough
+            calculateSotm = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2) + Math.pow(gamepad1.left_stick_y, 2)) > 0.25;
+
+            if (aimButton) {
+                isAimed = drivetrain.setAimedTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
                         shotData.angle);
             }
             else {
+                isAimed = false;
                 drivetrain.setTeleopDrive(
                         gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                         gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
@@ -91,23 +112,11 @@ public class BlueTeleop extends LinearOpMode {
                         false);
             }
 
-            if (zeroButton) {
-                if (red) {
-                    drivetrain.zeroHeading();
-                }
-                else {
-                    drivetrain.oneEightyHeading();
-                }
-            }
-
             if (gamepad1.back) {
-                drivetrain.setPose(new Pose(17.5/2, 17.75/2, Math.toRadians(90)));
+                drivetrain.setPose(new Pose(10.5, 10.5, Math.toRadians(90)));
             }
 
-            if (intakeButton && barfButton) {
-                intake.spit();
-            }
-            else if (intakeButton || shootButton){
+            if (intakeButton || shootButton){
                 intake.run();
             }
             else if (barfButton) {
@@ -126,7 +135,7 @@ public class BlueTeleop extends LinearOpMode {
             if (intakeButton) {
                 shooter.runBackPusher();
             }
-            else if (shootButton) {
+            else if (shootButton && isAimed) {
                 shooter.runPusher();
             }
             else if (barfButton) {
@@ -136,7 +145,13 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
-            indicator.blue();
+
+            if (isAimed && (!Objects.equals(indicator.currentColor, "green"))) {
+                indicator.green();
+            }
+            else if ((!Objects.equals(indicator.currentColor, "blue"))){
+                indicator.blue();
+            }
 
 //            telemetry.addLine("SHOOTER");
 //            telemetry.addData("LOWEST RPM", lowestRpm);
@@ -151,32 +166,37 @@ public class BlueTeleop extends LinearOpMode {
 //            telemetry.addData("Is aligned with goal", limelight.isAlignedWithGoal());
 //            telemetry.addData("Distance to target", limelight.getDistanceTarget(IS_RED, telemetry));
 
-            multipleTelemetry.addData("Target angle (degrees)", shotData.angle);
+            if (RobotConstants.Drive.IS_DEBUGGING) {
+                logging.updateTelemetryPacket(telemetryPacket);
 
-            multipleTelemetry.addData("Target rpm", shotData.rpm);
-            multipleTelemetry.addData("Actual Bottom rpm", shooter.getVelocityBottom());
-            multipleTelemetry.addData("Actual top rpm", shooter.getVelocityTop());
-            multipleTelemetry.addData("Distance from target", shotData.distance);
+                telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
+                telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());
+                telemetryPacket.put("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
 
+                telemetryPacket.put("Blue auto x", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getX());
+                telemetryPacket.put("Blue auto y", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getY());
+                telemetryPacket.put("Blue auto heading", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getHeading());
 
-            multipleTelemetry.addData("Robot x", pedroToAdvScope(drivetrain.getPose()).getX());
-            multipleTelemetry.addData("Robot y", pedroToAdvScope(drivetrain.getPose()).getY());
-            multipleTelemetry.addData("Robot heading", pedroToAdvScope(drivetrain.getPose()).getHeading());
+                telemetryPacket.put("Red auto x", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getX());
+                telemetryPacket.put("Red auto y", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getY());
+                telemetryPacket.put("Red auto heading", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getHeading());
 
-            multipleTelemetry.addData("Timer Loop", loopTimer.milliseconds());
+                telemetryPacket.put("Shooter/Target angle (degrees)", shotData.angle);
+                telemetryPacket.put("Shooter/Target rpm", shotData.rpm);
 
-            multipleTelemetry.update();
+                telemetryPacket.put("Shooter/Distance from target", shotData.distance);
 
+                telemetryPacket.put("Timer Loop", loopTimer.milliseconds());
+
+                FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+            }
+
+            telemetry.addData("Loop time", loopTimer.milliseconds());
+            telemetry.update();
         }
 
         // update last remembered pose
-        RobotConstants.AutoPaths.LAST_REMEMBERED_POSE = drivetrain.getPose();
-        RobotConstants.AutoPaths.HAS_POSE = true;
-    }
-
-    public Pose pedroToAdvScope(Pose pose) {
-        Pose ret = pose.unaryMinus().plus(new Pose(144, 144, 0));
-        ret = ret.setHeading(ret.getHeading() * -1).getAsCoordinateSystem(FTCCoordinates.INSTANCE);
-        return ret;
+        RobotConstants.Drive.HAS_POSE = true;
+        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.commands;
 
-import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPaths.*;
-import static org.firstinspires.ftc.teamcode.RobotConstants.Shooter.*;
+import static org.firstinspires.ftc.teamcode.Paths.*;
 
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Paths;
 import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
@@ -23,104 +25,164 @@ public class AutoCommands {
     private final Drivetrain drivetrain;
     private final Shooter shooter;
     private final Intake intake;
-    private final Limelight limelight;
     private final Telemetry telemetry;
+    private final AimCalculator aimCalculator;
 
-    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Limelight limelight, Telemetry telemetry) {
+    private final long SHOOT_TIME_MS = 600;
+
+    public AutoCommands(Drivetrain drivetrain, Shooter shooter, Intake intake, Telemetry telemetry) {
         this.drivetrain = drivetrain;
         this.shooter = shooter;
         this.intake = intake;
-        this.limelight = limelight;
         this.telemetry = telemetry;
+        this.aimCalculator = new AimCalculator(drivetrain);
     }
 
-    /**
-     * Returns a command where the robot starts and shoots the preload, based on whether: it is starting close or far, or red and blue.
-     * @param close if the robot is starting close or far
-     * @param red if the robot is red or blue
-     * @return a command where the robot drives to shooting position and shoots the preload
-     */
-    public Command startAndShoot(boolean close, boolean red) {
-        VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
+    public enum BallPose {
+        PPG,
+        PGP,
+        GPP
+    }
 
+    public Command startAndShootClose(boolean red) {
         return new SequentialCommand(
-                new ParallelCommand(
-                        new FollowPathCommand(drivetrain, startToShootPath(drivetrain, close, red)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(500)
-                ),
                 new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),
+                        new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                        new FollowPathCommand(drivetrain, Close.startToShoot(drivetrain, red)),
                         new SequentialCommand(
-                                new DelayCommand(close ? 100 : 300),
-                                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+                                new DelayCommand(900),
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
                         )
-                )
-        ) ;
-    }
-
-    /**
-     * Returns a command where the robot drives and intakes balls from the shooting position.
-     * @param ballPose the group of balls to intake (ex. PPG, PGP, GPP)
-     * @param close if the robot shot close or far
-     * @param red if the robot is red or blue
-     * @param drift an offset pose in case the dead wheels experience drift
-     * @return a command where the robot drives and intakes balls from the shooting position
-     */
-    public Command driveAndIntakeBallsBounce(RobotConstants.AutoPaths.BallPose ballPose, boolean close, boolean red, Pose drift) {
-        return new SequentialCommand(
-                //new DelayCommand(500),
-                new RaceCommand(
-                        new FollowPathCommand(drivetrain, intakeBallsPathBounce(drivetrain, ballPose, close, red, drift)).timeout(5000),
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
-                )
-               // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+                ),
+                new InstantCommand(shooter::coast)
         );
     }
 
-    public Command driveAndIntakeBallsUnbounce(BallPose ballPose, boolean close, boolean red, Pose drift) {
+    public Command intakeLineClose(BallPose ballPose, boolean red) {
+        PathChain pathChain = new PathChain();
+
+        switch (ballPose) {
+            case PPG:
+                pathChain = Close.intakePPG(drivetrain, red);
+                break;
+            case PGP:
+                pathChain = Close.intakePGP(drivetrain, red);
+                break;
+            case GPP:
+                pathChain = Close.intakeGPP(drivetrain, red);
+                break;
+        }
+
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, intakeBallsPathUnbounce(drivetrain, ballPose, close, red, drift)).timeout(5000),
+                        new FollowPathCommand(drivetrain, pathChain).timeout(5000),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
     }
 
-    public Command knockGate(boolean red, boolean fromFirstLine) {
+    public Command hitGate(boolean red, Pose from) {
+        return new FollowPathCommand(drivetrain, Close.hitGate(drivetrain, red, from));
+    }
+
+    public Command intakeGateClose(boolean red, long delay) {
         return new SequentialCommand(
-                new ParallelCommand(
-                        new FollowPathCommand(drivetrain, fromFirstLine ? knockGateFromFirstPath(drivetrain, red) : knockGateFromSecondPath(drivetrain, red)).timeout(2500),
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(700)
-                ),
-                new DelayCommand(0)
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Close.intakeGate(drivetrain, red), delay),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
         );
     }
 
-    /**
-     * Returns a command where the robot drives to the shooting position and shoots balls.
-     * @param ballPose the group of balls that the robot starts at (ex. PPG, PGP, GPP)
-     * @param close if the robot is shooting close or far
-     * @param red if the robot is red or blue
-     * @param drift a pose that offsets the end position in case the dead wheels experience drift     * @return a command where the robot drives to the shooting position and shoots balls
-     */
-    public Command goAndShootBalls(BallPose ballPose, boolean close, boolean red, GatePose gatePose, Pose drift) {
-        VelocityPair vel = close ? CLOSE_VELOCITY : FAR_VELOCITY;
+//    public Command knockGate(boolean red, boolean fromFirstLine) {
+//        return new SequentialCommand(
+//                new ParallelCommand(
+//                        new FollowPathCommand(drivetrain, fromFirstLine ? knockGateFromFirstPath(drivetrain, red) : knockGateFromSecondPath(drivetrain, red)).timeout(2500),
+//                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(700)
+//                ),
+//                new DelayCommand(0)
+//        );
+//    }
 
-        return new SequentialCommand(
-                new ParallelCommand(
-                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(900),
-                        new FollowPathCommand(drivetrain, intakeToShootPath(drivetrain, ballPose, close, red, gatePose, drift)),
-                        new ChargeFlywheelCommand(shooter, vel).timeout(1000)
-                ),
-                new RaceCommand(
-                        new AlignToTargetCommand(drivetrain, limelight, telemetry, red),   // hold the position while it's shooting, in case it gets bumped during auto
-                        new SequentialCommand(
-                                new DelayCommand(300),//300),
-                                new ShootCommand(shooter, intake, vel).timeout(SHOOT_TIME_MS)
+    public Command goAndShootBallsClose(Pose from, boolean red) {
+        return new SequentialCommand(new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new ParallelCommand(
+                                new FollowPathCommand(drivetrain, Close.shoot(drivetrain, from, red)),
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
+                        ),
+                        new RaceCommand(
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                                new AlignToTargetCommand(drivetrain, red)
                         )
+
+                )
+        ), new InstantCommand(shooter::coast));
+    }
+
+
+    public Command startAndShootFar(boolean red) {
+        return new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new FollowPathCommand(drivetrain, Far.startToShoot(drivetrain, red)),
+                        new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
                 )
         );
+    }
+
+    public Command intakeGPPFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Close.intakeGPP(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command intakeHPFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayer(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command intakeHPOffsetFar(boolean red) {
+        return new SequentialCommand(
+                //new DelayCommand(500),
+                new RaceCommand(
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayerOffsetABit(drivetrain, red)).timeout(5000),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
+                )
+                // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
+        );
+    }
+
+    public Command goAndShootBallsFar(Pose from, boolean red) {
+        return new SequentialCommand(new RaceCommand(
+                new ChargeFlywheelCommand(shooter, aimCalculator, red),
+                new SequentialCommand(
+                        new ParallelCommand(
+                                new FollowPathCommand(drivetrain, Far.shoot(drivetrain, from, red)),
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
+                        ),
+                        new RaceCommand(
+                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                                new AlignToTargetCommand(drivetrain, red)
+                        )
+                )
+        ), new InstantCommand(shooter::coast));
     }
 }

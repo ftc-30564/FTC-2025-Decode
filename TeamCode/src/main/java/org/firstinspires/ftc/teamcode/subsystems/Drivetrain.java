@@ -7,13 +7,8 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.robot.Robot;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -41,7 +36,7 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public void setAimedTeleopDrive(double forward, double strafe, double angle){
+    public boolean setAimedTeleopDrive(double forward, double strafe, double angle){
         double targetAngle = angle;
         double error = targetAngle - (getPose().getHeading());
 
@@ -57,6 +52,9 @@ public class Drivetrain {
         double targetPower = pidfController.run();
 
         follower.setTeleOpDrive(forward, strafe, targetPower, false);
+
+        return error < Math.toRadians(RobotConstants.Drive.IS_ALIGNED_MARGIN) && error > Math.toRadians(-RobotConstants.Drive.IS_ALIGNED_MARGIN)
+                && (Math.abs(pidfController.getErrorDerivative()) < RobotConstants.Drive.IS_ALIGNED_VELOCITY_RADIANS);
 
     }
 
@@ -92,6 +90,10 @@ public class Drivetrain {
 
     public void followPath(PathChain pathChain, boolean holdEnd) {
         follower.followPath(pathChain, false);
+    }
+
+    public void holdPoint(Pose pose) {
+        follower.holdPoint(pose);
     }
 
     public boolean isBusy() {
