@@ -12,10 +12,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Prism.Color;
+import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
+import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.Logging;
@@ -39,8 +41,6 @@ public class BlueTeleop extends LinearOpMode {
 
     private Logging logging;
 
-    private IndicatorRGB indicator;
-
     private boolean red = false;
     private AimCalculator.ShotData shotData;
 
@@ -48,15 +48,22 @@ public class BlueTeleop extends LinearOpMode {
         this.red = red;
     }
 
+    GoBildaPrismDriver prism;
+    PrismAnimations.SineWave sineWave = new PrismAnimations.SineWave(Color.MAGENTA);
+
     @Override
     public void runOpMode() {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap, telemetry);
-        indicator = new IndicatorRGB(hardwareMap);
         aimCalculator = new AimCalculator(drivetrain, this.red);
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetryPacket = new TelemetryPacket();
+
+        prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
+        sineWave.setBrightness(50);
+        sineWave.setStartIndex(0);
+        sineWave.setStopIndex(12);
 
         boolean intakeButton = false;
         boolean barfButton = false;
@@ -145,12 +152,8 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
-
-            if (isAimed && (!Objects.equals(indicator.currentColor, "green"))) {
-                indicator.green();
-            }
-            else if ((!Objects.equals(indicator.currentColor, "blue"))){
-                indicator.blue();
+            if (shootButton) {
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, sineWave);
             }
 
 //            telemetry.addLine("SHOOTER");
