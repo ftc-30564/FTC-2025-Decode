@@ -57,8 +57,10 @@ public class Paths {
             Pose end = isRed ? RED_GATEMPTY : BLUE_GATEMPTY;
 
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(from, end))
+                    .addPath(new BezierLine(from, new Pose(124, 58.9, 0)))
                     .setLinearHeadingInterpolation(from.getHeading(), end.getHeading())
+                    .addPath(new BezierLine(new Pose(124, 58.9, 0), end))
+                    .setLinearHeadingInterpolation(end.getHeading(), end.getHeading())
 
                     .build();
         }

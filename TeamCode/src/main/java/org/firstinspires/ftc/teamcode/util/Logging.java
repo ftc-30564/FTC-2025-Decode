@@ -37,9 +37,13 @@ public class Logging {
         telemetryPacket.put("Shooter/Bottom current", shooter.getBottomCurrent());
         telemetryPacket.put("Shooter/Top current", shooter.getTopCurrent());
 
-        telemetryPacket.put("Robot x", (drivetrain.getPose()).getX());
-        telemetryPacket.put("Robot y", (drivetrain.getPose()).getY());
-        telemetryPacket.put("Robot heading", (drivetrain.getPose()).getHeading());
+        telemetryPacket.put("Robot x", pedroToAdvScope(drivetrain.getPose()).getX());
+        telemetryPacket.put("Robot y", pedroToAdvScope(drivetrain.getPose()).getY());
+        telemetryPacket.put("Robot heading", pedroToAdvScope(drivetrain.getPose()).getHeading());
+
+        telemetryPacket.put("Robot p x", (drivetrain.getPose()).getX());
+        telemetryPacket.put("Robot p y", (drivetrain.getPose()).getY());
+        telemetryPacket.put("Robot p heading", (drivetrain.getPose()).getHeading());
 
 //        telemetryPacket.put("Aim x", pedroToAdvScope(shotData.pose).getX());
 //        telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());

@@ -84,7 +84,9 @@ public class AutoCommands {
     }
 
     public Command hitGate(boolean red, Pose from) {
-        return new FollowPathCommand(drivetrain, Close.hitGate(drivetrain, red, from));
+        return new RaceCommand(
+                new FollowPathCommand(drivetrain, Close.hitGate(drivetrain, red, from)),
+                        new IntakeCommand(intake, shooter, Intake.Mode.RUNNING));
     }
 
     public Command intakeGateClose(boolean red, long delay) {
@@ -141,7 +143,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, Close.intakeGPP(drivetrain, red)).timeout(5000),
+                        new FollowPathCommand(drivetrain, Far.intakeGPP(drivetrain, red)).timeout(5000),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)

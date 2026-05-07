@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import static org.firstinspires.ftc.teamcode.RobotConstants.Drive.FIELD_LEN;
+
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.geometry.Pose;
 
@@ -12,6 +14,6 @@ public class Poses {
 
     // i promise there's a reason for this
     public static Pose mirrorPose(Pose pose) {
-        return pose.mirror();
+        return pose.mirror(FIELD_LEN);
     }
 }
