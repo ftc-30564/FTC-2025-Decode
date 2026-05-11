@@ -57,8 +57,8 @@ public class RobotConstants {
         public static double IS_ALIGNED_MARGIN = 5;
         public static double IS_ALIGNED_VELOCITY_RADIANS = 2;
 
-        public static double BLUE_GOAL_POSE_X = 14;
-        public static double BLUE_GOAL_POSE_Y = 143;
+        public static double BLUE_GOAL_POSE_X = 18;
+        public static double BLUE_GOAL_POSE_Y = 138;
 
         public static double RED_GOAL_POSE_X = 145;
         public static double RED_GOAL_POSE_Y = 128;
@@ -102,7 +102,7 @@ public class RobotConstants {
         public static Pose RED_STARTING_CLOSE = new Pose(124.54, 121.8, Math.toRadians(217));
         public static Pose RED_STARTING_FAR = new Pose(87.01, 7.99, Math.toRadians(-91.05));
         public static Pose RED_SHOOT_CLOSE       = new Pose(87, 76.7, Math.toRadians(227));
-        public static Pose RED_SHOOT_FAR         = new Pose(87.24, 14.45, Math.toRadians(-112.62));
+        public static Pose RED_SHOOT_FAR         = new Pose(87.24, 14.45, Math.toRadians(-109));
 
         public static Pose RED_PRE_INTAKE_PPG    = new Pose(90,    83.9, Math.toRadians(1));
         public static Pose RED_POST_INTAKE_PPG   = new Pose(127, 83.9, Math.toRadians(1));
@@ -130,7 +130,7 @@ public class RobotConstants {
         public static Pose BLUE_STARTING_FAR     = Poses.mirrorPose(RED_STARTING_FAR);
 
         public static Pose BLUE_SHOOT_CLOSE      = Poses.mirrorPose(RED_SHOOT_CLOSE).plus(new Pose(0, 0, Math.toRadians(-8.5)));
-        public static Pose BLUE_SHOOT_FAR        = Poses.mirrorPose(RED_SHOOT_FAR);
+        public static Pose BLUE_SHOOT_FAR        = Poses.mirrorPose(RED_SHOOT_FAR).plus(new Pose(0, 0, Math.toRadians(-6)));
 
         public static Pose BLUE_PRE_INTAKE_PPG   = Poses.mirrorPose(RED_PRE_INTAKE_PPG);
         public static Pose BLUE_POST_INTAKE_PPG  = Poses.mirrorPose(RED_POST_INTAKE_PPG);
@@ -155,13 +155,9 @@ public class RobotConstants {
         public static Pose BLUE_GATEMPTY = Poses.mirrorPose(RED_GATEMPTY);
 
         public static Pose BLUE_HUMAN_PLAYER_1 = Poses.mirrorPose(RED_HUMAN_PLAYER_1);
-
         public static Pose BLUE_HUMAN_PLAYER_2 = Poses.mirrorPose(RED_HUMAN_PLAYER_2);
-
         public static Pose BLUE_HUMAN_PLAYER_3 = Poses.mirrorPose(RED_HUMAN_PLAYER_3);
-
         public static Pose BLUE_HUMAN_PLAYER_4 = Poses.mirrorPose(RED_HUMAN_PLAYER_4);
-
         public static Pose BLUE_HUMAN_PLAYER_5 = Poses.mirrorPose(RED_HUMAN_PLAYER_5);
 
         public static Pose BLUE_LEAVE_CLOSE = Poses.mirrorPose(RED_LEAVE_CLOSE);

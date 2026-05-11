@@ -95,8 +95,8 @@ public class BlueTeleop extends LinearOpMode {
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper;
-            shootButton = gamepad2.right_bumper;
+            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
+            shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
             aimCalculator.update();
@@ -162,7 +162,7 @@ public class BlueTeleop extends LinearOpMode {
             if (intakeButton) {
                 shooter.runBackPusher();
             }
-            else if (shootButton && isAimed) {
+            else if (shootButton) {
                 shooter.runPusher();
             }
             else if (barfButton) {

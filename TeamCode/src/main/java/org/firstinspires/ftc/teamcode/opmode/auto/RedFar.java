@@ -52,11 +52,16 @@ public class RedFar extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
-        drivetrain.setStartingPose(red ? RED_STARTING_FAR : BLUE_STARTING_CLOSE);
+        drivetrain.setStartingPose(red ? RED_STARTING_FAR : BLUE_STARTING_FAR);
 
         Command shootPreload = autoCommands.startAndShootFar(red);
 
         Command intakeAndShootHP = new SequentialCommand(
+                autoCommands.intakeHPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
+        );
+
+        Command intakeAndShootHP1 = new SequentialCommand(
                 autoCommands.intakeHPFar(red),
                 autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
         );
@@ -92,6 +97,7 @@ public class RedFar extends LinearOpMode {
                 shootPreload,
                 intakeAndShootHP,
                 intakeAndShootGPP,
+                intakeAndShootHP1,
                 intakeAndShootHPOffset,
                 intakeAndShootHPOffset1
         );

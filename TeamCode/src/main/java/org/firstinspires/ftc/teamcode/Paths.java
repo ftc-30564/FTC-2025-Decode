@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.PathConstraints;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.util.Poses;
@@ -152,15 +153,19 @@ public class Paths {
         public static PathChain intakeHumanPlayer(Drivetrain drivetrain, boolean isRed) {
             Pose start = isRed ? RED_SHOOT_FAR : BLUE_SHOOT_FAR;
 
+            Pose humanPlayer1 = isRed ? RED_HUMAN_PLAYER_1 : BLUE_HUMAN_PLAYER_1;
+            Pose humanPlayer2 = isRed ? RED_HUMAN_PLAYER_2 : BLUE_HUMAN_PLAYER_2;
+            Pose humanPlayer3 = isRed ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3;
+
             return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, RED_HUMAN_PLAYER_1))
-                    .setLinearHeadingInterpolation(start.getHeading(), RED_HUMAN_PLAYER_1.getHeading())
+                    .addPath(new BezierLine(start, humanPlayer1))
+                    .setLinearHeadingInterpolation(start.getHeading(), humanPlayer1.getHeading())
 
-                    .addPath(new BezierLine(RED_HUMAN_PLAYER_1, RED_HUMAN_PLAYER_2))
-                    .setLinearHeadingInterpolation(RED_HUMAN_PLAYER_1.getHeading(), RED_HUMAN_PLAYER_2.getHeading())
+                    .addPath(new BezierLine(humanPlayer1, humanPlayer2))
+                    .setLinearHeadingInterpolation(humanPlayer1.getHeading(), humanPlayer2.getHeading())
 
-                    .addPath(new BezierLine(RED_HUMAN_PLAYER_2, RED_HUMAN_PLAYER_3))
-                    .setLinearHeadingInterpolation(RED_HUMAN_PLAYER_2.getHeading(), RED_HUMAN_PLAYER_3.getHeading())
+                    .addPath(new BezierLine(humanPlayer2, humanPlayer3))
+                    .setLinearHeadingInterpolation(humanPlayer2.getHeading(), humanPlayer3.getHeading())
 
                     .build();
         }
@@ -168,12 +173,15 @@ public class Paths {
         public static PathChain intakeHumanPlayerOffsetABit(Drivetrain drivetrain, boolean isRed) {
             Pose start = isRed ? RED_SHOOT_FAR : BLUE_SHOOT_FAR;
 
-            return drivetrain.pathBuilder()
-                    .addPath(new BezierLine(start, RED_HUMAN_PLAYER_4))
-                    .setLinearHeadingInterpolation(start.getHeading(), RED_HUMAN_PLAYER_4.getHeading())
+            Pose humanPlayer4 = isRed ? RED_HUMAN_PLAYER_4 : BLUE_HUMAN_PLAYER_4;
+            Pose humanPlayer5 = isRed ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5;
 
-                    .addPath(new BezierLine(RED_HUMAN_PLAYER_4, RED_HUMAN_PLAYER_5))
-                    .setLinearHeadingInterpolation(RED_HUMAN_PLAYER_4.getHeading(), RED_HUMAN_PLAYER_5.getHeading())
+            return drivetrain.pathBuilder()
+                    .addPath(new BezierLine(start, humanPlayer4))
+                    .setLinearHeadingInterpolation(start.getHeading(), humanPlayer4.getHeading())
+
+                    .addPath(new BezierLine(humanPlayer4, humanPlayer5))
+                    .setLinearHeadingInterpolation(humanPlayer4.getHeading(), humanPlayer5.getHeading())
 
                     .build();
         }

@@ -48,7 +48,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 new RaceCommand(
                         new ChargeFlywheelCommand(shooter, aimCalculator, red),
-                        new FollowPathCommand(drivetrain, Close.startToShoot(drivetrain, red)),
+                        new FollowPathCommand(drivetrain, Close.startToShoot(drivetrain, red), 100),
                         new SequentialCommand(
                                 new DelayCommand(900),
                                 new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
@@ -115,9 +115,9 @@ public class AutoCommands {
         return new SequentialCommand(new RaceCommand(
                 new ChargeFlywheelCommand(shooter, aimCalculator, red),
                 new SequentialCommand(
-                        new ParallelCommand(
+                        new RaceCommand(
                                 new FollowPathCommand(drivetrain, Close.shoot(drivetrain, from, red)),
-                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
+                                new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                         ),
                         new RaceCommand(
                                 new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
@@ -181,7 +181,10 @@ public class AutoCommands {
                                 new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(1500)
                         ),
                         new RaceCommand(
-                                new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS),
+                                new SequentialCommand(
+                                        new DelayCommand(200),
+                                        new ShootCommand(shooter, intake).timeout(SHOOT_TIME_MS)
+                                ),
                                 new AlignToTargetCommand(drivetrain, red)
                         )
                 )
