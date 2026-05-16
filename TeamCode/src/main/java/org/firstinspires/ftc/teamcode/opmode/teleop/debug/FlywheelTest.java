@@ -34,6 +34,7 @@ public class FlywheelTest extends LinearOpMode {
         while (opModeIsActive()) {
             aimCalculator.update();
             drivetrain.update();
+            shooter.update();
 
             drivetrain.setTeleopDrive(
                     gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT,

@@ -89,7 +89,7 @@ public class Drivetrain {
     }
 
     public void followPath(PathChain pathChain, boolean holdEnd) {
-        follower.followPath(pathChain, false);
+        follower.followPath(pathChain, holdEnd);
     }
 
     public void holdPoint(Pose pose) {

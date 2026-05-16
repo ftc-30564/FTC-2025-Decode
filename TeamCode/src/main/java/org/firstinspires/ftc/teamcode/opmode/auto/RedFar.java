@@ -52,18 +52,28 @@ public class RedFar extends LinearOpMode {
         MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
         player.addSequence(reader.getMorseCode());
 
-        drivetrain.setStartingPose(red ? RED_STARTING_FAR : BLUE_STARTING_CLOSE);
+        drivetrain.setStartingPose(red ? RED_STARTING_FAR : BLUE_STARTING_FAR);
 
         Command shootPreload = autoCommands.startAndShootFar(red);
 
         Command intakeAndShootHP = new SequentialCommand(
                 autoCommands.intakeHPFar(red),
-                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : RED_HUMAN_PLAYER_3, red)
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
+        );
+
+        Command intakeAndShootHP1 = new SequentialCommand(
+                autoCommands.intakeHPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
         );
 
         Command intakeAndShootHPOffset = new SequentialCommand(
                 autoCommands.intakeHPOffsetFar(red),
-                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : RED_HUMAN_PLAYER_5, red)
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5, red)
+        );
+
+        Command intakeAndShootHPOffset1 = new SequentialCommand(
+                autoCommands.intakeHPOffsetFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5, red)
         );
 
         Command intakeAndShootGPP = new SequentialCommand(
@@ -86,8 +96,10 @@ public class RedFar extends LinearOpMode {
         CommandScheduler scheduler = new CommandScheduler(
                 shootPreload,
                 intakeAndShootHP,
+                intakeAndShootGPP,
+                intakeAndShootHP1,
                 intakeAndShootHPOffset,
-                intakeAndShootGPP
+                intakeAndShootHPOffset1
         );
 
         waitForStart();
@@ -100,6 +112,9 @@ public class RedFar extends LinearOpMode {
 //            logging.updateTelemetryPacket(telemetryPacket);
 //
 //            FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+
+            RobotConstants.Drive.HAS_POSE = true;
+            RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
         }
 
         // update the pose for teleop
