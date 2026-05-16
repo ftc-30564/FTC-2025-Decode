@@ -193,7 +193,6 @@ public class BlueTeleop extends LinearOpMode {
             }
             else {
                 shooter.stopPusher();
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
             }
 
             if (shootButton) {

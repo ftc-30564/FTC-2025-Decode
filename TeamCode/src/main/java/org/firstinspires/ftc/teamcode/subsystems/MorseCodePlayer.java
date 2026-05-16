@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MorseCodePlayer {
-    private IndicatorRGB indicator;
     private List<LightDuration> lightSequence = new ArrayList<>();
     private final long UNIT_LENGTH = 150;
 
@@ -28,10 +27,6 @@ public class MorseCodePlayer {
             this.ms = ms;
             this.white = white;
         }
-    }
-
-    public MorseCodePlayer(IndicatorRGB indicator) {
-        this.indicator = indicator;
     }
 
     public void addSequence(String morse) {
@@ -59,10 +54,6 @@ public class MorseCodePlayer {
         if (currentSequence >= lightSequence.size())
             return true;
 
-        if (lightSequence.get(currentSequence).white)
-            indicator.white();
-        else
-            indicator.off();
 
         if (timerStarted) {
             if (timer.milliseconds() > lightSequence.get(currentSequence).ms) {
