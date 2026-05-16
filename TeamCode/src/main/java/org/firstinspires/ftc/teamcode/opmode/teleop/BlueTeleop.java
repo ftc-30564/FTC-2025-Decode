@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Prism.Color;
+import org.firstinspires.ftc.teamcode.Prism.Direction;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -55,7 +56,7 @@ public class BlueTeleop extends LinearOpMode {
     GoBildaPrismDriver prism;
     PrismAnimations.Snakes snakes = new PrismAnimations.Snakes(Color.MAGENTA);
     PrismAnimations.Pulse pulse = new PrismAnimations.Pulse(Color.ORANGE);
-    PrismAnimations.Solid solidAligned = new PrismAnimations.Solid(new Color(148, 170, 198));
+    PrismAnimations.Solid solidAligned = new PrismAnimations.Solid(new Color(148, 170, 240));
     PrismAnimations.Solid solidNotAligned = new PrismAnimations.Solid(Color.RED);
 
     @Override
@@ -68,19 +69,20 @@ public class BlueTeleop extends LinearOpMode {
         telemetryPacket = new TelemetryPacket();
 
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
-        snakes.setBrightness(50);
+        snakes.setBrightness(80);
         snakes.setStartIndex(0);
         snakes.setStopIndex(12);
+        snakes.setDirection(Direction.Backward);
 
-        pulse.setBrightness(50);
+        pulse.setBrightness(80);
         pulse.setStartIndex(0);
         pulse.setStopIndex(12);
 
-        solidAligned.setBrightness(50);
+        solidAligned.setBrightness(80);
         solidAligned.setStartIndex(0);
         solidAligned.setStopIndex(12);
 
-        solidNotAligned.setBrightness(50);
+        solidNotAligned.setBrightness(80);
         solidNotAligned.setStartIndex(0);
         solidNotAligned.setStopIndex(12);
 
@@ -194,20 +196,22 @@ public class BlueTeleop extends LinearOpMode {
                 shooter.stopPusher();
             }
 
-            if (shootButton){
-                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
+            if (gamepad1.rightTriggerWasPressed()){
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
             }
-            else if (intakeButton) {
-                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
-            }
-            else if (isAimed){
-                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
-            }
-            else {
-                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
+            if (gamepad1.rightBumperWasPressed()) {
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
             }
 
-            prism.updateAllAnimations();
+            if (gamepad1.rightTriggerWasReleased() || gamepad1.rightBumperWasReleased()) {
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
+            }
+//            if (isAimed){
+//                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
+//            }
+//            else {
+//                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
+//            }
 
 
 //            telemetry.addLine("SHOOTER");
@@ -256,8 +260,8 @@ public class BlueTeleop extends LinearOpMode {
                 FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
             }
 
-            telemetry.addData("Loop time", loopTimer.milliseconds());
-            telemetry.update();
+//            telemetry.addData("Loop time", loopTimer.milliseconds());
+//            telemetry.update();
 
             // update last remembered pose
             RobotConstants.Drive.HAS_POSE = true;
