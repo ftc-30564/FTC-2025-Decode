@@ -49,7 +49,10 @@ public class BlueTeleop extends LinearOpMode {
     }
 
     GoBildaPrismDriver prism;
-    PrismAnimations.SineWave sineWave = new PrismAnimations.SineWave(Color.MAGENTA);
+    PrismAnimations.Snakes snakes = new PrismAnimations.Snakes(Color.MAGENTA);
+    PrismAnimations.Pulse pulse = new PrismAnimations.Pulse(Color.ORANGE);
+    PrismAnimations.Solid solidAligned = new PrismAnimations.Solid(new Color(148, 170, 198));
+    PrismAnimations.Solid solidNotAligned = new PrismAnimations.Solid(Color.RED);
 
     @Override
     public void runOpMode() {
@@ -61,9 +64,21 @@ public class BlueTeleop extends LinearOpMode {
         telemetryPacket = new TelemetryPacket();
 
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
-        sineWave.setBrightness(50);
-        sineWave.setStartIndex(0);
-        sineWave.setStopIndex(12);
+        snakes.setBrightness(50);
+        snakes.setStartIndex(0);
+        snakes.setStopIndex(12);
+
+        pulse.setBrightness(50);
+        pulse.setStartIndex(0);
+        pulse.setStopIndex(12);
+
+        solidAligned.setBrightness(50);
+        solidAligned.setStartIndex(0);
+        solidAligned.setStopIndex(12);
+
+        solidNotAligned.setBrightness(50);
+        solidNotAligned.setStartIndex(0);
+        solidNotAligned.setStopIndex(12);
 
         boolean intakeButton = false;
         boolean barfButton = false;
@@ -144,16 +159,22 @@ public class BlueTeleop extends LinearOpMode {
             }
             else if (shootButton && isAimed) {
                 shooter.runPusher();
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
             }
             else if (barfButton) {
                 shooter.barfPusher();
             }
             else {
                 shooter.stopPusher();
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
             }
 
             if (shootButton) {
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, sineWave);
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
+            }
+
+            if (intakeButton) {
+                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
             }
 
 //            telemetry.addLine("SHOOTER");
