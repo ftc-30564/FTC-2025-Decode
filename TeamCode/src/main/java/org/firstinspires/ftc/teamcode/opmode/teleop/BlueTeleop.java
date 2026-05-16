@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_GATETAKE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_GATETAKE;
 import static org.firstinspires.ftc.teamcode.util.Poses.pedroToAdvScope;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -87,6 +91,10 @@ public class BlueTeleop extends LinearOpMode {
         boolean shootButton;
         boolean isAimed = false;
         boolean calculateSotm = false;
+        boolean intakeGatePressed = false;
+        boolean followingPath = false;
+
+        PathChain currentPath;
 
         logging = new Logging(drivetrain, shooter, hardwareMap);
 
@@ -109,8 +117,8 @@ public class BlueTeleop extends LinearOpMode {
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper;
-            shootButton = gamepad2.right_bumper;
+            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
+            shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
             aimCalculator.update();
@@ -119,20 +127,39 @@ public class BlueTeleop extends LinearOpMode {
             // only run shoot on the move calculations if the joystick is far enough
             calculateSotm = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2) + Math.pow(gamepad1.left_stick_y, 2)) > 0.25;
 
-            if (aimButton) {
-                isAimed = drivetrain.setAimedTeleopDrive(
-                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
-                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
-                        shotData.angle);
+            if (gamepad1.leftTriggerWasPressed()) {
+                followingPath = true;
+                Pose pose = red ? RED_GATETAKE : BLUE_GATETAKE;
+                currentPath = drivetrain.pathBuilder()
+                        .addPath(new BezierLine(drivetrain.getPose(), pose))
+                        .setLinearHeadingInterpolation(drivetrain.getPose().getHeading(), pose.getHeading())
+                        .build();
+
+                drivetrain.followPath(currentPath, true);
+
             }
-            else {
-                isAimed = false;
-                drivetrain.setTeleopDrive(
-                        gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
-                        gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
-                        -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
-                        false);
+            if (gamepad1.leftTriggerWasReleased()) {
+                followingPath = false;
+                drivetrain.startTeleopDrive();
             }
+
+            if (!followingPath) {
+                if (aimButton) {
+                    isAimed = drivetrain.setAimedTeleopDrive(
+                            gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
+                            gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
+                            shotData.angle);
+                }
+                else {
+                    isAimed = false;
+                    drivetrain.setTeleopDrive(
+                            gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
+                            gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
+                            -gamepad1.right_stick_x * RobotConstants.Drive.TURN_SPEEDLIMIT,
+                            false);
+                }
+            }
+
 
             if (gamepad1.back) {
                 drivetrain.setPose(new Pose(10.5, 10.5, Math.toRadians(90)));
@@ -157,7 +184,7 @@ public class BlueTeleop extends LinearOpMode {
             if (intakeButton) {
                 shooter.runBackPusher();
             }
-            else if (shootButton && isAimed) {
+            else if (shootButton) {
                 shooter.runPusher();
             }
             else if (barfButton) {
@@ -211,6 +238,14 @@ public class BlueTeleop extends LinearOpMode {
                 telemetryPacket.put("Red auto y", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getY());
                 telemetryPacket.put("Red auto heading", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getHeading());
 
+                telemetryPacket.put("Red gatetake x", pedroToAdvScope(RED_GATETAKE).getX());
+                telemetryPacket.put("Red gatetake y", pedroToAdvScope(RED_GATETAKE).getY());
+                telemetryPacket.put("Red gatetake heading", pedroToAdvScope(RED_GATETAKE).getHeading());
+
+                telemetryPacket.put("Blue gatetake x", pedroToAdvScope(BLUE_GATETAKE).getX());
+                telemetryPacket.put("Blue gatetake y", pedroToAdvScope(BLUE_GATETAKE).getY());
+                telemetryPacket.put("Blue gatetake heading", pedroToAdvScope(BLUE_GATETAKE).getHeading());
+
                 telemetryPacket.put("Shooter/Target angle (degrees)", shotData.angle);
                 telemetryPacket.put("Shooter/Target rpm", shotData.rpm);
 
@@ -223,10 +258,11 @@ public class BlueTeleop extends LinearOpMode {
 
             telemetry.addData("Loop time", loopTimer.milliseconds());
             telemetry.update();
+
+            // update last remembered pose
+            RobotConstants.Drive.HAS_POSE = true;
+            RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
         }
 
-        // update last remembered pose
-        RobotConstants.Drive.HAS_POSE = true;
-        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
     }
 }

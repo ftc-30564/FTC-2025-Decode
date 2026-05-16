@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
 import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MorseCodePlayer;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -48,8 +47,6 @@ public class RedCloseGreedy extends LinearOpMode {
         logging = new Logging(drivetrain, shooter, hardwareMap);
 
         MorseCodeReader reader = new MorseCodeReader(hardwareMap);
-        MorseCodePlayer player = new MorseCodePlayer(new IndicatorRGB(hardwareMap));
-        player.addSequence(reader.getMorseCode());
 
         drivetrain.setStartingPose(red ? RED_STARTING_CLOSE : BLUE_STARTING_CLOSE);
 
@@ -71,12 +68,12 @@ public class RedCloseGreedy extends LinearOpMode {
         );
 
         Command intakeAndShootGate = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 500),
+                autoCommands.intakeGateClose(red, 300),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
         Command intakeAndShootGate1 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 100),
+                autoCommands.intakeGateClose(red, 600),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
@@ -102,6 +99,9 @@ public class RedCloseGreedy extends LinearOpMode {
 //            logging.updateTelemetryPacket(telemetryPacket);
 //
 //            FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+
+            RobotConstants.Drive.HAS_POSE = true;
+            RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
         }
 
         // update the pose for teleop

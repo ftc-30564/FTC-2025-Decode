@@ -44,7 +44,7 @@ public class AimCalculator {
         this.drivetrain = drivetrain;
         this.red = red;
 
-        this.rpmInterpolator = new Interpolator(InterpolationPoints.rpms_4_19);
+        this.rpmInterpolator = new Interpolator(InterpolationPoints.rpms_5_11);
         this.tofInterpolator = new Interpolator(InterpolationPoints.tof);
     }
 

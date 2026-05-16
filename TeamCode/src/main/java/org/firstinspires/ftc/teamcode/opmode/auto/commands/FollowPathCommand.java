@@ -44,10 +44,6 @@ public class FollowPathCommand extends Command {
             pathOver = true;
             extraTime.reset();
         }
-
-        if (pathOver) {
-            drivetrain.holdPoint(path.lastPath().endPose());
-        }
     }
 
     @Override
