@@ -159,23 +159,29 @@ public class BlueTeleop extends LinearOpMode {
             }
             else if (shootButton && isAimed) {
                 shooter.runPusher();
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
             }
             else if (barfButton) {
                 shooter.barfPusher();
             }
             else {
                 shooter.stopPusher();
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
             }
 
-            if (shootButton) {
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
+            if (shootButton){
+                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
+            }
+            else if (intakeButton) {
+                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
+            }
+            else if (isAimed){
+                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
+            }
+            else {
+                prism.insertAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidNotAligned);
             }
 
-            if (intakeButton) {
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
-            }
+            prism.updateAllAnimations();
+
 
 //            telemetry.addLine("SHOOTER");
 //            telemetry.addData("LOWEST RPM", lowestRpm);
