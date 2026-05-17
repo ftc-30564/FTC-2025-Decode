@@ -71,20 +71,20 @@ public class BlueTeleop extends LinearOpMode {
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
         snakes.setBrightness(80);
         snakes.setStartIndex(0);
-        snakes.setStopIndex(12);
+        snakes.setStopIndex(24);
         snakes.setDirection(Direction.Backward);
 
         pulse.setBrightness(80);
         pulse.setStartIndex(0);
-        pulse.setStopIndex(12);
+        pulse.setStopIndex(24);
 
         solidAligned.setBrightness(80);
         solidAligned.setStartIndex(0);
-        solidAligned.setStopIndex(12);
+        solidAligned.setStopIndex(24);
 
         solidNotAligned.setBrightness(80);
         solidNotAligned.setStartIndex(0);
-        solidNotAligned.setStopIndex(12);
+        solidNotAligned.setStopIndex(24);
 
         boolean intakeButton = false;
         boolean barfButton = false;
