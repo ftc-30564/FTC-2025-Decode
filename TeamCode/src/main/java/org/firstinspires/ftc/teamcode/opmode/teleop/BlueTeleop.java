@@ -72,20 +72,20 @@ public class BlueTeleop extends LinearOpMode {
 
         snakes.setBrightness(80);
         snakes.setStartIndex(0);
-        snakes.setStopIndex(12);
+        snakes.setStopIndex(24);
         snakes.setDirection(Direction.Backward);
 
         pulse.setBrightness(80);
         pulse.setStartIndex(0);
-        pulse.setStopIndex(12);
+        pulse.setStopIndex(24);
 
         solidAligned.setBrightness(80);
         solidAligned.setStartIndex(0);
-        solidAligned.setStopIndex(12);
+        solidAligned.setStopIndex(24);
 
         solidNotAligned.setBrightness(80);
         solidNotAligned.setStartIndex(0);
-        solidNotAligned.setStopIndex(12);
+        solidNotAligned.setStopIndex(24);
 
         boolean intakeButton = false;
         boolean barfButton = false;
@@ -120,7 +120,8 @@ public class BlueTeleop extends LinearOpMode {
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
+            chargeButton = gamepad2.left_bumper || (gamepad1.right_
+        trigger_pressed);
             shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
