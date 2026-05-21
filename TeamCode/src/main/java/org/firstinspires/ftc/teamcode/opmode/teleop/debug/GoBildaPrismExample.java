@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Prism.Color;
+import org.firstinspires.ftc.teamcode.Prism.Direction;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 
@@ -17,8 +18,12 @@ public class GoBildaPrismExample extends LinearOpMode {
 
     GoBildaPrismDriver prism;
 
-    PrismAnimations.Solid solid = new PrismAnimations.Solid(Color.BLUE);
-    PrismAnimations.RainbowSnakes rainbowSnakes = new PrismAnimations.RainbowSnakes();
+    PrismAnimations.Snakes snakeLeft  = new PrismAnimations.Snakes(new Color(0, 240, 255));
+    PrismAnimations.Snakes snakeRight = new PrismAnimations.Snakes(new Color(0, 240, 255));
+
+    PrismAnimations.Solid solidWhite = new PrismAnimations.Solid(Color.WHITE);
+
+    PrismAnimations.DroidScan droidScan = new PrismAnimations.DroidScan(new Color(0, 240, 255));
 
     @Override
     public void runOpMode() {
@@ -34,14 +39,25 @@ public class GoBildaPrismExample extends LinearOpMode {
          * has carefully selected default parameters. So you do not need to set each parameter
          * for every animation!
          */
-        solid.setBrightness(50);
-        solid.setStartIndex(0);
-        solid.setStopIndex(12);
+        solidWhite.setBrightness(80);
+        solidWhite.setStartIndex(0);
+        solidWhite.setStopIndex(23);
 
-        rainbowSnakes.setNumberOfSnakes(2);
-        rainbowSnakes.setSnakeLength(3);
-        rainbowSnakes.setSpacingBetween(6);
-        rainbowSnakes.setSpeed(0.5f);
+        droidScan.setIndexes(0, 23);
+
+        snakeLeft.setIndexes(0, 11);
+        snakeRight.setIndexes(12, 23);
+
+        snakeLeft.setDirection(Direction.Backward);
+        snakeRight.setDirection(Direction.Backward);
+
+        snakeLeft.setSpeed(0.7f);
+        snakeRight.setSpeed(0.7f);
+
+        droidScan.setSpeed(0.7f);
+
+        snakeLeft.setBrightness(80);
+        snakeRight.setBrightness(80);
 
         telemetry.addData("Device ID: ", prism.getDeviceID());
         telemetry.addData("Firmware Version: ", prism.getFirmwareVersionString());
@@ -65,8 +81,8 @@ public class GoBildaPrismExample extends LinearOpMode {
                  * .updateAnimationFromIndex(LayerHeight.LAYER_0) to update an animation at a
                  * specific layer height without overwriting it completely.
                  */
-                prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, solid);
-                prism.insertAndUpdateAnimation(LayerHeight.LAYER_1,rainbowSnakes);
+                prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, droidScan);
+
             }
 
             if(gamepad1.xWasPressed()){

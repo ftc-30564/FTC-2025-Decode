@@ -69,6 +69,7 @@ public class BlueTeleop extends LinearOpMode {
         telemetryPacket = new TelemetryPacket();
 
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
+
         snakes.setBrightness(80);
         snakes.setStartIndex(0);
         snakes.setStopIndex(12);
@@ -197,15 +198,12 @@ public class BlueTeleop extends LinearOpMode {
             }
 
             if (gamepad1.rightTriggerWasPressed()){
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, snakes);
+                prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1);
             }
-            if (gamepad1.rightBumperWasPressed()) {
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, pulse);
+            if (gamepad1.rightTriggerWasReleased()) {
+                prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
             }
 
-            if (gamepad1.rightTriggerWasReleased() || gamepad1.rightBumperWasReleased()) {
-                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
-            }
 //            if (isAimed){
 //                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
 //            }
