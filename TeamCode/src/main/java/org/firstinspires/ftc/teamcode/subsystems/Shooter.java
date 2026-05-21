@@ -126,6 +126,6 @@ public class Shooter {
         this.isShooting = false;
     }
 
-    public void runBackPusher(){shooterPusher.setPower(-0.4);
+    public void runBackPusher(){shooterPusher.setPower(-0.1);
     this.isShooting = false;}
 }

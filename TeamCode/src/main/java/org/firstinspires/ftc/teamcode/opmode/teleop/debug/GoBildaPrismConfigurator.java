@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
-@TeleOp(name="Prism Configurator", group="Linear OpMode")
+@TeleOp(name="Prism Configurator", group="Tests")
 //@Disabled
 
 public class GoBildaPrismConfigurator extends LinearOpMode {

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 
 import java.util.concurrent.TimeUnit;
 
-    @TeleOp(name="Prism Animations", group="Linear OpMode")
+    @TeleOp(name="Prism Animations", group="Tests")
 //@Disabled
 
 public class GoBildaPrismExample extends LinearOpMode {

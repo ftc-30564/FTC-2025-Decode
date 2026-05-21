@@ -54,14 +54,18 @@ public class RobotConstants {
         public static double DRIVE_SNAP_TO_ANGLE_P = 1.55;
         public static double DRIVE_SNAP_TO_ANGLE_D = 0.1;
 
+        // good but loop time: 1.6, 0.15
+        public static double DRIVE_SOTM_P = 1.8;
+        public static double DRIVE_SOTM_D = 0.1;
+
         public static double IS_ALIGNED_MARGIN = 5;
         public static double IS_ALIGNED_VELOCITY_RADIANS = 2;
 
         public static double BLUE_GOAL_POSE_X = 18;
         public static double BLUE_GOAL_POSE_Y = 138;
 
-        public static double RED_GOAL_POSE_X = 145;
-        public static double RED_GOAL_POSE_Y = 128;
+        public static double RED_GOAL_POSE_X = 140;
+        public static double RED_GOAL_POSE_Y = 131;
 
         public static double FIELD_LEN = 145;
     }
@@ -77,10 +81,10 @@ public class RobotConstants {
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
         public static double VELOCITY_BOTTOM_P_STANDBY = 0.03;
-        public static double VELOCITY_TOP_P_STANDBY = 0.03;
+        public static double VELOCITY_TOP_P_STANDBY = 0.05;
 
         public static double VELOCITY_BOTTOM_P_SHOOT = 0.03;
-        public static double VELOCITY_TOP_P_SHOOT = 0.03;
+        public static double VELOCITY_TOP_P_SHOOT = 0.05;
         public static boolean IS_P_ENABLED = true;
 
         public static final double VELOCITY_DEADBAND = 10;
@@ -100,7 +104,7 @@ public class RobotConstants {
     @Config
     public static class AutoPoses {
         public static Pose RED_STARTING_CLOSE = new Pose(124.54, 121.8, Math.toRadians(217));
-        public static Pose RED_STARTING_FAR = new Pose(87.01, 7.99, Math.toRadians(-91.05));
+        public static Pose RED_STARTING_FAR = new Pose(87.01, 9, Math.toRadians(-91.05));
         public static Pose RED_SHOOT_CLOSE       = new Pose(87, 76.7, Math.toRadians(227));
         public static Pose RED_SHOOT_FAR         = new Pose(87.24, 14.45, Math.toRadians(-109));
 
@@ -115,11 +119,11 @@ public class RobotConstants {
 
         public static Pose RED_GATEMPTY = new Pose(126.4, 62.5, Math.toRadians(0));//new Pose(11.61, 55.87, Math.toRadians(-89.57))
 
-        public static Pose RED_HUMAN_PLAYER_1 = new Pose(110.71, 14.57, Math.toRadians(-19.57));
-        public static Pose RED_HUMAN_PLAYER_2 = new Pose(131.77, 11.30, Math.toRadians(-27.08));
-        public static Pose RED_HUMAN_PLAYER_3 = new Pose(130.01, 9.02, Math.toRadians(-23.80));
-        public static Pose RED_HUMAN_PLAYER_4 = new Pose(116.38, 19.92, Math.toRadians(2.18));
-        public static Pose RED_HUMAN_PLAYER_5 = new Pose(133.39, 19.20, Math.toRadians(13.56));
+        public static Pose RED_HUMAN_PLAYER_1 = new Pose(110.71, 15.57, Math.toRadians(-19.57));
+        public static Pose RED_HUMAN_PLAYER_2 = new Pose(131.77, 14.30, Math.toRadians(-27.08));
+        public static Pose RED_HUMAN_PLAYER_3 = new Pose(130.01, 11.02, Math.toRadians(-23.80));
+        public static Pose RED_HUMAN_PLAYER_4 = new Pose(100.38, 15.92, Math.toRadians(2.18));
+        public static Pose RED_HUMAN_PLAYER_5 = new Pose(133.39, 26.20, Math.toRadians(13.56));
 
         public static Pose RED_GATETAKE = new Pose(132.35, 57.7, Math.toRadians(35));
 

@@ -87,9 +87,10 @@ public class InterpolationPoints {
             new Point(90.8, 120),
             new Point(104, 120),
             new Point(110, 123),
-            new Point(129, 127),
-            new Point(141, 135),
-            new Point(154, 140)
+            new Point(123, 130),
+            new Point(140, 135),
+            new Point(148, 140),
+            new Point(154, 144)
 
     ));
 

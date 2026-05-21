@@ -36,7 +36,7 @@ public class Drivetrain {
         follower.setTeleOpDrive(forward, strafe, turn, isRobotCentric);
     }
 
-    public boolean setAimedTeleopDrive(double forward, double strafe, double angle){
+    public boolean setAimedTeleopDrive(double forward, double strafe, double angle, boolean sotm){
         double targetAngle = angle;
         double error = targetAngle - (getPose().getHeading());
 
@@ -44,8 +44,8 @@ public class Drivetrain {
             error -= (Math.PI * 2) * Math.signum(error);
         }
 
-        pidfController.setP(RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P);
-        pidfController.setD(RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D);
+        pidfController.setP(sotm ? RobotConstants.Drive.DRIVE_SOTM_P : RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_P);
+        pidfController.setD(sotm ? RobotConstants.Drive.DRIVE_SOTM_D : RobotConstants.Drive.DRIVE_SNAP_TO_ANGLE_D);
 
         pidfController.updateError(error);
 

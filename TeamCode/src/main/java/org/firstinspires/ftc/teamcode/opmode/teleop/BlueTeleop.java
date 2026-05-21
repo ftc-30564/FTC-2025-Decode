@@ -120,8 +120,7 @@ public class BlueTeleop extends LinearOpMode {
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper || (gamepad1.right_
-        trigger_pressed);
+            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
             shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
@@ -129,7 +128,7 @@ public class BlueTeleop extends LinearOpMode {
             shotData = aimCalculator.getShotData(calculateSotm);
 
             // only run shoot on the move calculations if the joystick is far enough
-            calculateSotm = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2) + Math.pow(gamepad1.left_stick_y, 2)) > 0.25;
+            calculateSotm = Math.sqrt(Math.pow(gamepad1.left_stick_x, 2) + Math.pow(gamepad1.left_stick_y, 2)) > 0.2;
 
             if (gamepad1.leftTriggerWasPressed()) {
                 followingPath = true;
@@ -152,7 +151,8 @@ public class BlueTeleop extends LinearOpMode {
                     isAimed = drivetrain.setAimedTeleopDrive(
                             gamepad1.left_stick_y * RobotConstants.Drive.FORWARD_SPEEDLIMIT * (red ? -1 : 1),
                             gamepad1.left_stick_x * RobotConstants.Drive.STRAFE_SPEEDLIMIT * (red ? -1 : 1),
-                            shotData.angle);
+                            shotData.angle,
+                            calculateSotm);
                 }
                 else {
                     isAimed = false;
@@ -179,10 +179,7 @@ public class BlueTeleop extends LinearOpMode {
                 intake.stop();
             }
 
-            if (chargeButton)
-                shooter.setToVelocityPair(new VelocityPair(shotData.rpm, shotData.rpm));
-            else
-                shooter.coast();
+            shooter.setToVelocityPair(new VelocityPair(shotData.rpm, shotData.rpm));
 
 
             if (intakeButton) {
@@ -233,9 +230,9 @@ public class BlueTeleop extends LinearOpMode {
                 telemetryPacket.put("Aim y", pedroToAdvScope(shotData.pose).getY());
                 telemetryPacket.put("Aim heading", pedroToAdvScope(shotData.pose).getHeading());
 
-                telemetryPacket.put("Blue auto x", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getX());
-                telemetryPacket.put("Blue auto y", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getY());
-                telemetryPacket.put("Blue auto heading", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_CLOSE).getHeading());
+                telemetryPacket.put("Blue auto x", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_FAR).getX());
+                telemetryPacket.put("Blue auto y", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_FAR).getY());
+                telemetryPacket.put("Blue auto heading", pedroToAdvScope(RobotConstants.AutoPoses.BLUE_STARTING_FAR).getHeading());
 
                 telemetryPacket.put("Red auto x", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getX());
                 telemetryPacket.put("Red auto y", pedroToAdvScope(RobotConstants.AutoPoses.RED_STARTING_CLOSE).getY());

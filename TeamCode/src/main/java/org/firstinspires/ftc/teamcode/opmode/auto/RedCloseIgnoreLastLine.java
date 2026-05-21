@@ -1,0 +1,127 @@
+package org.firstinspires.ftc.teamcode.opmode.auto;
+
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_GATETAKE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_POST_INTAKE_GPP;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_POST_INTAKE_PGP;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_POST_INTAKE_PPG;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_GATETAKE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_POST_INTAKE_GPP;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_POST_INTAKE_PGP;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_POST_INTAKE_PPG;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_CLOSE;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.GPP;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.PGP;
+import static org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands.BallPose.PPG;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.Paths;
+import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.AutoCommands;
+import org.firstinspires.ftc.teamcode.opmode.auto.commands.FollowPathCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.util.Logging;
+import org.firstinspires.ftc.teamcode.util.MorseCodeReader;
+import org.firstinspires.ftc.teamcode.util.command_lib.Command;
+import org.firstinspires.ftc.teamcode.util.command_lib.CommandScheduler;
+import org.firstinspires.ftc.teamcode.util.command_lib.SequentialCommand;
+
+@Autonomous(group = "Red")
+public class RedCloseIgnoreLastLine extends LinearOpMode {
+    private Drivetrain drivetrain;
+    private Intake intake;
+    private Shooter shooter;
+    private AutoCommands autoCommands;
+    private Logging logging;
+    private TelemetryPacket telemetryPacket;
+
+    private boolean red = true;
+
+    public void setAlliance(boolean red) {
+        this.red = red;
+    }
+
+    @Override
+    public void runOpMode() {
+        drivetrain = new Drivetrain(hardwareMap);
+        intake = new Intake(hardwareMap);
+        shooter = new Shooter(hardwareMap, telemetry);
+        autoCommands = new AutoCommands(drivetrain, shooter, intake, telemetry);
+
+        logging = new Logging(drivetrain, shooter, hardwareMap);
+
+        MorseCodeReader reader = new MorseCodeReader(hardwareMap);
+
+        drivetrain.setStartingPose(red ? RED_STARTING_CLOSE : BLUE_STARTING_CLOSE);
+
+        Command shootPreload = autoCommands.startAndShootClose(red);
+
+        Command intakeAndShootPPG = new SequentialCommand(
+                autoCommands.intakeLineClose(PPG, red),
+                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PPG : BLUE_POST_INTAKE_PPG, red)
+        );
+
+        Command intakeAndShootPGP = new SequentialCommand(
+                autoCommands.intakeLineClose(PGP, red),
+                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_PGP : BLUE_POST_INTAKE_PGP, red)
+        );
+
+//        Command intakeAndShootGPP = new SequentialCommand(
+//                autoCommands.intakeLineClose(GPP, red),
+//                autoCommands.goAndShootBallsClose(red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP, red)
+//        );
+
+        Command intakeAndShootGate = new SequentialCommand(
+                autoCommands.intakeGateClose(red, 300),
+                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
+        );
+
+        Command intakeAndShootGate1 = new SequentialCommand(
+                autoCommands.intakeGateClose(red, 600),
+                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
+        );
+
+        Command intakeAndShootGate2 = new SequentialCommand(
+                autoCommands.intakeGateClose(red, 600),
+                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
+        );
+
+        Command leave = new FollowPathCommand(drivetrain, Paths.Close.leave(drivetrain, red));
+
+        CommandScheduler scheduler = new CommandScheduler(
+                shootPreload,
+                intakeAndShootPGP,
+                intakeAndShootGate,
+                intakeAndShootGate1,
+                intakeAndShootGate2,
+                //intakeAndShootGPP,
+                intakeAndShootPPG,
+                leave
+        );
+
+        waitForStart();
+
+        shooter.stopPusher();
+        while (opModeIsActive()) {
+            scheduler.run();
+            //player.playSequence();
+
+//            logging.updateTelemetryPacket(telemetryPacket);
+//
+//            FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+
+            RobotConstants.Drive.HAS_POSE = true;
+            RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
+        }
+
+        // update the pose for teleop
+//        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
+        RobotConstants.Drive.HAS_POSE = true;
+        RobotConstants.Drive.LAST_REMEMBERED_POSE = drivetrain.getPose();
+    }
+}
