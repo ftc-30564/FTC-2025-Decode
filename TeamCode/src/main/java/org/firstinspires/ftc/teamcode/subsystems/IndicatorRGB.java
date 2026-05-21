@@ -20,7 +20,7 @@ public class IndicatorRGB {
         secondLightRGB.setPosition(0.500);
     }
     public void blue(){
-        lightRGB.setPosition(0.600);
-        secondLightRGB.setPosition(0.600);
+        lightRGB.setPosition(0.570);
+        secondLightRGB.setPosition(0.570);
     }
 }
