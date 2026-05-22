@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.AimCalculator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.IndicatorRGB;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.Logging;
@@ -43,6 +44,7 @@ public class BlueTeleop extends LinearOpMode {
     private TelemetryPacket telemetryPacket;
     private LynxModule controlHub;
     private LynxModule expansionHub;
+    private IndicatorRGB indicator;
 
     private Logging logging;
 
@@ -67,6 +69,7 @@ public class BlueTeleop extends LinearOpMode {
         aimCalculator = new AimCalculator(drivetrain, this.red);
         multipleTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetryPacket = new TelemetryPacket();
+        indicator = new IndicatorRGB(hardwareMap);
 
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
 
@@ -112,16 +115,18 @@ public class BlueTeleop extends LinearOpMode {
 
         drivetrain.startTeleopDrive();
 
+        indicator.blue();
+
         while (opModeIsActive()) {
             loopTimer.reset();
 
             drivetrain.update();
             shooter.update();
 
+
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper || (gamepad1.right_
-        trigger_pressed);
+            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
             shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
@@ -204,6 +209,8 @@ public class BlueTeleop extends LinearOpMode {
             if (gamepad1.rightTriggerWasReleased()) {
                 prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
             }
+
+
 
 //            if (isAimed){
 //                prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solidAligned);
