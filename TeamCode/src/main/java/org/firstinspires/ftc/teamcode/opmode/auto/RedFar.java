@@ -63,12 +63,22 @@ public class RedFar extends LinearOpMode {
                 autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
         );
 
+        Command intakeAndShootHP2 = new SequentialCommand(
+                autoCommands.intakeHPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_3 : BLUE_HUMAN_PLAYER_3, red)
+        );
+
         Command intakeAndShootHPOffset = new SequentialCommand(
                 autoCommands.intakeHPOffsetFar(red),
                 autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5, red)
         );
 
         Command intakeAndShootHPOffset1 = new SequentialCommand(
+                autoCommands.intakeHPOffsetFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5, red)
+        );
+
+        Command intakeAndShootHPOffset2 = new SequentialCommand(
                 autoCommands.intakeHPOffsetFar(red),
                 autoCommands.goAndShootBallsFar(red ? RED_HUMAN_PLAYER_5 : BLUE_HUMAN_PLAYER_5, red)
         );
@@ -96,7 +106,8 @@ public class RedFar extends LinearOpMode {
                 intakeAndShootGPP,
                 intakeAndShootHP1,
                 intakeAndShootHPOffset,
-                intakeAndShootHPOffset1
+                intakeAndShootHP2,
+                intakeAndShootHPOffset2
         );
 
         waitForStart();

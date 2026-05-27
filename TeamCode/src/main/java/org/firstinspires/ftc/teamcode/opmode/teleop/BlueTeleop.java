@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_GATETAKE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.BLUE_STARTING_FAR;
 import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_GATETAKE;
+import static org.firstinspires.ftc.teamcode.RobotConstants.AutoPoses.RED_STARTING_FAR;
 import static org.firstinspires.ftc.teamcode.util.Poses.pedroToAdvScope;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -172,7 +174,7 @@ public class BlueTeleop extends LinearOpMode {
 
 
             if (gamepad1.back) {
-                drivetrain.setPose(new Pose(10.5, 10.5, Math.toRadians(90)));
+                drivetrain.setPose(red ? RED_STARTING_FAR : BLUE_STARTING_FAR);
             }
 
             if (intakeButton || shootButton){
