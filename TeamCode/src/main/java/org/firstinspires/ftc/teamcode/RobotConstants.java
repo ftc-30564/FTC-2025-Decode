@@ -80,11 +80,11 @@ public class RobotConstants {
         public static final double VELOCITY_BOTTOM_FEEDFORWARD_12V = (VELOCITY_BOTTOM_FEEDFORWARD) * (12.6 / 12);
         public static final double VELOCITY_TOP_FEEDFORWARD_12V = (VELOCITY_TOP_FEEDFORWARD) * (12.6 / 12);
 
-        public static double VELOCITY_BOTTOM_P_STANDBY = 0.03;
-        public static double VELOCITY_TOP_P_STANDBY = 0.05;
+        public static double VELOCITY_BOTTOM_P_STANDBY = 0.033;
+        public static double VELOCITY_TOP_P_STANDBY = 0.033;
 
-        public static double VELOCITY_BOTTOM_P_SHOOT = 0.03;
-        public static double VELOCITY_TOP_P_SHOOT = 0.05;
+        public static double VELOCITY_BOTTOM_P_SHOOT = 0.033;
+        public static double VELOCITY_TOP_P_SHOOT = 0.033;
         public static boolean IS_P_ENABLED = true;
 
         public static final double VELOCITY_DEADBAND = 10;

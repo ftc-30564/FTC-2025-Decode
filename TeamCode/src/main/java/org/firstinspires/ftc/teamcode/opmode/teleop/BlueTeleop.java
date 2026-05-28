@@ -128,8 +128,7 @@ public class BlueTeleop extends LinearOpMode {
 
             intakeButton = (gamepad1.right_bumper || gamepad2.a);
             barfButton = gamepad1.b;
-            chargeButton = gamepad2.left_bumper || (gamepad1.right_trigger_pressed);
-            shootButton = gamepad2.right_bumper || (gamepad1.right_trigger_pressed);
+            shootButton = (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
             aimCalculator.update();
@@ -175,6 +174,16 @@ public class BlueTeleop extends LinearOpMode {
 
             if (gamepad1.back) {
                 drivetrain.setPose(red ? RED_STARTING_FAR : BLUE_STARTING_FAR);
+            }
+            if (gamepad1.dpad_left) {
+                drivetrain.setPose(new Pose(10.5, 10.5, Math.toRadians(90)));
+            }
+
+            if (gamepad2.leftBumperWasPressed()) {
+                drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(-1))));
+            }
+            if (gamepad2.rightBumperWasPressed()) {
+                drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(1))));
             }
 
             if (intakeButton || shootButton){
