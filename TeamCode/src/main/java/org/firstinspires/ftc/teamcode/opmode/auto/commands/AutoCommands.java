@@ -160,7 +160,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayer(drivetrain, red)).timeout(3500),
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayer(drivetrain, red)).timeout(2500),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)
@@ -171,7 +171,7 @@ public class AutoCommands {
         return new SequentialCommand(
                 //new DelayCommand(500),
                 new RaceCommand(
-                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayerOffsetABit(drivetrain, red)).timeout(5000),
+                        new FollowPathCommand(drivetrain, Far.intakeHumanPlayerOffsetABit(drivetrain, red)).timeout(2700),
                         new IntakeCommand(intake, shooter, Intake.Mode.RUNNING)
                 )
                 // new IntakeCommand(intake, shooter, Intake.Mode.RUNNING).timeout(100)

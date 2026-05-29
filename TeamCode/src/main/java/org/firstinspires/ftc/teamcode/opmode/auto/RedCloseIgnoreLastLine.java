@@ -77,17 +77,17 @@ public class RedCloseIgnoreLastLine extends LinearOpMode {
 //        );
 
         Command intakeAndShootGate = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 300),
+                autoCommands.intakeGateClose(red, 1000),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
         Command intakeAndShootGate1 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 600),
+                autoCommands.intakeGateClose(red, 1000),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 
         Command intakeAndShootGate2 = new SequentialCommand(
-                autoCommands.intakeGateClose(red, 600),
+                autoCommands.intakeGateClose(red, 1000),
                 autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
         );
 

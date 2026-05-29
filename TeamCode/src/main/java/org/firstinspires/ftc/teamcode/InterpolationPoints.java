@@ -68,7 +68,7 @@ public class InterpolationPoints {
 //            new Point(125, 1)
             new Point(87, .5),
             new Point(106,.6),
-            new Point(145,.7)
+            new Point(145,.8)
     ));
 
     public static ArrayList<Point> rpms_4_19 = new ArrayList<>(Arrays.asList(
