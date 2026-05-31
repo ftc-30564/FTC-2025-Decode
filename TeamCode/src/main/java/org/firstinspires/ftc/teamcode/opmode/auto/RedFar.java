@@ -93,6 +93,11 @@ public class RedFar extends LinearOpMode {
                 autoCommands.goAndShootBallsFar(red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP, red)
         );
 
+        Command intakeAndShootGPP3 = new SequentialCommand(
+                autoCommands.intakeGPPFar(red),
+                autoCommands.goAndShootBallsFar(red ? RED_POST_INTAKE_GPP : BLUE_POST_INTAKE_GPP, red)
+        );
+
 //        Command intakeAndShootGate = new SequentialCommand(
 //                autoCommands.intakeGateClose(red, 500),
 //                autoCommands.goAndShootBallsClose(red ? RED_GATETAKE : BLUE_GATETAKE, red)
@@ -109,10 +114,11 @@ public class RedFar extends LinearOpMode {
                 shootPreload,
                 intakeAndShootHP,
                 intakeAndShootGPP,
-                intakeAndShootHP1,
                 intakeAndShootGPP2,
-                intakeAndShootHPOffset,
+                intakeAndShootHP1,
+                intakeAndShootGPP3,
                 intakeAndShootHP2
+//                intakeAndShootHP2
                 //intakeAndShootHPOffset2
         );
 

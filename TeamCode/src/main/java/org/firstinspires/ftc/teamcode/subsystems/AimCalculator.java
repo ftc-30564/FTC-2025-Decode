@@ -22,6 +22,8 @@ public class AimCalculator {
     public Pose newPose;
     public Pose goalPose = blueGoal;
 
+    public double offset = 0;
+
     public static class ShotData {
         public double rpm;
         public double angle;
@@ -97,15 +99,20 @@ public class AimCalculator {
 
         return new ShotData(
                 newRpm,
-                newAngle,
+                newAngle - Math.toRadians(offset),
                 distance,
                 newPose
         );
     }
 
     public void update() {
+        update(0);
+    }
+
+    public void update(double offset) {
         this.pose = drivetrain.getPose();
         this.velocity = drivetrain.getVelocity();
+        this.offset = offset;
     }
 
     public double targetAngle(Pose pose) {

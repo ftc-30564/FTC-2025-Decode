@@ -102,6 +102,8 @@ public class BlueTeleop extends LinearOpMode {
         boolean intakeGatePressed = false;
         boolean followingPath = false;
 
+        double angleOffset = 0;
+
         PathChain currentPath;
 
         logging = new Logging(drivetrain, shooter, hardwareMap);
@@ -116,7 +118,6 @@ public class BlueTeleop extends LinearOpMode {
         waitForStart();
 
         drivetrain.startTeleopDrive();
-
         indicator.blue();
 
         while (opModeIsActive()) {
@@ -126,12 +127,12 @@ public class BlueTeleop extends LinearOpMode {
             shooter.update();
 
 
-            intakeButton = (gamepad1.right_bumper || gamepad2.a);
+            intakeButton = (gamepad1.right_bumper);
             barfButton = gamepad1.b;
             shootButton = (gamepad1.right_trigger_pressed);
             aimButton = gamepad1.left_bumper;
 
-            aimCalculator.update();
+            aimCalculator.update(angleOffset);
             shotData = aimCalculator.getShotData(calculateSotm);
 
             // only run shoot on the move calculations if the joystick is far enough
@@ -180,10 +181,16 @@ public class BlueTeleop extends LinearOpMode {
             }
 
             if (gamepad2.leftBumperWasPressed()) {
-                drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(-1))));
+                angleOffset --;
+                //drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(-1))));
             }
             if (gamepad2.rightBumperWasPressed()) {
-                drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(1))));
+                angleOffset ++;
+                //drivetrain.setPose(drivetrain.getPose().plus(new Pose(0,0,Math.toRadians(1))));
+            }
+
+            if (gamepad2.a) {
+                angleOffset = 0;
             }
 
             if (intakeButton || shootButton){

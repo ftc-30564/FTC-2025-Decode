@@ -106,7 +106,7 @@ public class RobotConstants {
         public static Pose RED_STARTING_CLOSE = new Pose(123.64, 123.12, Math.toRadians(218));//new Pose(122.31, 125.85, Math.toRadians(-139)); //field 1: 121.46, 122.97, -141
         public static Pose RED_STARTING_FAR = new Pose(87.01, 10.5, Math.toRadians(-90));
         public static Pose RED_SHOOT_CLOSE       = new Pose(87, 76.7, Math.toRadians(227));
-        public static Pose RED_SHOOT_FAR         = new Pose(89.24, 17.45, Math.toRadians(-111.5));
+        public static Pose RED_SHOOT_FAR         = new Pose(89.24, 17.45, Math.toRadians(-114.5));
 
         public static Pose RED_PRE_INTAKE_PPG    = new Pose(90,    83.9, Math.toRadians(1));
         public static Pose RED_POST_INTAKE_PPG   = new Pose(127, 83.9, Math.toRadians(1));
@@ -125,7 +125,7 @@ public class RobotConstants {
         public static Pose RED_HUMAN_PLAYER_4 = new Pose(100.38, 15.92, Math.toRadians(2.18));
         public static Pose RED_HUMAN_PLAYER_5 = new Pose(133.39, 26.20, Math.toRadians(13.56));
 
-        public static Pose RED_GATETAKE = new Pose(132.5, 61, Math.toRadians(34.2));// = new Pose(131.3, 60.5, Math.toRadians(33.78)); // field 1: 130.63, 59.73, 34
+        public static Pose RED_GATETAKE = new Pose(132.5, 60, Math.toRadians(34.2));// = new Pose(131.3, 60.5, Math.toRadians(33.78)); // field 1: 130.63, 59.73, 34
 
         public static Pose RED_LEAVE_CLOSE       = new Pose(92, 71.7, Math.toRadians(227));
         public static Pose RED_LEAVE_FAR         = new Pose(91,    26.5, Math.toRadians(270));
@@ -154,7 +154,7 @@ public class RobotConstants {
 //        public static Pose BLUE_LINEUP_1         = new Pose(26, 78, Math.toRadians(270));
 //        public static Pose BLUE_LINEUP_2         = new Pose(26, 67, Math.toRadians(270));
 
-        public static Pose BLUE_GATETAKE = new Pose(11.7, 60.59, Math.toRadians(142.9));//= new Pose(13.84, 60.23, Math.toRadians(146.9));   // field 1: 13.74, 60.93, 142
+        public static Pose BLUE_GATETAKE = new Pose(11.2, 61, Math.toRadians(142.9));//= new Pose(13.84, 60.23, Math.toRadians(146.9));   // field 1: 13.74, 60.93, 142
 
         public static Pose BLUE_GATEMPTY = Poses.mirrorPose(RED_GATEMPTY);
 
